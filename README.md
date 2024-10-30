@@ -2,6 +2,13 @@ Ovo je projekt za ProjektR - Nenjuskalo
 
 ## Getting Started
 
+Upali bazu podataka  
+
+- Otvori pgadmin ili psql i stvori bazu podataka iz dump-a baze.
+- upiši u terminal "npx prisma init" kako bi stvorio .env datoteku
+- upiši lokaciju lokalne baze podataka u stvorenu .env datoteku
+- "npx tsx src/app/PrismaTest.ts" kako bi testirao je li radi
+
 Upali server
 
 ```bash
