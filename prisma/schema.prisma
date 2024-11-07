@@ -7,7 +7,101 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model TodoItem {
-  Name        String  @id
-  Description String?
+model belongsto {
+  categoryid Int
+  itemid     Int
+  category   category @relation(fields: [categoryid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  item       item     @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([categoryid, itemid])
+}
+
+model category {
+  id              Int         @id
+  name            String      @unique
+  supercategoryid Int?
+  belongsto       belongsto[]
+  category        category?   @relation("categoryTocategory", fields: [supercategoryid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  other_category  category[]  @relation("categoryTocategory")
+}
+
+model condition {
+  id   Int    @id
+  name String
+  item item[]
+}
+
+model item {
+  id                               Int               @id
+  title                            String
+  description                      String?
+  askingprice                      Decimal           @db.Decimal(10, 2)
+  sellerid                         Int
+  buyerid                          Int?
+  conditionid                      Int
+  belongsto                        belongsto[]
+  siteuser_item_buyeridTositeuser  siteuser?         @relation("item_buyeridTositeuser", fields: [buyerid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  condition                        condition         @relation(fields: [conditionid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  siteuser_item_selleridTositeuser siteuser          @relation("item_selleridTositeuser", fields: [sellerid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  itemchangestate                  itemchangestate[]
+  picture                          picture[]
+}
+
+model itemchangestate {
+  changetime DateTime @db.Timestamp(6)
+  itemid     Int
+  stateid    Int
+  item       item     @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  state      state    @relation(fields: [stateid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([itemid, stateid, changetime])
+}
+
+model message {
+  id                                    Int       @id
+  content                               String
+  senttime                              DateTime  @db.Timestamp(6)
+  seentime                              DateTime? @db.Timestamp(6)
+  senderid                              Int
+  receiverid                            Int
+  siteuser_message_receiveridTositeuser siteuser  @relation("message_receiveridTositeuser", fields: [receiverid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  siteuser_message_senderidTositeuser   siteuser  @relation("message_senderidTositeuser", fields: [senderid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model picture {
+  url    String @id
+  itemid Int
+  item   item   @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model role {
+  id       Int        @id
+  name     String
+  siteuser siteuser[]
+}
+
+model siteuser {
+  id                                   Int       @id
+  name                                 String
+  surname                              String
+  email                                String    @unique
+  googleid                             Int       @unique
+  password                             String?
+  country                              String?
+  city                                 String?
+  street                               String?
+  houseno                              String?
+  roleid                               Int
+  registertime                         DateTime  @db.Timestamp(6)
+  item_item_buyeridTositeuser          item[]    @relation("item_buyeridTositeuser")
+  item_item_selleridTositeuser         item[]    @relation("item_selleridTositeuser")
+  message_message_receiveridTositeuser message[] @relation("message_receiveridTositeuser")
+  message_message_senderidTositeuser   message[] @relation("message_senderidTositeuser")
+  role                                 role      @relation(fields: [roleid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model state {
+  id              Int               @id
+  name            String
+  itemchangestate itemchangestate[]
 }

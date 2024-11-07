@@ -2,11 +2,16 @@ Ovo je projekt za ProjektR - Nenjuskalo
 
 ## Getting Started
 
+Napomena: "npm install" kako bi instalirao potrebne module.
+
 Upali bazu podataka  
 
 - Otvori pgadmin ili psql i stvori bazu podataka iz dump-a baze.
-- upiši u terminal "npx prisma init" kako bi stvorio .env datoteku
+- stvorni novu praznu BP, pa desni klik, restore, "backup"
+- upiši u terminal "npx prisma init" kako bi stvorio .env datoteku (ako se žali za folder prisma, obriši ga)
 - upiši lokaciju lokalne baze podataka u stvorenu .env datoteku
+- "npx prisma db pull"
+- "npx prisma generate"
 - "npx tsx src/app/PrismaTest.ts" kako bi testirao je li radi
 
 Upali server

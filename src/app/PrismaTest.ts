@@ -3,15 +3,15 @@ import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function main() {
-  /*await prisma.TodoItem.create({
+  /*await prisma.todoItem.create({
     data: {
       Name: 'Todo Item Name',
       Description: 'Put pg database data in .env'
     },
   })
   */
-  const allUsers = await prisma.TodoItem.findMany()
-  console.log(allUsers)
+  const allUsers = await prisma.siteuser.findMany();
+  console.log(allUsers);
   
 }
 
