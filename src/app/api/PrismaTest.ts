@@ -10,7 +10,7 @@ async function main() {
     },
   })
   */
-  const allUsers = await prisma.TodoItem.findMany()
+  const allUsers = await prisma.todoItem.findMany()
   console.log(allUsers)
   
 }
