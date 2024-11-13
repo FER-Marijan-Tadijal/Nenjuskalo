@@ -1,12 +1,12 @@
 "use client";
 import { Container, Box } from "@mui/material";
 import React from "react";
-import ItemThumbnail from "./ItemViewComponents/ItemThumbnail";
-import ItemDescription from "./ItemViewComponents/ItemDescription";
-import ItemSideInfo from "./ItemViewComponents/ItemSideInfo";
+import ItemThumbnail from "../components/ItemViewComponents/ItemThumbnail";
+import ItemDescription from "../components/ItemViewComponents/ItemDescription";
+import ItemSideInfo from "../components/ItemViewComponents/ItemSideInfo";
+import ItemTitle from "../components/ItemViewComponents/ItemTitle";
 import { useState, useContext, createContext } from "react";
 import theme from "../styles/theme";
-import ItemTitle from "./ItemViewComponents/ItemTitle";
 
 const item = {
     title: "Mercedes Benz 2022 EQ-class",

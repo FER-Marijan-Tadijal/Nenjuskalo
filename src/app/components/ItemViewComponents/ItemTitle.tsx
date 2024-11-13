@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { useContext } from "react";
-import { ItemViewContext } from "../ItemView";
+import { ItemViewContext } from "../../pages/ItemViewPage";
 
 const ItemTitle = () => {
     const data = useContext(ItemViewContext);

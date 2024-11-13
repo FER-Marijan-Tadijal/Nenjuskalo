@@ -1,7 +1,7 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import { useContext } from "react";
-import { ItemViewContext } from "../ItemView";
+import { ItemViewContext } from "../../pages/ItemViewPage";
 import theme from "@/app/styles/theme";
 
 const ItemDescription = () => {

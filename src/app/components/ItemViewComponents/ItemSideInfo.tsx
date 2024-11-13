@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { ItemViewContext } from "../ItemView";
+import { ItemViewContext } from "../../pages/ItemViewPage";
 import { useContext } from "react";
 import theme from "@/app/styles/theme";
 
