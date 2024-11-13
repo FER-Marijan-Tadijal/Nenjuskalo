@@ -2,16 +2,18 @@
 import { Container, Box } from "@mui/material";
 import React from "react";
 import ItemThumbnail from "./ItemViewComponents/ItemThumbnail";
-import ItemDetails from "./ItemViewComponents/ItemDescription";
+import ItemDescription from "./ItemViewComponents/ItemDescription";
 import ItemSideInfo from "./ItemViewComponents/ItemSideInfo";
 import { useState, useContext, createContext } from "react";
+import theme from "../styles/theme";
+import ItemTitle from "./ItemViewComponents/ItemTitle";
 
 const item = {
     title: "Mercedes Benz 2022 EQ-class",
     price: 120000,
     condition: "new",
     description:
-        " simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+        "The 2024 Mercedes-Benz S-Class redefines the luxury sedan experience with unmatched elegance, innovation, and power. Crafted with precision, this model combines sophisticated style with advanced technology, setting new standards in both comfort and performance. Under the hood, the S-Class offers a powerful inline-six or optional V8 engine, delivering smooth acceleration and effortless power on the road.",
 };
 const seller = {
     name: "Toni",
@@ -34,24 +36,17 @@ const ItemView = () => {
             <ItemViewContext.Provider value={data}>
                 <Container
                     sx={{
-                        backgroundColor: "white",
+                        backgroundColor: theme.palette.primary.main,
                         height: "100vh",
-                        padding: 4,
+                        padding: 2,
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
                     }}
                 >
-                    <Box
-                        sx={{
-                            width: "100%",
-                            backgroundColor: "red",
-                            display: "flex",
-                            justifyContent: "space-between",
-                            p: 2,
-                        }}
-                    >
-                        <ItemThumbnail />
-                        <ItemSideInfo />
-                    </Box>
-                    <ItemDetails />
+                    <ItemThumbnail />
+                    <ItemTitle />
+                    <ItemDescription />
                 </Container>
             </ItemViewContext.Provider>
         </>
