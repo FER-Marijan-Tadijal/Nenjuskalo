@@ -3,7 +3,7 @@ import React from "react";
 
 type Props = {};
 
-const ItemDetails = (props: Props) => {
+const ItemDescription = (props: Props) => {
     return (
         <Box sx={{ width: "100%", backgroundColor: "blue", padding: 2 }}>
             broskii
@@ -11,4 +11,4 @@ const ItemDetails = (props: Props) => {
     );
 };
 
-export default ItemDetails;
+export default ItemDescription;
