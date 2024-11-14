@@ -2,6 +2,7 @@
 import React from "react";
 import Navbar from "./components/Navbar";  // Reusable Navbar component
 import { Container } from "@mui/material";
+import Footer from "./components/Footer";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,6 +22,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </main>
 
           {/* Footer at the bottom */}
+          <Footer />
         </Container>
       </body>
     </html>

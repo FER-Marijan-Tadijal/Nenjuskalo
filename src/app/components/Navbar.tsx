@@ -2,9 +2,10 @@
 
 import React from "react";
 import { AppBar, Toolbar, Typography, Box, IconButton, InputBase, Badge, Button } from "@mui/material";
-import { Search, ShoppingCart, AccountCircle } from "@mui/icons-material";
+import { Search, ShoppingCart } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import Link from "next/link";
+import GoogleIcon from '@mui/icons-material/Google'; // Using Material UI Google Icon for the button
 
 const SearchBox = styled("div")(({ theme }) => ({
   position: "relative",
@@ -60,15 +61,28 @@ export default function Navbar() {
           </IconButton>
         </SearchBox>
 
-        {/* Account and Cart Icons */}
+        {/* Login with Google Button */}
         <Box sx={{ display: "flex", alignItems: "center", marginLeft: 2 }}>
-          <IconButton component={Link} href="/account" size="large" color="inherit">
-            <AccountCircle />
-          </IconButton>
+          <Button
+            variant="contained"
+            startIcon={<GoogleIcon />}
+            sx={{
+              bgcolor: "#4285F4",
+              color: "white",
+              "&:hover": {
+                bgcolor: "#357ae8",
+              },
+              textTransform: "none", // Keeps "Log in with Google" text normal
+              mr: 2,
+            }}
+            onClick={() => console.log("Log in with Google clicked")}
+          >
+            Log in with Google
+          </Button>
+
+          {/* Cart Icon with Badge */}
           <IconButton component={Link} href="/cart" size="large" color="inherit">
-            <Badge badgeContent={4} color="error">
-              <ShoppingCart />
-            </Badge>
+            <ShoppingCart />
           </IconButton>
         </Box>
       </Toolbar>
