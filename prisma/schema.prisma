@@ -72,6 +72,11 @@ model picture {
   url    String @id
   itemid Int
   item   item   @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+<<<<<<< Updated upstream
+=======
+
+  @@id([itemid, index])
+>>>>>>> Stashed changes
 }
 
 model role {
