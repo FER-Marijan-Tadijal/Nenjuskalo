@@ -69,14 +69,11 @@ model message {
 }
 
 model picture {
-  url    String @id
+  url    String @unique(map: "URL_unique")
   itemid Int
   item   item   @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-<<<<<<< Updated upstream
-=======
 
   @@id([itemid, index])
->>>>>>> Stashed changes
 }
 
 model role {
