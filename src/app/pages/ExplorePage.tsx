@@ -62,13 +62,14 @@ const Explore = () => {
                         Search results for: {search}
                     </Typography>
                 </Box>
-                {exploreItems.map((e) => (
+                {exploreItems.map((e, key) => (
                     <ExploreItem
                         title={e.title}
                         price={e.price}
                         city={e.city}
                         street={e.street}
                         category={e.category}
+                        key={key}
                     />
                 ))}
             </Container>
