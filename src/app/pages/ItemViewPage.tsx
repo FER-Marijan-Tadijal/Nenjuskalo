@@ -39,9 +39,12 @@ const ItemView = () => {
                         backgroundColor: theme.palette.primary.main,
                         height: "100vh",
                         padding: 2,
+                        marginTop: 9,
+                        marginBottom: 1,
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
+                        borderRadius: 2,
                     }}
                 >
                     <ItemThumbnail />
