@@ -69,12 +69,14 @@ model message {
 }
 
 model picture {
-  url    String
+
+  url    String @unique(map: "URL_unique")
   itemid Int
   index  Int
   item   item   @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
-  @@id([url, index])
+
+  @@id([itemid, index])
 }
 
 model role {
