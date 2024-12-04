@@ -1,19 +1,51 @@
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '@/lib/db';
 
 async function main() {
-  /*await prisma.TodoItem.create({
+  /* await prisma.item.create({
     data: {
-      Name: 'Todo Item Name',
-      Description: 'Put pg database data in .env'
+      id: 11,
+      title: "megatron",
+      askingprice: 123122,
+      siteuser_item_selleridTositeuser: {
+        connect: {
+          id: 1
+        }
+      },
+      condition: {
+        connect: {
+          id: 3
+        }
+      }
+    }
+  }) */
+
+  /* await prisma.belongsto.create({
+    data:
+    {
+      categoryid: 4,
+      itemid: 11
+    }
+  }) */
+
+  /* await prisma.category.update({
+    data: {
+      name: "transformeri"
     },
-  })
-  */
-  const allUsers = await prisma.TodoItem.findMany()
-  console.log(allUsers)
-  
+    where: {
+      id: 4
+    }
+  }) */
+
+  console.log(await prisma.belongsto.findMany({
+    select: {
+      item: true
+    },
+    where: {
+      categoryid: 4
+    }
+  }));
 }
+
 
 main()
   .then(async () => {
