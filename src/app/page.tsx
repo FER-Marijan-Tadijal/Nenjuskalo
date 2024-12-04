@@ -1,4 +1,5 @@
 import { Container, Typography, Box } from "@mui/material";
+import Component from "@/app/Component";
 
 export default function Home() {
   return (
@@ -10,6 +11,7 @@ export default function Home() {
         <Typography variant="body1">
           Pocetak developanja je u <code>src/app/page.tsx</code> datoteci. Sretno!
         </Typography>
+        <Component />
       </Box>
     </Container>
   );
