@@ -17,7 +17,7 @@ model belongsto {
 }
 
 model category {
-  id              Int         @id
+  id              Int         @id @default(autoincrement())
   name            String      @unique
   supercategoryid Int?
   belongsto       belongsto[]
