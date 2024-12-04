@@ -19,13 +19,13 @@ async function main() {
     }
   }) */
 
-  await prisma.belongsto.create({
+  /* await prisma.belongsto.create({
     data:
     {
       categoryid: 4,
       itemid: 11
     }
-  })
+  }) */
 
   /* await prisma.category.update({
     data: {

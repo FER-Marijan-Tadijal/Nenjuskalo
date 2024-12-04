@@ -55,7 +55,7 @@ export default async function Category({ params }) {
                     <li key={item.item.id}>{`Item ${i + 1}: ${item.item.title}, price: ${item.item.askingprice}, seller: ${item.seller?.name}`}</li>
                 ))}
             </ul>
-            <Link href={"/"}><b>Go back to categories</b></Link>
+            <Link href={"/categories"}><b>Go back to categories</b></Link>
         </>
     );
 }
