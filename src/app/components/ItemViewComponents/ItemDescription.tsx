@@ -11,7 +11,8 @@ const ItemDescription = () => {
         <Box
             sx={{
                 width: "70%",
-                backgroundColor: theme.palette.secondary.main,
+                backgroundColor: "#AED5F2 ",
+                borderRadius: 2,
                 padding: 2,
             }}
         >

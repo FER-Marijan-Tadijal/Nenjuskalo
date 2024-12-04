@@ -13,7 +13,7 @@ const ItemSideInfo = () => {
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "left",
                 p: 4,
             }}
         >

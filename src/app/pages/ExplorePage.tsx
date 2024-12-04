@@ -42,7 +42,8 @@ const Explore = () => {
         <>
             <Container
                 sx={{
-                    backgroundColor: theme.palette.primary.light,
+                    backgroundColor: "#578BA0",
+                    color: "#F1E9DA",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",

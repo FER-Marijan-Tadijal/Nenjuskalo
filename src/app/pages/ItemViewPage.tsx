@@ -36,15 +36,15 @@ const ItemView = () => {
             <ItemViewContext.Provider value={data}>
                 <Container
                     sx={{
-                        backgroundColor: theme.palette.primary.main,
+                        backgroundColor: "#578BA0",
+                        color: "#F1E9DA",
                         height: "100vh",
                         padding: 2,
-                        marginTop: 9,
-                        marginBottom: 1,
+                        paddingBottom: 93,
+                        marginTop: 7,
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
-                        borderRadius: 2,
                     }}
                 >
                     <ItemThumbnail />
