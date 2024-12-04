@@ -48,16 +48,17 @@ const Explore = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     marginTop: 8,
-                    marginBottom: 0,
+                    paddingBottom: 1,
                 }}
             >
                 <Box
                     sx={{
                         marginTop: 2,
                         marginBottom: 1,
-                        padding: 2,
-                        backgroundColor: theme.palette.success.main,
-                        borderRadius: 5,
+                        padding: 1,
+                        backgroundColor: "#D9F0FF ",
+                        color: "#1C2B36",
+                        borderRadius: 2,
                     }}
                 >
                     <Typography variant="h5">

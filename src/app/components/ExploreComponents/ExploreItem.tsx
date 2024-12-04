@@ -20,8 +20,8 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                     padding: 2,
                     display: "flex",
                     justifyContent: "space-between",
-                    borderRadius: 5,
-                    backgroundColor: "#AED5F2 ",
+                    borderRadius: 3,
+                    backgroundColor: "#FFFFFF",
                     color: "#1C2B36",
                 }}
             >
@@ -31,7 +31,7 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                     style={{
                         width: "300px",
                         height: "200px",
-                        borderRadius: 10,
+                        borderRadius: 4,
                     }}
                 />
                 <Box
