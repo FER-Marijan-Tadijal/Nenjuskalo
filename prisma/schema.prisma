@@ -7,7 +7,148 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model TodoItem {
-  Name        String  @id
-  Description String?
+model belongsto {
+  categoryid Int
+  itemid     Int
+  category   category @relation(fields: [categoryid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  item       item     @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([categoryid, itemid])
+}
+
+model category {
+  id              Int         @id @default(autoincrement())
+  name            String      @unique
+  supercategoryid Int?
+  belongsto       belongsto[]
+  category        category?   @relation("categoryTocategory", fields: [supercategoryid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  other_category  category[]  @relation("categoryTocategory")
+}
+
+model condition {
+  id   Int    @id
+  name String
+  item item[]
+}
+
+model item {
+  id                               Int               @id
+  title                            String
+  description                      String?
+  askingprice                      Decimal           @db.Decimal(10, 2)
+  sellerid                         String
+  buyerid                          String?
+  conditionid                      Int
+  belongsto                        belongsto[]
+  siteuser_item_buyeridTositeuser  siteuser?         @relation("item_buyeridTositeuser", fields: [buyerid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  condition                        condition         @relation(fields: [conditionid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  siteuser_item_selleridTositeuser siteuser          @relation("item_selleridTositeuser", fields: [sellerid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  itemchangestate                  itemchangestate[]
+  picture                          picture[]
+}
+
+model itemchangestate {
+  changetime DateTime @db.Timestamp(6)
+  itemid     Int
+  stateid    Int
+  item       item     @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  state      state    @relation(fields: [stateid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+  @@id([itemid, stateid, changetime])
+}
+
+model message {
+  id                                    Int       @id
+  content                               String
+  senttime                              DateTime  @db.Timestamp(6)
+  seentime                              DateTime? @db.Timestamp(6)
+  senderid                              String
+  receiverid                            String
+  siteuser_message_receiveridTositeuser siteuser  @relation("message_receiveridTositeuser", fields: [receiverid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  siteuser_message_senderidTositeuser   siteuser  @relation("message_senderidTositeuser", fields: [senderid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model picture {
+
+  url    String @unique(map: "URL_unique")
+  itemid Int
+  index  Int
+  item   item   @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+
+  @@id([itemid, index])
+}
+
+model role {
+  id       Int        @id
+  name     String
+  siteuser siteuser[]
+}
+
+model siteuser {
+  id                                   String    @id
+  country                              String?
+  city                                 String?
+  street                               String?
+  houseno                              String?
+  roleid                               Int
+  item_item_buyeridTositeuser          item[]    @relation("item_buyeridTositeuser")
+  item_item_selleridTositeuser         item[]    @relation("item_selleridTositeuser")
+  message_message_receiveridTositeuser message[] @relation("message_receiveridTositeuser")
+  message_message_senderidTositeuser   message[] @relation("message_senderidTositeuser")
+  role                                 role      @relation(fields: [roleid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+}
+
+model state {
+  id              Int               @id
+  name            String
+  itemchangestate itemchangestate[]
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
 }
