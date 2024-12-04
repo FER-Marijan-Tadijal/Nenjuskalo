@@ -7,5 +7,5 @@ import theme from "./styles/theme";
 import ProfilePage from "./pages/ProfilePage";
 
 export default function Home() {
-    return <ItemView />;
+    return <ExplorePage />;
 }

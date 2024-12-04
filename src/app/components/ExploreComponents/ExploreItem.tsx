@@ -21,7 +21,8 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                     display: "flex",
                     justifyContent: "space-between",
                     borderRadius: 5,
-                    backgroundColor: theme.palette.secondary.light,
+                    backgroundColor: "#AED5F2 ",
+                    color: "#1C2B36",
                 }}
             >
                 <img

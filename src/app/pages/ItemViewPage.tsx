@@ -40,7 +40,6 @@ const ItemView = () => {
                         color: "#F1E9DA",
                         height: "100vh",
                         padding: 2,
-                        paddingBottom: 93,
                         marginTop: 7,
                         display: "flex",
                         flexDirection: "column",

@@ -48,8 +48,7 @@ const Explore = () => {
                     flexDirection: "column",
                     alignItems: "center",
                     marginTop: 8,
-                    maxWidth: "lg",
-                    marginRight: "auto",
+                    marginBottom: 0,
                 }}
             >
                 <Box

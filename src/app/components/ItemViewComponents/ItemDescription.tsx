@@ -12,6 +12,7 @@ const ItemDescription = () => {
             sx={{
                 width: "70%",
                 backgroundColor: "#AED5F2 ",
+                color: "#1C2B36",
                 borderRadius: 2,
                 padding: 2,
             }}
