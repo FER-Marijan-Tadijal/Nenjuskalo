@@ -36,8 +36,8 @@ model item {
   title                            String
   description                      String?
   askingprice                      Decimal           @db.Decimal(10, 2)
-  sellerid                         Int
-  buyerid                          Int?
+  sellerid                         String
+  buyerid                          String?
   conditionid                      Int
   belongsto                        belongsto[]
   siteuser_item_buyeridTositeuser  siteuser?         @relation("item_buyeridTositeuser", fields: [buyerid], references: [id], onDelete: NoAction, onUpdate: NoAction)
@@ -62,16 +62,21 @@ model message {
   content                               String
   senttime                              DateTime  @db.Timestamp(6)
   seentime                              DateTime? @db.Timestamp(6)
-  senderid                              Int
-  receiverid                            Int
+  senderid                              String
+  receiverid                            String
   siteuser_message_receiveridTositeuser siteuser  @relation("message_receiveridTositeuser", fields: [receiverid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   siteuser_message_senderidTositeuser   siteuser  @relation("message_senderidTositeuser", fields: [senderid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 }
 
 model picture {
-  url    String @id
+
+  url    String @unique(map: "URL_unique")
   itemid Int
+  index  Int
   item   item   @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+
+  @@id([itemid, index])
 }
 
 model role {
@@ -81,18 +86,12 @@ model role {
 }
 
 model siteuser {
-  id                                   Int       @id @default(autoincrement())
-  name                                 String
-  surname                              String
-  email                                String    @unique
-  googleid                             Int       @unique
-  password                             String?
+  id                                   String    @id
   country                              String?
   city                                 String?
   street                               String?
   houseno                              String?
   roleid                               Int
-  registertime                         DateTime  @db.Timestamp(6)
   item_item_buyeridTositeuser          item[]    @relation("item_buyeridTositeuser")
   item_item_selleridTositeuser         item[]    @relation("item_selleridTositeuser")
   message_message_receiveridTositeuser message[] @relation("message_receiveridTositeuser")
@@ -104,4 +103,52 @@ model state {
   id              Int               @id
   name            String
   itemchangestate itemchangestate[]
+}
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  accounts      Account[]
+  sessions      Session[]
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
 }

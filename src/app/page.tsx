@@ -3,6 +3,9 @@ import Link from "next/link";
 
 export default async function Home() {
 
+import Component from "@/app/Component";
+
+
   return (
     <Container maxWidth="md" sx={{ bgcolor: "black", color: "white", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
       <Box textAlign="center">
@@ -14,6 +17,7 @@ export default async function Home() {
         </Typography>
         <br />
         <Link href={"/categories"}>Go to Category Selection</Link>
+        <Component />
       </Box>
     </Container>
   );
