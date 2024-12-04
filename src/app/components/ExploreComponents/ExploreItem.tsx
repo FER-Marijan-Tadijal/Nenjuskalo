@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import theme from "@/app/styles/theme";
 
 type Props = {
@@ -50,8 +50,23 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                         <Typography variant="h6">
                             • Location: {city}, {street}
                         </Typography>
+                        <Typography variant="h6">
+                            • Category: {category}
+                        </Typography>
                     </Box>
-                    <Typography variant="h6">• Category: {category}</Typography>
+                    <Button
+                        variant="contained"
+                        fullWidth
+                        sx={{
+                            mt: 2,
+                            bgcolor: "#FFC300",
+                            color: "#003049",
+                            fontWeight: "600",
+                            "&:hover": { bgcolor: "#E5A800" },
+                        }}
+                    >
+                        View Details
+                    </Button>
                 </Box>
             </Box>
         </>
