@@ -1,11 +1,11 @@
-import prisma from "@/lib/db";
+import { prisma } from "@/prisma";
 import Link from "next/link";
 
 export default async function Category({ params }) {
     const { id } = await params;
     const category_id = parseInt(id);
 
-    async function getSeller(sellerid: number) {
+    async function getSeller(sellerid: string) {
         return await prisma.siteuser.findUnique({
             where: {
                 id: sellerid
@@ -34,7 +34,7 @@ export default async function Category({ params }) {
     let items_and_sellers = [];
 
     for (let i = 0; i < items.length; i++) {
-        const sellerName = await prisma.siteuser.findUnique({
+        const sellerName = await prisma.user.findUnique({
             where: {
                 id: items[i].item.sellerid
             },

@@ -13,6 +13,9 @@ export default async function Page({
     const session = await auth();
     const senderID = session?.user?.id;
 
+    if (senderID == undefined)
+        return (<p>You must be signed in to message people </p>)
+
     let messages = await prisma.message.findMany({
         where: {
             OR: [
