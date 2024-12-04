@@ -36,8 +36,9 @@ const ItemView = () => {
             <ItemViewContext.Provider value={data}>
                 <Container
                     sx={{
-                        backgroundColor: "#578BA0",
-                        color: "#F1E9DA",
+                        width: "900px",
+                        backgroundColor: "#D9F0FF",
+                        color: "#1C2B36",
                         height: "100vh",
                         padding: 2,
                         marginTop: 7,

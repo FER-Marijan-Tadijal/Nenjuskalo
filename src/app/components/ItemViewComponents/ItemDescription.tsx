@@ -15,6 +15,7 @@ const ItemDescription = () => {
                 color: "#1C2B36",
                 borderRadius: 2,
                 padding: 2,
+                marginTop: 2,
             }}
         >
             <Typography variant="body1">{description}</Typography>

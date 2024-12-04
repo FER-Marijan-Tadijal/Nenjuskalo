@@ -1,7 +1,6 @@
 import React from "react";
 import { Box, Container, Typography } from "@mui/material";
 import ExploreItem from "../components/ExploreComponents/ExploreItem";
-import { title } from "process";
 import theme from "../styles/theme";
 
 const exploreItems = [
@@ -42,8 +41,9 @@ const Explore = () => {
         <>
             <Container
                 sx={{
-                    backgroundColor: "#578BA0",
-                    color: "#F1E9DA",
+                    width: "1000px",
+                    backgroundColor: "#D9F0FF ",
+                    //color: "#F1E9DA",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -56,12 +56,12 @@ const Explore = () => {
                         marginTop: 2,
                         marginBottom: 1,
                         padding: 1,
-                        backgroundColor: "#D9F0FF ",
+                        backgroundColor: "#578BA0 ",
                         color: "#1C2B36",
                         borderRadius: 2,
                     }}
                 >
-                    <Typography variant="h5">
+                    <Typography variant="h6">
                         {" "}
                         Search results for: {search}
                     </Typography>
