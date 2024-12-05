@@ -1,10 +1,12 @@
-"use client"
-import { useSession } from "next-auth/react"
+"use server"
 
-export default function Component() {
-  const { data: session, status } = useSession()
+import { auth } from "./auth";
 
-  if (status === "authenticated") {
+export default async function Component() {
+  //const { data: session, status } = useSession()
+  const session = await auth();
+
+  if (session != null) {
     return (
       <>
         <p>Email: {session.user?.email ?? ""}</p>

@@ -41,6 +41,7 @@ export default function RootLayout({
             </body>
         </html>
     );
+    
 /* In case the merge fiddles something up
 export default function RootLayout({
   children,
