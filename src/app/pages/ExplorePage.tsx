@@ -42,7 +42,7 @@ const Explore = () => {
             <Container
                 sx={{
                     width: "1000px",
-                    backgroundColor: "#D9F0FF ",
+                    //backgroundColor: "#D9F0FF ",
                     //color: "#F1E9DA",
                     display: "flex",
                     flexDirection: "column",
@@ -56,7 +56,7 @@ const Explore = () => {
                         marginTop: 2,
                         marginBottom: 1,
                         padding: 1,
-                        backgroundColor: "#578BA0 ",
+                        backgroundColor: "#D9F0FF ",
                         color: "#1C2B36",
                         borderRadius: 2,
                     }}

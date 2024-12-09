@@ -16,11 +16,13 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
             <Box
                 sx={{
                     width: "55%",
-                    margin: 0.5,
+                    height: "150px",
+                    margin: 0.7,
                     padding: 2,
                     display: "flex",
                     justifyContent: "space-between",
                     borderRadius: 3,
+                    border: "1px solid grey",
                     backgroundColor: "#FFFFFF",
                     color: "#1C2B36",
                     transition: "background-color 0.3s ease",
@@ -29,15 +31,23 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                     },
                 }}
             >
-                <img
-                    src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fG5hdHVyZXxlbnwwfHx8fDE2MTg4NzU1MjA&ixlib=rb-1.2.1&q=80&w=400"
-                    alt="Nature image from Unsplash"
-                    style={{
-                        width: "250px",
-                        height: "200px",
-                        borderRadius: 4,
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "center",
                     }}
-                />
+                >
+                    <img
+                        src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fG5hdHVyZXxlbnwwfHx8fDE2MTg4NzU1MjA&ixlib=rb-1.2.1&q=80&w=400"
+                        alt="Nature image from Unsplash"
+                        style={{
+                            width: "250px",
+                            height: "145px",
+                            borderRadius: 4,
+                        }}
+                    />
+                </Box>
                 <Box
                     sx={{
                         display: "flex",
