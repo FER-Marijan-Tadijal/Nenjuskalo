@@ -7,6 +7,8 @@ export default async function CategorySelection() {
 
     return (
         <div>
+            <br />
+            <br />
             <h1>Category Selection</h1>
             <br />
             <ul>

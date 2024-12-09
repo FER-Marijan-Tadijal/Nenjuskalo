@@ -249,6 +249,7 @@ export default function HomePage() {
         </Grid>
         <br />
         <Link href={"/categories"}>Go to Category Selection</Link>
+        <Link href={"/makeNewAd"}>Make New Ad Here</Link>
         <Component />
       </Box>
     </Container>
