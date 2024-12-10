@@ -1,6 +1,4 @@
-//
-
-async function getItem(itemId: string) {
+export default async function getItem(itemId: string) {
     try {
         const response = await fetch(`/api/item/${itemId}`);
         const itemData = await response.json();
@@ -9,6 +7,3 @@ async function getItem(itemId: string) {
         console.log("Error: ", err);
     }
 }
-
-const data = getItem("1");
-export default data;

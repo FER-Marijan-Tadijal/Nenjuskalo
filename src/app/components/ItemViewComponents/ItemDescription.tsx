@@ -1,16 +1,20 @@
 import { Box, Typography } from "@mui/material";
 import React from "react";
 import { useContext } from "react";
-import { ItemViewContext } from "../../pages/ItemViewPage";
+//import { ItemViewContext } from "../../pages/ItemViewPage";
 import theme from "@/app/styles/theme";
 
-const ItemDescription = () => {
-    const data = useContext(ItemViewContext);
-    const description = data.item.description;
+interface Prop {
+    description: string;
+}
+
+const ItemDescription = ({ description }: Prop) => {
+    //const data = useContext(ItemViewContext);
+    //const description = data.item.description;
     return (
         <Box
             sx={{
-                width: "70%",
+                width: "80%",
                 backgroundColor: "#AED5F2 ",
                 color: "#1C2B36",
                 borderRadius: 2,
