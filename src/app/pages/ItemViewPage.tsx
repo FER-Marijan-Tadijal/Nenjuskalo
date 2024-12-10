@@ -29,7 +29,12 @@ const data = { item, seller };
 
 export const ItemViewContext = createContext(data);
 
-const ItemView = () => {
+type Props = {
+    itemId: string;
+};
+
+const ItemView = ({ itemId }: Props) => {
+    const e = itemId;
     return (
         <>
             {/* HEADER */}

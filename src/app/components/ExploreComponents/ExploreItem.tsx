@@ -62,7 +62,7 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                     >
                         <Typography variant="body2">• {title}</Typography>
                         <Typography variant="body2">
-                            • Price: {price}
+                            • Price: {price} €
                         </Typography>
                         <Typography variant="body2">
                             • Location: {city}, {street}
