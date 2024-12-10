@@ -2,6 +2,7 @@ import { Container, Typography, Box } from "@mui/material";
 import Component from "@/app/Component";
 import { auth } from "@/app/auth"
 import { prisma } from "@/prisma";
+import SendMessages from "@/app/message/sendMessage";
 //import MessageList from "@/app/message/messageList";
 
 export default async function Page({
@@ -51,7 +52,11 @@ export default async function Page({
                     ))}
                 </ul>
 
+                
+
             </Box>
+
+            <SendMessages senderid={senderID} receiverid={receiverID}/>
         </Container>
     );
 }
