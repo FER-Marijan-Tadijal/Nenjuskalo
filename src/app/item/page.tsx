@@ -1,5 +1,5 @@
 import ItemView from "../pages/ItemViewPage";
 
 export default function HomePage() {
-    return <ItemView />
+    return <ItemView itemId="1" />;
 }

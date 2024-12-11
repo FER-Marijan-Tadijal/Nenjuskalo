@@ -3,10 +3,11 @@ import { Container, Box } from "@mui/material";
 import React from "react";
 import ItemThumbnail from "../components/ItemViewComponents/ItemThumbnail";
 import ItemDescription from "../components/ItemViewComponents/ItemDescription";
-import ItemSideInfo from "../components/ItemViewComponents/ItemSideInfo";
 import ItemTitle from "../components/ItemViewComponents/ItemTitle";
 import { useState, useContext, createContext } from "react";
-import theme from "../styles/theme";
+//import theme from "../styles/theme";
+import getItem from "../data/fetchItem";
+import getSeller from "../data/fetchSeller";
 
 const item = {
     title: "Mercedes Benz 2022 EQ-class",
@@ -26,32 +27,40 @@ const seller = {
 };
 
 const data = { item, seller };
+//export const ItemViewContext = createContext(data);
 
-export const ItemViewContext = createContext(data);
+type Props = {
+    itemId: string;
+    sellerId: string;
+};
 
-const ItemView = () => {
+const ItemView = ({ itemId, sellerId }: Props) => {
+    const itemInfo = getItem(itemId); //FETCH FUNCTIONS
+    const sellerInfo = getSeller(sellerId); //FETCH FUNCTIONS
+
     return (
         <>
-            {/* HEADER */}
-            <ItemViewContext.Provider value={data}>
-                <Container
-                    sx={{
-                        width: "900px",
-                        backgroundColor: "#D9F0FF",
-                        color: "#1C2B36",
-                        height: "100vh",
-                        padding: 2,
-                        marginTop: 7,
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                    }}
-                >
-                    <ItemThumbnail />
-                    <ItemTitle />
-                    <ItemDescription />
-                </Container>
-            </ItemViewContext.Provider>
+            {/*<ItemViewContext.Provider value={data}>*/}
+            <Container
+                sx={{
+                    width: "950px",
+                    //backgroundColor: "#D9F0FF",
+                    color: "#1C2B36",
+                    height: "100vh",
+                    padding: 2,
+                    marginBottom: 20,
+                    //paddingBottom: 90,
+                    marginTop: 7,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                }}
+            >
+                <ItemThumbnail seller={seller} />
+                <ItemTitle item={item} />
+                <ItemDescription description={item.description} />
+            </Container>
+            {/*</ItemViewContext.Provider>*/}
         </>
     );
 };
