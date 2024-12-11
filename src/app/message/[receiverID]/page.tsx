@@ -3,7 +3,7 @@ import Component from "@/app/Component";
 import { auth } from "@/app/auth"
 import { prisma } from "@/prisma";
 import SendMessages from "@/app/message/sendMessage";
-//import MessageList from "@/app/message/messageList";
+import MessageList from "@/app/message/messageList";
 
 export default async function Page({
     params,
@@ -46,18 +46,10 @@ export default async function Page({
                 <Component />
                 <div>You are currently messaging: {receiver?.name} with ID: { receiverID }</div>
 
-                <ul>
-                    {messages.map((message) => (
-                        <li key={message.id}>{message.content}</li>
-                    ))}
-                </ul>
-
-                
-
+                <MessageList senderID={senderID} receiverID={receiverID} />
             </Box>
 
             <SendMessages senderid={senderID} receiverid={receiverID}/>
         </Container>
     );
 }
-

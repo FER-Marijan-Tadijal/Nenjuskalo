@@ -1,14 +1,14 @@
-// Note: This may be deleted yet. Must check SWR and client-side fetching
 
 import { prisma } from "@/prisma"
 
-export async function GET({
-    params,
-}: {
-    params: Promise<{ users: string[] }>
-}) {
-    const senderID = (await params).users[0]
-    const receiverID = (await params).users[1]
+export function GET() {
+    return Response.json("Stop touching my api.");
+}
+
+export async function POST(request: Request) {
+    const body = await request.json();
+    const senderID = body.senderid;
+    const receiverID = body.receiverid;
 
     let data = await prisma.message.findMany({
         where: {
@@ -26,7 +26,7 @@ export async function GET({
         orderBy: {
             senttime: "desc"
         }
-        });
-   
-    return Response.json({ data })
-  }
+    });
+
+    return Response.json(data)
+}

@@ -26,11 +26,12 @@ export default async function SendMessages({ senderid, receiverid }: {senderid: 
                 receiverid: receiverid,
             }
         })
-        // revalidate cache
     }
    
-    return <form action={sendMyMessage}>
+    return (
+    <form action={sendMyMessage}>
         <input type="text" required name="content" placeholder="Aa"></input>
         <input type="submit" value="Pošalji"></input>
     </form>
-  }
+    )
+}
