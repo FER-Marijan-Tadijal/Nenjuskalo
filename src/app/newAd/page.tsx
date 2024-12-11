@@ -47,7 +47,7 @@ export default async function makeNewAd() {
                         title: formData.get("title") as string,
                         description: formData.get("description") as string,
                         askingprice: parseInt(formData.get("askingprice") as string),
-                        sellerid: 1, //promijeniti sa id-ijem trenutnog korisnika
+                        sellerid: "1", //promijeniti sa id-ijem trenutnog korisnika
                         conditionid: parseInt(formData.get("condition") as string)
                     }
                 })
