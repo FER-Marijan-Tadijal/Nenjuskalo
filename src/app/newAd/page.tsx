@@ -1,11 +1,14 @@
 import { prisma } from "@/prisma";
 import Link from "next/link";
 import { format } from "path";
+import { auth } from "@/app/auth";
 
 export default async function makeNewAd() {
-
     const possible_conditions = await prisma.condition.findMany();
     const categories = await prisma.category.findMany();
+    const session = await auth();
+
+    if (session == null) return "You must be signed in to create an ad!"
 
     /* console.log(await prisma.siteuser.findMany());
     console.log(await prisma.condition.findMany());
@@ -47,7 +50,7 @@ export default async function makeNewAd() {
                         title: formData.get("title") as string,
                         description: formData.get("description") as string,
                         askingprice: parseInt(formData.get("askingprice") as string),
-                        sellerid: 1, //promijeniti sa id-ijem trenutnog korisnika
+                        sellerid: session.user?.id,
                         conditionid: parseInt(formData.get("condition") as string)
                     }
                 })

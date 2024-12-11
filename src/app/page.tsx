@@ -344,8 +344,10 @@ export default function HomePage() {
                 <Link href={"/categories"}>Go to Category Selection</Link>
                 <br />
                 <Link href={"/makeNewAd"}>Make New Ad Here</Link>
+                <Link href={"/message"}>Go to messages</Link>
                 <Component />
             </Box>
         </Container>
     );
 }
+
