@@ -3,14 +3,14 @@
 import React from "react";
 import Link from "next/link";
 import { Box, Typography, Grid } from "@mui/material";
-import { Facebook, Twitter, Instagram } from "@mui/icons-material";
+import { GitHub } from "@mui/icons-material";
 
 const Footer = () => {
     return (
         <Box
             component="footer"
             sx={{
-                width: "vp",
+                width: "100%", // Ensure full width
                 overflow: "hidden",
                 backgroundColor: "#003049",
                 color: "#F1E9DA",
@@ -18,10 +18,10 @@ const Footer = () => {
                 px: 2,
             }}
         >
-            <Box sx={{ maxWidth: "1200px", mx: "auto" }}>
-                <Grid container spacing={4}>
+            <Box sx={{ maxWidth: "1200px", mx: "auto", px: 4 }}>
+                <Grid container spacing={4} justifyContent="space-between">
                     {/* About Us Section */}
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3} sx={{ textAlign: "center" }}>
                         <Typography
                             variant="h6"
                             gutterBottom
@@ -32,7 +32,7 @@ const Footer = () => {
                                 letterSpacing: "0.05em",
                             }}
                         >
-                            About Us
+                            O nama
                         </Typography>
                         <Typography
                             variant="body2"
@@ -42,55 +42,15 @@ const Footer = () => {
                                 fontSize: "0.9rem",
                             }}
                         >
-                            We are a company dedicated to providing the best
-                            products and services to our customers. Learn more
-                            about our story and team.
+                            Šnjofalica je DRUGI najveći i najpopularniji internetski oglasnik u Hrvatskoj koji svakodnevno spaja stotine tisuća kupaca i prodavatelja. 
+                            <br />
+                            <br />
+                            Naša platforma omogućuje trgovanje između pojedinaca, putem sigurnog, jednostavnog i intuitivnog okruženja.
                         </Typography>
-                    </Grid>
-
-                    {/* Links Section */}
-                    <Grid item xs={12} sm={6} md={3}>
-                        <Typography
-                            variant="h6"
-                            gutterBottom
-                            sx={{
-                                color: "#FFC300",
-                                fontFamily: "'Poppins', sans-serif",
-                                fontWeight: "600",
-                                letterSpacing: "0.05em",
-                            }}
-                        >
-                            Links
-                        </Typography>
-                        <Box sx={{ display: "flex", flexDirection: "column" }}>
-                            {["Home", "About", "Contact"].map((label) => (
-                                <Link
-                                    href={`/${label.toLowerCase()}`}
-                                    key={label}
-                                    passHref
-                                >
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            fontFamily: "'Roboto', sans-serif",
-                                            color: "inherit",
-                                            textDecoration: "none",
-                                            mb: 1,
-                                            cursor: "pointer",
-                                            "&:hover": {
-                                                color: "#FFC300", // On hover
-                                            },
-                                        }}
-                                    >
-                                        {label}
-                                    </Typography>
-                                </Link>
-                            ))}
-                        </Box>
                     </Grid>
 
                     {/* Contact Section */}
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3} sx={{ textAlign: "center" }}>
                         <Typography
                             variant="h6"
                             gutterBottom
@@ -101,7 +61,7 @@ const Footer = () => {
                                 letterSpacing: "0.05em",
                             }}
                         >
-                            Contact
+                            Kontakt
                         </Typography>
                         <Typography
                             variant="body2"
@@ -111,7 +71,7 @@ const Footer = () => {
                                 fontSize: "0.9rem",
                             }}
                         >
-                            1234 Street Name, City, State, Zip
+                            1234 Ime Ulice, Grad, Država, Zip
                         </Typography>
                         <Typography
                             variant="body2"
@@ -121,7 +81,7 @@ const Footer = () => {
                                 fontSize: "0.9rem",
                             }}
                         >
-                            Phone: (123) 456-7890
+                            Tel: (123) 456-7890
                         </Typography>
                         <Typography
                             variant="body2"
@@ -131,12 +91,12 @@ const Footer = () => {
                                 fontSize: "0.9rem",
                             }}
                         >
-                            Email: info@example.com
+                            Email: imeprezime@mail.com
                         </Typography>
                     </Grid>
 
                     {/* Social Media Section */}
-                    <Grid item xs={12} sm={6} md={3}>
+                    <Grid item xs={12} sm={6} md={3} sx={{ textAlign: "center" }}>
                         <Typography
                             variant="h6"
                             gutterBottom
@@ -147,25 +107,21 @@ const Footer = () => {
                                 letterSpacing: "0.05em",
                             }}
                         >
-                            Follow Us
+                            Pratite nas
                         </Typography>
-                        <Box sx={{ display: "flex", gap: 1 }}>
-                            {[Facebook, Twitter, Instagram].map(
-                                (Icon, index) => (
-                                    <Link href="#" key={index} passHref>
-                                        <Icon
-                                            sx={{
-                                                color: "#F1E9DA",
-                                                cursor: "pointer",
-                                                "&:hover": {
-                                                    color: "#FFC300", // On hover
-                                                },
-                                                fontSize: "1.8rem",
-                                            }}
-                                        />
-                                    </Link>
-                                )
-                            )}
+                        <Box sx={{ display: "flex", justifyContent: "center" }}>
+                            <Link href="https://github.com/FER-Marijan-Tadijal/Nenjuskalo" passHref>
+                                <GitHub
+                                    sx={{
+                                        color: "#F1E9DA",
+                                        cursor: "pointer",
+                                        "&:hover": {
+                                            color: "#FFC300", // Change color on hover
+                                        },
+                                        fontSize: "2.5rem", // Larger icon size
+                                    }}
+                                />
+                            </Link>
                         </Box>
                     </Grid>
                 </Grid>
@@ -179,8 +135,7 @@ const Footer = () => {
                             fontSize: "0.9rem",
                         }}
                     >
-                        &copy; {new Date().getFullYear()} Your Company. All
-                        rights reserved.
+                        &copy; {new Date().getFullYear()} FER. Ova stranica napravljena je u sklopu kolegija "Projekt R"
                     </Typography>
                 </Box>
             </Box>

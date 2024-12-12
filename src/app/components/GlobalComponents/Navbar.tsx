@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
     AppBar,
     Toolbar,
@@ -9,29 +9,33 @@ import {
     IconButton,
     InputBase,
     Button,
+    Badge,
 } from "@mui/material";
 import { Search, ShoppingCart } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import Link from "next/link";
 import Image from "next/image";
 import GoogleIcon from "@mui/icons-material/Google";
+import GitHubIcon from "@mui/icons-material/GitHub";
+import { useSession, signIn, signOut } from "next-auth/react"; // For authentication
 
-const SearchBox = styled("div")(({ theme }) => ({
+const SearchBox = styled("form")(({ theme }) => ({
     position: "relative",
-    borderRadius: "20px", // Rounded corners
+    borderRadius: "20px",
     backgroundColor: "#A2CFFF",
     "&:hover": {
-        backgroundColor: "#8AB3E9", // Slightly darker blue on hover
+        backgroundColor: "#8AB3E9",
     },
     width: "100%",
     maxWidth: "300px",
     marginLeft: theme.spacing(2),
-    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)", // Soft shadow
+    boxShadow: "0px 4px 8px rgba(0, 0, 0, 0.2)",
 }));
 
 const StyledInput = styled(InputBase)(({ theme }) => ({
     color: "#003049",
     padding: theme.spacing(1, 1, 1, 3),
+    paddingRight: `calc(1em + ${theme.spacing(5)})`,
     fontFamily: "'Roboto', sans-serif",
     fontSize: "1rem",
     width: "100%",
@@ -39,12 +43,11 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
     overflow: "hidden",
     textOverflow: "ellipsis",
     "&::placeholder": {
-        color: "#003049", // Placeholder text
-        opacity: 0.6, // Make placeholder lighter
+        color: "#003049",
+        opacity: 0.6,
     },
 }));
 
-// Custom styling for Navbar Links
 const NavbarLink = styled(Button)(({ theme }) => ({
     color: "#F1E9DA",
     fontFamily: "'Poppins', sans-serif",
@@ -53,19 +56,31 @@ const NavbarLink = styled(Button)(({ theme }) => ({
     fontSize: "1rem",
     textTransform: "uppercase",
     "&:hover": {
-        color: "#FFC300", // Yellow on hover
+        color: "#FFC300",
     },
 }));
 
 export default function Navbar() {
+    const { data: session } = useSession(); // Use session data
+    const [query, setQuery] = useState("");
+    const [cartCount, setCartCount] = useState(0); // Placeholder cart count
+
+    const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        if (!query.trim()) {
+            alert("Unesite pojam za pretragu!");
+            return;
+        }
+        console.log("Searching for:", query);
+        // Implement backend API call here
+    };
+
     return (
         <AppBar
             position="fixed"
             sx={{ bgcolor: "#003049", width: "100%", boxShadow: "none" }}
         >
-            {" "}
-            {/* Dark Blue */}
-            <Toolbar sx={{ justifyContent: "center" }}>
+            <Toolbar sx={{ justifyContent: "space-between" }}>
                 {/* Logo and Home Link */}
                 <Box
                     sx={{ display: "flex", alignItems: "center", flexGrow: 1 }}
@@ -76,7 +91,6 @@ export default function Navbar() {
                         style={{ textDecoration: "none", color: "inherit" }}
                     >
                         <Box sx={{ display: "flex", alignItems: "center" }}>
-                            {/* Rounded Logo Container */}
                             <Box
                                 sx={{
                                     width: 40,
@@ -96,8 +110,6 @@ export default function Navbar() {
                                     priority
                                 />
                             </Box>
-
-                            {/* Title */}
                             <Typography
                                 variant="h6"
                                 sx={{
@@ -122,30 +134,51 @@ export default function Navbar() {
                         justifyContent: "center",
                     }}
                 >
-                    {["Početna", "Artikli", "Košarica"].map((label) => (
+                    {["Početna", "Kategorije", "Košarica"].map((label) => (
                         <Link
-                            href={`/${label.toLowerCase()}`}
+                            href={
+                                label === "Početna"
+                                    ? "/"
+                                    : label === "Kategorije"
+                                    ? "/categories"
+                                    : `/${label.toLowerCase()}`
+                            }
                             key={label}
                             passHref
                         >
                             <NavbarLink>{label}</NavbarLink>
                         </Link>
                     ))}
+
+                    {/* Add Profile Button if authenticated */}
+                    {session && (
+                        <Link href="/profile" passHref>
+                            <NavbarLink>Profil</NavbarLink>
+                        </Link>
+                    )}
                 </Box>
 
-                {/* Centered Search Bar */}
+                {/* Search Bar */}
                 <Box
                     sx={{
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
-                        flexGrow: 2,
+                        flexGrow: 4.5,
                     }}
                 >
-                    <SearchBox>
+                    <SearchBox
+                        onSubmit={handleSearch}
+                        sx={{
+                            maxWidth: "500px",
+                            width: "100%",
+                        }}
+                    >
                         <StyledInput
                             placeholder="Search…"
                             inputProps={{ "aria-label": "search" }}
+                            value={query}
+                            onChange={(e) => setQuery(e.target.value)}
                         />
                         <IconButton
                             type="submit"
@@ -161,48 +194,62 @@ export default function Navbar() {
                     </SearchBox>
                 </Box>
 
-                {/* Login with Google Button and Cart Icon */}
+                {/* Login with Google/GitHub or Sign Out Button */}
                 <Box
                     sx={{
                         display: "flex",
+                        gap: 2,
                         alignItems: "center",
-                        flexGrow: 1,
-                        justifyContent: "flex-end",
                     }}
                 >
-                    <Button
-                        variant="contained"
-                        startIcon={<GoogleIcon />}
-                        sx={{
-                            bgcolor: "#FFC300",
-                            color: "#003049",
-                            fontFamily: "'Poppins', sans-serif",
-                            fontWeight: "bold",
-                            "&:hover": {
-                                bgcolor: "#E5A800",
-                            },
-                            textTransform: "none",
-                            mr: 2,
-                            px: 2,
-                        }}
-                        onClick={() =>
-                            console.log("Log in with Google clicked")
-                        }
-                    >
-                        Logirajte se uz Google
-                    </Button>
-
-                    {/* Cart Icon */}
-                    <IconButton
-                        component={Link}
-                        href="/cart"
-                        size="large"
-                        sx={{ color: "#F1E9DA" }}
-                    >
-                        {" "}
-                        {/* Off-White */}
-                        <ShoppingCart />
-                    </IconButton>
+                    {!session ? (
+                        <Button
+                            variant="contained"
+                            startIcon={
+                                <Box
+                                    sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <GitHubIcon />
+                                    <GoogleIcon sx={{ ml: 1 }} />
+                                </Box>
+                            }
+                            sx={{
+                                bgcolor: "#FFC300",
+                                color: "#003049",
+                                fontFamily: "'Poppins', sans-serif",
+                                fontWeight: "bold",
+                                "&:hover": {
+                                    bgcolor: "#E5A800",
+                                },
+                                textTransform: "none",
+                                px: 2,
+                            }}
+                            onClick={() => signIn()} // Use signIn for authentication
+                        >
+                            Prijava
+                        </Button>
+                    ) : (
+                        <Button
+                            variant="contained"
+                            sx={{
+                                bgcolor: "#FFC300",
+                                color: "#003049",
+                                fontFamily: "'Poppins', sans-serif",
+                                fontWeight: "bold",
+                                "&:hover": {
+                                    bgcolor: "#E5A800",
+                                },
+                                textTransform: "none",
+                                px: 2,
+                            }}
+                            onClick={() => signOut()} // Use signOut for authentication
+                        >
+                            Odjava
+                        </Button>
+                    )}
                 </Box>
             </Toolbar>
         </AppBar>
