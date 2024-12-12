@@ -50,8 +50,9 @@ export default async function makeNewAd() {
                         title: formData.get("title") as string,
                         description: formData.get("description") as string,
                         askingprice: parseInt(formData.get("askingprice") as string),
-                        sellerid: session.user?.id,
+                        sellerid: session.user?.id != undefined ? session.user?.id : "greska",
                         conditionid: parseInt(formData.get("condition") as string)
+
                     }
                 })
                 await prisma.belongsto.create({
