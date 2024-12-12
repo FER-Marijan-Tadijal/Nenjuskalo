@@ -58,7 +58,7 @@ model itemchangestate {
 }
 
 model message {
-  id                                    Int       @id @default(autoincrement())
+  id                                    Int       @id
   content                               String
   senttime                              DateTime  @db.Timestamp(6)
   seentime                              DateTime? @db.Timestamp(6)
@@ -69,12 +69,10 @@ model message {
 }
 
 model picture {
-
   url    String @unique(map: "URL_unique")
   itemid Int
   index  Int
   item   item   @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
 
   @@id([itemid, index])
 }
