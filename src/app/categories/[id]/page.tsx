@@ -35,12 +35,12 @@ export default async function Category({ params }: {params: {id: string}}) {
     let items_and_sellers = [];
 
     for (let i = 0; i < items.length; i++) {
-        const sellerName = await prisma.siteuser.findUnique({
+        const sellerName = await prisma.user.findUnique({
             where: {
                 id: items[i].item.sellerid
             },
             select: {
-                id: true
+                name: true
             }
         })
         items_and_sellers.push({ item: items[i].item, seller: sellerName });
@@ -55,7 +55,7 @@ export default async function Category({ params }: {params: {id: string}}) {
             <h1>Category: {category?.name}</h1>
             <ul>
                 {items_and_sellers.map((item, i) => (
-                    <li key={item.item.id}>{`Item ${i + 1}: ${item.item.title}, price: ${item.item.askingprice}, seller: ${item.seller?.id}`}</li>
+                    <li key={item.item.id}>{`Item ${i + 1}: ${item.item.title}, price: ${item.item.askingprice}, seller: ${item.seller?.name}`}</li>
                 ))}
             </ul>
             <Link href={"/categories"}><b>Go back to categories</b></Link>
