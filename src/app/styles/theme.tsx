@@ -12,10 +12,10 @@ const theme = createTheme({
         accent: {
             main: "#FFC300", // Yellow for buttons
         },
-        background: {
-            default: "#ffffff", // White background
-            paper: "#ffffff", // Paper background is also white for consistency
-        },
+        /*background: {
+            default: "#ffffff",
+            paper: "#ffffff",
+        },*/
         textBlack: {
             main: "#1C2B36", // Grey for light background
         },
@@ -28,13 +28,14 @@ const theme = createTheme({
         buttonHover: {
             main: "#E5A800",
         },
-        text: {
+        /*text: {
             primary: "#333333", // Dark gray for primary text
             secondary: "#555555", // Medium gray for secondary text
         },
-        divider: "#e0e0e0", // Light gray for borders or dividers
+        divider: "#e0e0e0", // Light gray for borders or dividers*/
     },
     typography: {
+        //fontove treba popravit
         fontFamily: '"Roboto", sans-serif', // Font for the whole theme
         h1: {
             fontWeight: 600,
@@ -52,7 +53,7 @@ const theme = createTheme({
             fontWeight: 400,
             color: "#555555",
         },
-    },
+    }, //OVO DOLJE IZGENERIRAO CHAT GPT, TREBA TEK NAPRAVIT/POPRAVIT ZAPRAVO - ignoriraj zasad
     components: {
         MuiButton: {
             styleOverrides: {
