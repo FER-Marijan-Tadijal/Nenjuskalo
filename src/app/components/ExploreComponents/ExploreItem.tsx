@@ -27,7 +27,7 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                     color: "#1C2B36",
                     transition: "background-color 0.3s ease",
                     "&:hover": {
-                        backgroundColor: "#FAF3E0",
+                        backgroundColor: theme.palette.cardHover.main,
                     },
                 }}
             >
@@ -76,10 +76,12 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                         fullWidth
                         sx={{
                             mt: 2,
-                            bgcolor: "#FFC300",
-                            color: "#003049",
+                            bgcolor: theme.palette.accent.main,
+                            color: theme.palette.primary.main,
                             fontWeight: "600",
-                            "&:hover": { bgcolor: "#E5A800" },
+                            "&:hover": {
+                                bgcolor: theme.palette.buttonHover.main,
+                            },
                         }}
                     >
                         View Details

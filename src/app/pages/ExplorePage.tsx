@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import {
     Box,
+    Button,
     Container,
     Typography,
     FormControl,
@@ -52,6 +53,18 @@ const search = "Mercedes car";
 const categories = ["Auto-Moto nautika", "Oprema", "Odjeca", "Obuca"];
 
 const Explore = () => {
+    const [page, setPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(1);
+
+    const fetchItems = async (currentPage: number) => {
+        const res = await fetch(
+            `http://localhost:3000/api/items?page=${currentPage}`
+        );
+        const data = await res.json();
+        setItems(data.data);
+        setTotalPages(data.totalPages);
+    };
+
     const [items, setItems] = useState(exploreItems);
     const [lowestPrice, setLowPrice] = useState("");
     const [highestPrice, setHighPrice] = useState("");
@@ -133,7 +146,7 @@ const Explore = () => {
                 <Box>
                     <Box
                         sx={{
-                            backgroundColor: "#D9F0FF",
+                            backgroundColor: theme.palette.secondary.main,
                             mt: 10,
                             padding: 2,
                             width: "300px",
@@ -165,7 +178,7 @@ const Explore = () => {
                     </Box>
                     <Box
                         sx={{
-                            backgroundColor: "#D9F0FF",
+                            backgroundColor: theme.palette.secondary.main,
                             mt: 2,
                             padding: 2,
                             width: "300px",
@@ -260,6 +273,29 @@ const Explore = () => {
                             Search results for: "{search}"
                         </Typography>
                     </Box>
+                    <Box sx={{ border: "1px solid grey" }}>
+                        <Button
+                            onClick={() =>
+                                setPage((prev) => Math.max(prev - 1, 1))
+                            }
+                            disabled={page === 1}
+                        >
+                            Previous
+                        </Button>
+                        <span>
+                            Page {page} of {totalPages}
+                        </span>
+                        <Button
+                            onClick={() =>
+                                setPage((prev) =>
+                                    Math.min(prev + 1, totalPages)
+                                )
+                            }
+                            disabled={page === totalPages}
+                        >
+                            Next
+                        </Button>
+                    </Box>
                     {items.map((e, key) => (
                         <ExploreItem
                             title={e.title}
@@ -273,7 +309,7 @@ const Explore = () => {
                 </Container>
                 <Box
                     sx={{
-                        backgroundColor: "#D9F0FF",
+                        backgroundColor: theme.palette.secondary.main,
                         mt: 10,
                         padding: 2,
                         width: "300px",
@@ -294,14 +330,15 @@ const Explore = () => {
                                     marginBottom: "auto",
                                     transition: "background-color 0.3s ease",
                                     "&:hover": {
-                                        backgroundColor: "#FAF3E0",
+                                        backgroundColor:
+                                            theme.palette.cardHover.main,
                                     },
                                 }}
                                 key={index}
                             >
                                 <Typography
                                     component="a"
-                                    href={`/items/${item.title}`} //promijeni u item.id
+                                    href={`/items/${item.title}`} // PROMIJENI U item.id
                                     sx={{
                                         textDecoration: "none",
                                         //color: "#1C2B36",

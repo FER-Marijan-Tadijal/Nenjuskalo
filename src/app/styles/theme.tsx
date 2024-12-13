@@ -4,18 +4,29 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
     palette: {
         primary: {
-            main: "#ff6b6b", // Light red as the primary color
-            light: "#ffa4a4", // Lighter shade of red for hover effects
-            contrastText: "#ffffff", // White text on primary elements
+            main: "#003049", // Dark blue
         },
         secondary: {
-            main: "#fff3b0", // Light yellow as the secondary color
-            light: "#fff8d0", // Even lighter yellow for backgrounds/highlights
-            contrastText: "#333333", // Dark text on secondary elements
+            main: "#D9F0FF", // Light blue
+        },
+        accent: {
+            main: "#FFC300", // Yellow for buttons
         },
         background: {
             default: "#ffffff", // White background
             paper: "#ffffff", // Paper background is also white for consistency
+        },
+        textBlack: {
+            main: "#1C2B36", // Grey for light background
+        },
+        textWhite: {
+            main: "#F1E9DA", // White for dark background
+        },
+        cardHover: {
+            main: "#FAF3E0",
+        },
+        buttonHover: {
+            main: "#E5A800",
         },
         text: {
             primary: "#333333", // Dark gray for primary text
@@ -49,8 +60,8 @@ const theme = createTheme({
                     borderRadius: "4px", // Optional: customize button shape
                 },
                 containedPrimary: {
-                    backgroundColor: "#ff6b6b",
-                    color: "#ffffff",
+                    backgroundColor: "#000000",
+                    color: "#000000",
                     "&:hover": {
                         backgroundColor: "#ffa4a4",
                     },
