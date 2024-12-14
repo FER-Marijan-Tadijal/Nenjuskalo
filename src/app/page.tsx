@@ -1,10 +1,9 @@
 "use client";
 
-//import { Container, Typography, Box, ThemeProvider } from "@mui/material";
 //import ItemView from "./pages/ItemViewPage";
 //import NotFoundPage from "./pages/NotFoundPage";
 import ExplorePage from "./pages/ExplorePage";
-//import theme from "./styles/theme";
+import theme from "./styles/theme";
 //import ProfilePage from "./pages/ProfilePage";
 import Component from "@/app/Component";
 
@@ -120,7 +119,11 @@ export default function HomePage() {
                 <Typography
                     variant="h2"
                     gutterBottom
-                    sx={{ ...titleStyle, color: "#FFC300", fontSize: "2.5rem" }}
+                    sx={{
+                        ...titleStyle,
+                        color: "#FFC300",
+                        fontSize: "2.5rem",
+                    }}
                 >
                     Welcome to Šnjofalica!
                 </Typography>
@@ -264,7 +267,9 @@ export default function HomePage() {
                                             bgcolor: "#FFC300",
                                             color: "#003049",
                                             fontWeight: "600",
-                                            "&:hover": { bgcolor: "#E5A800" },
+                                            "&:hover": {
+                                                bgcolor: "#E5A800",
+                                            },
                                         }}
                                         href={`/item/${index}`} //POPRAVI PATH
                                     >
@@ -329,7 +334,9 @@ export default function HomePage() {
                                             bgcolor: "#FFC300",
                                             color: "#003049",
                                             fontWeight: "600",
-                                            "&:hover": { bgcolor: "#E5A800" },
+                                            "&:hover": {
+                                                bgcolor: "#E5A800",
+                                            },
                                         }}
                                         href={`/item/${index}`} //POPRAVI PATH
                                     >

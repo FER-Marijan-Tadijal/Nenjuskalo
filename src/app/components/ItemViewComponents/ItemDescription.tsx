@@ -15,8 +15,8 @@ const ItemDescription = ({ description }: Prop) => {
         <Box
             sx={{
                 width: "80%",
-                backgroundColor: "#AED5F2 ",
-                color: "#1C2B36",
+                backgroundColor: theme.palette.secondary.main,
+                color: theme.palette.textBlack.main,
                 borderRadius: 2,
                 padding: 2,
                 marginTop: 2,

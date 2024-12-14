@@ -4,26 +4,38 @@ import { createTheme } from "@mui/material/styles";
 const theme = createTheme({
     palette: {
         primary: {
-            main: "#ff6b6b", // Light red as the primary color
-            light: "#ffa4a4", // Lighter shade of red for hover effects
-            contrastText: "#ffffff", // White text on primary elements
+            main: "#003049", // Dark blue
         },
         secondary: {
-            main: "#fff3b0", // Light yellow as the secondary color
-            light: "#fff8d0", // Even lighter yellow for backgrounds/highlights
-            contrastText: "#333333", // Dark text on secondary elements
+            main: "#D9F0FF", // Light blue
         },
-        background: {
-            default: "#ffffff", // White background
-            paper: "#ffffff", // Paper background is also white for consistency
+        accent: {
+            main: "#FFC300", // Yellow for buttons
         },
-        text: {
+        /*background: {
+            default: "#ffffff",
+            paper: "#ffffff",
+        },*/
+        textBlack: {
+            main: "#1C2B36", // Grey for light background
+        },
+        textWhite: {
+            main: "#F1E9DA", // White for dark background
+        },
+        cardHover: {
+            main: "#FAF3E0",
+        },
+        buttonHover: {
+            main: "#E5A800",
+        },
+        /*text: {
             primary: "#333333", // Dark gray for primary text
             secondary: "#555555", // Medium gray for secondary text
         },
-        divider: "#e0e0e0", // Light gray for borders or dividers
+        divider: "#e0e0e0", // Light gray for borders or dividers*/
     },
     typography: {
+        //fontove treba popravit
         fontFamily: '"Roboto", sans-serif', // Font for the whole theme
         h1: {
             fontWeight: 600,
@@ -44,43 +56,40 @@ const theme = createTheme({
     },
     components: {
         MuiButton: {
-            styleOverrides: {
-                root: {
-                    borderRadius: "4px", // Optional: customize button shape
-                },
-                containedPrimary: {
-                    backgroundColor: "#ff6b6b",
-                    color: "#ffffff",
-                    "&:hover": {
-                        backgroundColor: "#ffa4a4",
-                    },
-                },
-                containedSecondary: {
-                    backgroundColor: "#fff3b0",
-                    color: "#333333",
-                    "&:hover": {
-                        backgroundColor: "#fff8d0",
-                    },
-                },
-            },
-        },
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: "#ffffff", // White background for input fields
-                    "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                            borderColor: "#e0e0e0", // Default light gray border
-                        },
-                        "&:hover fieldset": {
-                            borderColor: "#ff6b6b", // Light red border on hover
-                        },
-                        "&.Mui-focused fieldset": {
-                            borderColor: "#ff6b6b", // Light red border when focused
+            variants: [
+                {
+                    props: { variant: "accentBtn" },
+                    style: {
+                        mt: 2,
+                        backgroundColor: "#FFC300",
+                        color: "#003049",
+                        fontWeight: "600",
+                        "&:hover": {
+                            backgroundColor: "#E5A800",
                         },
                     },
                 },
-            },
+                {
+                    props: { variant: "categoryBtn" },
+                    style: {
+                        width: "100%",
+                        height: "80px",
+                        borderRadius: "16px",
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                        fontFamily: "'Poppins', sans-serif",
+                        color: "white",
+                        backgroundColor: "#003049",
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+                        "&:hover": {
+                            backgroundColor: "#1c4a6e",
+                            transform: "scale(1.05)",
+                            boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.3)",
+                        },
+                        transition: "transform 0.2s ease-in-out",
+                    },
+                },
+            ],
         },
     },
 });
