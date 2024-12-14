@@ -1,5 +1,5 @@
 import ExplorePage from "../pages/ExplorePage";
 
-export default function HomePage() {
+export default function Page() {
     return <ExplorePage />;
 }

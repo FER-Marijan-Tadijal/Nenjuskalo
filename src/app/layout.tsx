@@ -1,13 +1,15 @@
 // src/app/layout.tsx
 import React from "react";
-import Navbar from "./components/GlobalComponents/Navbar"; // Reusable Navbar component
+import Navbar from "./components/GlobalComponents/Navbar";
 import { Container } from "@mui/material";
 import Footer from "./components/GlobalComponents/Footer";
 import type { Metadata } from "next";
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
 import localFont from "next/font/local";
 import "./globals.css";
 import { SessionProvider } from "next-auth/react";
+//import { ThemeProvider } from "@mui/material";
+import theme from "./styles/theme";
 
 export default function RootLayout({
     children,
@@ -41,8 +43,8 @@ export default function RootLayout({
             </body>
         </html>
     );
-    
-/* In case the merge fiddles something up
+
+    /* In case the merge fiddles something up
 export default function RootLayout({
   children,
 }: Readonly<{

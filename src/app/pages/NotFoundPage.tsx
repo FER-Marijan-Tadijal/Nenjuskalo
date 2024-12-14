@@ -3,9 +3,7 @@ import { Box, Typography, Button } from "@mui/material";
 import Link from "next/link";
 import theme from "../styles/theme";
 
-type Props = {};
-
-const NotFoundPage = (props: Props) => {
+const NotFoundPage = () => {
     return (
         <Box
             sx={{

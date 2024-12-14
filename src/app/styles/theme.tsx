@@ -56,15 +56,31 @@ const theme = createTheme({
     }, //OVO DOLJE IZGENERIRAO CHAT GPT, TREBA TEK NAPRAVIT/POPRAVIT ZAPRAVO - ignoriraj zasad
     components: {
         MuiButton: {
-            styleOverrides: {
-                root: {
-                    borderRadius: "4px", // Optional: customize button shape
+            variants: [
+                {
+                    props: { variant: "accentBtn" },
+                    style: {
+                        border: "1px solid black",
+                        mt: 2,
+                        bgcolor: "#FFC300",
+                        color: "#003049",
+                        fontWeight: "600",
+                        "&:hover": {
+                            bgcolor: "#E5A800",
+                        },
+                    },
                 },
-                containedPrimary: {
-                    backgroundColor: "#000000",
-                    color: "#000000",
+            ],
+            /*styleOverrides: {
+                root: {
+                    mt: 2,
+                },
+                contained: {
+                    bgcolor: "accent.main",
+                    color: "primary.main",
+                    fontWeight: "600",
                     "&:hover": {
-                        backgroundColor: "#ffa4a4",
+                        bgcolor: "theme.palette.buttonHover.main",
                     },
                 },
                 containedSecondary: {
@@ -74,7 +90,7 @@ const theme = createTheme({
                         backgroundColor: "#fff8d0",
                     },
                 },
-            },
+            },*/
         },
         MuiTextField: {
             styleOverrides: {
