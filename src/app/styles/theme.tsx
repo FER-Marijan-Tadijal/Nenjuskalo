@@ -53,62 +53,43 @@ const theme = createTheme({
             fontWeight: 400,
             color: "#555555",
         },
-    }, //OVO DOLJE IZGENERIRAO CHAT GPT, TREBA TEK NAPRAVIT/POPRAVIT ZAPRAVO - ignoriraj zasad
+    },
     components: {
         MuiButton: {
             variants: [
                 {
                     props: { variant: "accentBtn" },
                     style: {
-                        border: "1px solid black",
                         mt: 2,
-                        bgcolor: "#FFC300",
+                        backgroundColor: "#FFC300",
                         color: "#003049",
                         fontWeight: "600",
                         "&:hover": {
-                            bgcolor: "#E5A800",
+                            backgroundColor: "#E5A800",
                         },
+                    },
+                },
+                {
+                    props: { variant: "categoryBtn" },
+                    style: {
+                        width: "100%",
+                        height: "80px",
+                        borderRadius: "16px",
+                        fontSize: "1rem",
+                        fontWeight: "600",
+                        fontFamily: "'Poppins', sans-serif",
+                        color: "white",
+                        backgroundColor: "#003049",
+                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
+                        "&:hover": {
+                            backgroundColor: "#1c4a6e",
+                            transform: "scale(1.05)",
+                            boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.3)",
+                        },
+                        transition: "transform 0.2s ease-in-out",
                     },
                 },
             ],
-            /*styleOverrides: {
-                root: {
-                    mt: 2,
-                },
-                contained: {
-                    bgcolor: "accent.main",
-                    color: "primary.main",
-                    fontWeight: "600",
-                    "&:hover": {
-                        bgcolor: "theme.palette.buttonHover.main",
-                    },
-                },
-                containedSecondary: {
-                    backgroundColor: "#fff3b0",
-                    color: "#333333",
-                    "&:hover": {
-                        backgroundColor: "#fff8d0",
-                    },
-                },
-            },*/
-        },
-        MuiTextField: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: "#ffffff", // White background for input fields
-                    "& .MuiOutlinedInput-root": {
-                        "& fieldset": {
-                            borderColor: "#e0e0e0", // Default light gray border
-                        },
-                        "&:hover fieldset": {
-                            borderColor: "#ff6b6b", // Light red border on hover
-                        },
-                        "&.Mui-focused fieldset": {
-                            borderColor: "#ff6b6b", // Light red border when focused
-                        },
-                    },
-                },
-            },
         },
     },
 });
