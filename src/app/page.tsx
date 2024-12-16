@@ -5,7 +5,6 @@
 import ExplorePage from "./pages/ExplorePage";
 import theme from "./styles/theme";
 //import ProfilePage from "./pages/ProfilePage";
-import Component from "@/app/Component";
 
 //import React from "react";
 import {
@@ -352,7 +351,6 @@ export default function HomePage() {
                 <br />
                 <Link href={"/makeNewAd"}>Make New Ad Here</Link>
                 <Link href={"/message"}>Go to messages</Link>
-                <Component />
             </Box>
         </Container>
     );

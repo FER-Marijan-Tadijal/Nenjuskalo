@@ -1,8 +1,6 @@
 "use client"
 
-import { useSession } from "next-auth/react"
 import { useState, useEffect } from 'react'
-import { prisma } from "@/prisma"
 
 export default function MessageList({ senderID, receiverID } : { senderID: string, receiverID: string}) {
     const [messages, setMessages] = useState<{
