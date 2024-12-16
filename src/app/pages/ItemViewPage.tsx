@@ -1,4 +1,3 @@
-"use client";
 import { Container, Box } from "@mui/material";
 import React from "react";
 import ItemThumbnail from "../components/ItemViewComponents/ItemThumbnail";
@@ -6,8 +5,7 @@ import ItemDescription from "../components/ItemViewComponents/ItemDescription";
 import ItemTitle from "../components/ItemViewComponents/ItemTitle";
 import { useState, useContext, createContext } from "react";
 //import theme from "../styles/theme";
-import getItem from "../dataFunctions/fetchItem";
-import getSeller from "../dataFunctions/fetchSeller";
+import { getItem, getUser} from "@/app/util/getFromId";
 import theme from "../styles/theme";
 
 const item = {
@@ -37,7 +35,7 @@ type Props = {
 
 const ItemView = ({ itemId, sellerId }: Props) => {
     const itemInfo = getItem(itemId); //FETCH FUNCTIONS
-    const sellerInfo = getSeller(sellerId); //FETCH FUNCTIONS
+    const sellerInfo = getUser(sellerId); //FETCH FUNCTIONS
 
     return (
         <>
