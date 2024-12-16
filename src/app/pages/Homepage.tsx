@@ -7,7 +7,6 @@ import ExplorePage from "./ExplorePage";
 //import theme from "./styles/theme";
 //import ProfilePage from "./pages/ProfilePage";
 import Component from "@/app/Component";
-
 //import React from "react";
 import {
     Box,
@@ -22,6 +21,7 @@ import {
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
 import Link from "next/link";
+import CarouselComponent from "../components/GlobalComponents/Carousel";
 
 // Custom font styles
 const titleStyle = {
@@ -57,62 +57,7 @@ export default function HomePage() {
         >
             {/* Main Banner/Carousel Section */}
             <Box sx={{ width: "100%", mb: 4 }}>
-                <Carousel
-                    navButtonsAlwaysVisible
-                    navButtonsProps={{
-                        style: {
-                            backgroundColor: "rgba(0, 0, 0, 0.5)",
-                            color: "white",
-                        },
-                    }}
-                    indicators={true}
-                >
-                    {[
-                        {
-                            image: "/images/banner1.jpg",
-                            title: "Discover Amazing Deals",
-                        },
-                        {
-                            image: "/images/banner2.jpg",
-                            title: "Find Your Next Favorite Product",
-                        },
-                    ].map((item, index) => (
-                        <Box
-                            key={index}
-                            sx={{
-                                position: "relative",
-                                width: "100%",
-                                height: "400px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                overflow: "hidden",
-                            }}
-                        >
-                            <Image
-                                src={item.image}
-                                alt={item.title}
-                                layout="fill"
-                                objectFit="cover"
-                                priority
-                            />
-                            <Typography
-                                variant="h3"
-                                sx={{
-                                    ...titleStyle,
-                                    color: "#F1E9DA",
-                                    backgroundColor: "rgba(0, 0, 0, 0.6)",
-                                    padding: "10px 20px",
-                                    borderRadius: "8px",
-                                    textAlign: "center",
-                                    zIndex: 1,
-                                }}
-                            >
-                                {item.title}
-                            </Typography>
-                        </Box>
-                    ))}
-                </Carousel>
+                <CarouselComponent />
             </Box>
 
             {/* Hero Section */}
@@ -122,7 +67,7 @@ export default function HomePage() {
                     gutterBottom
                     sx={{ ...titleStyle, color: "#FFC300", fontSize: "2.5rem" }}
                 >
-                    Welcome to Šnjofalica!
+                    Dobrodošli u Šnjofalicu!
                 </Typography>
                 <Typography
                     variant="body1"
@@ -132,8 +77,8 @@ export default function HomePage() {
                         fontSize: "1.1rem",
                     }}
                 >
-                    Discover amazing deals and browse our wide selection of
-                    products.
+                    Pogledajte našu ponudu i
+                    pronađite ono što vam je potrebno!
                 </Typography>
                 <Button
                     variant="contained"
@@ -146,7 +91,7 @@ export default function HomePage() {
                         "&:hover": { bgcolor: "#E5A800" },
                     }}
                 >
-                    Shop Now
+                    Istraži!
                 </Button>
             </Box>
 
@@ -266,7 +211,7 @@ export default function HomePage() {
                                             fontWeight: "600",
                                             "&:hover": { bgcolor: "#E5A800" },
                                         }}
-                                        href={`/item/${index}`} //POPRAVI PATH
+                                        href="/item"
                                     >
                                         View Details
                                     </Button>
@@ -340,12 +285,6 @@ export default function HomePage() {
                         </Grid>
                     ))}
                 </Grid>
-                <br />
-                {/* <Link href={"/categories"}>Go to Category Selection</Link> */}
-                <br />
-                <Link href={"/makeNewAd"}>Make New Ad Here</Link>
-                <br />
-                <Link href={"/message"}>Go to messages</Link>
             </Box>
         </Container>
     );

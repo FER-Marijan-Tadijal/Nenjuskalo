@@ -9,16 +9,21 @@ import {
     IconButton,
     InputBase,
     Button,
-    Badge,
 } from "@mui/material";
 import { Search, ShoppingCart } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import Link from "next/link";
 import Image from "next/image";
+import { signIn, signOut } from "next-auth/react";
+import type { Session } from "next-auth";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import { useSession, signIn, signOut } from "next-auth/react"; // For authentication
 
+interface NavbarProps {
+    session: Session | null; // Accepts session as a prop
+}
+
+// Styled Components
 const SearchBox = styled("form")(({ theme }) => ({
     position: "relative",
     borderRadius: "20px",
@@ -39,9 +44,6 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
     fontFamily: "'Roboto', sans-serif",
     fontSize: "1rem",
     width: "100%",
-    whiteSpace: "nowrap",
-    overflow: "hidden",
-    textOverflow: "ellipsis",
     "&::placeholder": {
         color: "#003049",
         opacity: 0.6,
@@ -60,10 +62,8 @@ const NavbarLink = styled(Button)(({ theme }) => ({
     },
 }));
 
-export default function Navbar() {
-    const { data: session } = useSession(); // Use session data
+export default function Navbar({ session }: NavbarProps) {
     const [query, setQuery] = useState("");
-    const [cartCount, setCartCount] = useState(0); // Placeholder cart count
 
     const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -72,7 +72,6 @@ export default function Navbar() {
             return;
         }
         console.log("Searching for:", query);
-        // Implement backend API call here
     };
 
     return (
@@ -104,10 +103,10 @@ export default function Navbar() {
                             >
                                 <Image
                                     src="/images/logo.png"
-                                    alt="Šnjofalica Logo"
+                                    alt="Logo"
                                     width={40}
                                     height={40}
-                                    priority
+                                    style={{ borderRadius: "50%" }}
                                 />
                             </Box>
                             <Typography
@@ -134,23 +133,20 @@ export default function Navbar() {
                         justifyContent: "center",
                     }}
                 >
-                    {["Početna", "Kategorije", "Košarica"].map((label) => (
-                        <Link
-                            href={
-                                label === "Početna"
-                                    ? "/"
-                                    : label === "Kategorije"
-                                    ? "/categories"
-                                    : `/${label.toLowerCase()}`
-                            }
-                            key={label}
-                            passHref
-                        >
-                            <NavbarLink>{label}</NavbarLink>
+                    <Link href="/" passHref>
+                        <NavbarLink>Početna</NavbarLink>
+                    </Link>
+                    <Link href="/categories" passHref>
+                        <NavbarLink>Kategorije</NavbarLink>
+                    </Link>
+                    <Link href="/explore" passHref>
+                        <NavbarLink>Istraži</NavbarLink>
+                    </Link>
+                    {session && (
+                        <Link href="/messages" passHref>
+                            <NavbarLink>Poruke</NavbarLink>
                         </Link>
-                    ))}
-
-                    {/* Add Profile Button if authenticated */}
+                    )}
                     {session && (
                         <Link href="/profile" passHref>
                             <NavbarLink>Profil</NavbarLink>
@@ -194,7 +190,7 @@ export default function Navbar() {
                     </SearchBox>
                 </Box>
 
-                {/* Login with Google/GitHub or Sign Out Button */}
+                {/* Login/Logout Buttons */}
                 <Box
                     sx={{
                         display: "flex",
@@ -206,14 +202,9 @@ export default function Navbar() {
                         <Button
                             variant="contained"
                             startIcon={
-                                <Box
-                                    sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                    }}
-                                >
+                                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                    <GoogleIcon />
                                     <GitHubIcon />
-                                    <GoogleIcon sx={{ ml: 1 }} />
                                 </Box>
                             }
                             sx={{
@@ -227,7 +218,7 @@ export default function Navbar() {
                                 textTransform: "none",
                                 px: 2,
                             }}
-                            onClick={() => signIn()} // Use signIn for authentication
+                            onClick={() => signIn()}
                         >
                             Prijava
                         </Button>
@@ -245,7 +236,7 @@ export default function Navbar() {
                                 textTransform: "none",
                                 px: 2,
                             }}
-                            onClick={() => signOut()} // Use signOut for authentication
+                            onClick={() => signOut()}
                         >
                             Odjava
                         </Button>

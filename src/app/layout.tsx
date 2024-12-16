@@ -1,19 +1,17 @@
-"use client";
-
-import React from "react";
-import Navbar from "./components/GlobalComponents/Navbar"; // Reusable Navbar component
-import { Container } from "@mui/material";
+import Navbar from "./components/GlobalComponents/Navbar";
 import Footer from "./components/GlobalComponents/Footer";
-import type { Metadata } from "next";
+import { Container } from "@mui/material";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
+import { auth } from "./auth"; // Fetch the session on the server
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const session = await auth(); // Fetch session server-side
+
     return (
         <html lang="en">
             <head>
@@ -24,21 +22,16 @@ export default function RootLayout({
                 />
             </head>
             <body>
-                <SessionProvider> {/* Wrap with SessionProvider */}
+                <AppRouterCacheProvider>
                     <Container maxWidth={false} disableGutters>
-                        {/* Navbar at the top */}
-                        <Navbar />
-
-                        {/* Main content area */}
+                        {/* Navbar passes session for conditional rendering */}
+                        <Navbar session={session} />
                         <main style={{ minHeight: "calc(100vh - 128px)" }}>
-                            {/* Render the content of page.tsx here */}
                             {children}
                         </main>
-
-                        {/* Footer at the bottom */}
                         <Footer />
                     </Container>
-                </SessionProvider>
+                </AppRouterCacheProvider>
             </body>
         </html>
     );
