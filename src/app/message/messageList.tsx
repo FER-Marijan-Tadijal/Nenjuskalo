@@ -1,12 +1,8 @@
-/*"use client"
+"use client"
 
-import { useSession } from "next-auth/react"
 import { useState, useEffect } from 'react'
-import { prisma } from "@/prisma"
 
 export default function MessageList({ senderID, receiverID } : { senderID: string, receiverID: string}) {
-    const { data: session, status } = useSession();
-
     const [messages, setMessages] = useState<{
         id: number;
         content: string;
@@ -18,18 +14,21 @@ export default function MessageList({ senderID, receiverID } : { senderID: strin
 
     useEffect(() => {
     async function fetchPosts() {
-        let res = await fetch('http://localhost:3000/api/getMessages/' + senderID + "/" + receiverID);
-        let data = await res.json();
-        console.log(data)
-
-        setMessages(data)
+        let intervalid = setInterval(async () => {
+            let res = await fetch("/api/getMessages", {
+                method: "POST",
+                body: JSON.stringify({ senderid: senderID, receiverid: receiverID }),
+            });
+            let data = await res.json();
+    
+            setMessages(data)
+        }, 1000)
         }
     fetchPosts()
     }, [])
 
     if (!messages) return <div>Loading...</div>
 
-    if (status === "authenticated") {
     return (
         <ul>
             {messages.map((message) => (
@@ -37,8 +36,4 @@ export default function MessageList({ senderID, receiverID } : { senderID: strin
             ))}
         </ul>
     )
-  }
-
-  return <a href="/api/auth/signin">Sign in</a>
 }
-*/

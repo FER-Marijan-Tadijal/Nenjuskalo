@@ -5,7 +5,6 @@
 import ExplorePage from "./pages/ExplorePage";
 import theme from "./styles/theme";
 //import ProfilePage from "./pages/ProfilePage";
-import Component from "@/app/Component";
 
 //import React from "react";
 import {
@@ -348,11 +347,11 @@ export default function HomePage() {
                     ))}
                 </Grid>
                 <br />
-                <Link href={"/categories"}>Go to Category Selection</Link>
-                <br />
-                <Link href={"/makeNewAd"}>Make New Ad Here</Link>
-                <Component />
+                <Link href={"/categories"}>Go to Category Selection</Link> <br />
+                <Link href={"/newAd"}>Make New Ad Here</Link> <br />
+                <Link href={"/message"}>Go to messages</Link> <br />
             </Box>
         </Container>
     );
 }
+

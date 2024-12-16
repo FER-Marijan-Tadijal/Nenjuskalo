@@ -17,7 +17,7 @@ model belongsto {
 }
 
 model category {
-  id              Int         @id @default(autoincrement())
+  id              Int         @id
   name            String      @unique
   supercategoryid Int?
   belongsto       belongsto[]
@@ -69,12 +69,10 @@ model message {
 }
 
 model picture {
-
   url    String @unique(map: "URL_unique")
   itemid Int
   index  Int
   item   item   @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
-
 
   @@id([itemid, index])
 }
