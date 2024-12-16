@@ -1,5 +1,4 @@
 import { Container, Typography, Box } from "@mui/material";
-import Component from "@/app/Component";
 import { auth } from "@/app/auth"
 import { prisma } from "@/prisma";
 import SendMessages from "@/app/message/sendMessage";
@@ -17,23 +16,6 @@ export default async function Page({
     if (senderID == undefined)
         return (<p>You must be signed in to message people </p>)
 
-    let messages = await prisma.message.findMany({
-        where: {
-            OR: [
-                {
-                    senderid: senderID,
-                    receiverid: receiverID,
-                },
-                {
-                    senderid: receiverID,
-                    receiverid: senderID,
-                }
-            ],
-        },
-        orderBy: {
-            senttime: "desc"
-        }
-        });
     let receiver = await prisma.user.findFirst({
         where: {
             id: receiverID
@@ -43,7 +25,6 @@ export default async function Page({
     return (
         <Container maxWidth="md" sx={{ bgcolor: "black", color: "white", height: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Box textAlign="center">
-                <Component />
                 <div>You are currently messaging: {receiver?.name} with ID: { receiverID }</div>
 
                 <MessageList senderID={senderID} receiverID={receiverID} />
