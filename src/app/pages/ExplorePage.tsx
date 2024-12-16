@@ -21,6 +21,15 @@ import { ThemeProvider } from "@mui/material";
 
 const exploreItems = [
     {
+        id: 4,
+        title: "Mercedes Benz S-class 2020",
+        price: 2003,
+        city: "Zagreb",
+        street: "Donji Dupci",
+        category: "luxury cars",
+    },
+    {
+        id: 1,
         title: "Mercedes Benz S-class 2020",
         price: 98000,
         city: "Zagreb",
@@ -28,6 +37,7 @@ const exploreItems = [
         category: "Auto-Moto nautika",
     },
     {
+        id: 2,
         title: "Mercedes Benz S-class 2020",
         price: 123,
         city: "Zagreb",
@@ -35,6 +45,7 @@ const exploreItems = [
         category: "Oprema",
     },
     {
+        id: 3,
         title: "Mercedes Benz S-class 2020",
         price: 10,
         city: "Zagreb",
@@ -42,78 +53,77 @@ const exploreItems = [
         category: "Oprema",
     },
     {
+        id: 4,
         title: "Mercedes Benz S-class 2020",
         price: 2003,
         city: "Zagreb",
         street: "Donji Dupci",
         category: "luxury cars",
     },
+    {
+        id: 1,
+        title: "Mercedes Benz S-class 2020",
+        price: 98000,
+        city: "Zagreb",
+        street: "Donji Dupci",
+        category: "Auto-Moto nautika",
+    },
+    {
+        id: 2,
+        title: "Mercedes Benz S-class 2020",
+        price: 123,
+        city: "Zagreb",
+        street: "Donji Dupci",
+        category: "Oprema",
+    },
 ];
 const search = "Mercedes car";
 const categories = ["Auto-Moto nautika", "Oprema", "Odjeca", "Obuca"];
+const conditions = ["new", "used", "old"];
+const orders = ["Lower Price", "Higher price", "Newer post", "Older post"];
 
 const Explore = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [items, setItems] = useState(exploreItems);
+    const [randomItems, setRandomItems] = useState(exploreItems); //need function for random items
+    const [lowestPrice, setLowPrice] = useState("");
+    const [highestPrice, setHighPrice] = useState("");
+    const [category, setCategory] = useState("");
+    const [condition, setCondition] = useState("");
+    const [order, setOrder] = useState("");
+    const [priceChanged, setPriceChanged] = useState(false);
 
     const fetchItems = async (currentPage: number) => {
-        const res = await fetch(
-            `http://localhost:3000/api/items?page=${currentPage}`
-        );
+        const params = new URLSearchParams({
+            page: currentPage.toString(),
+            category,
+            condition,
+            order,
+            lowestPrice,
+            highestPrice,
+        });
+
+        const res = await fetch(`http://localhost:3000/api/items?${params}`);
         const data = await res.json();
         setItems(data.data);
         setTotalPages(data.totalPages);
     };
 
-    const [items, setItems] = useState(exploreItems);
-    const [lowestPrice, setLowPrice] = useState("");
-    const [highestPrice, setHighPrice] = useState("");
-    const [category, setCategory] = useState("");
-    const [priceChanged, setPriceChanged] = useState(false);
-    const [priceCheck, setPriceCheck] = useState(true); //additional variable for checking if price has changed
-    var changingItems = exploreItems;
-
     useEffect(() => {
-        changingItems = exploreItems;
-        if (category != "") {
-            if (category != "-All Categories-") {
-                setItems(
-                    changingItems.filter((item) => item.category == category)
-                );
-                changingItems = items;
-            } else {
-                setItems(exploreItems);
-            }
-        }
-
-        if (priceCheck == priceChanged) {
-            //NE RADI KAKO TREBA
-            if (lowestPrice != "") {
-                setItems(
-                    changingItems.filter(
-                        (item) => item.price >= parseInt(lowestPrice)
-                    )
-                );
-                setPriceCheck(!priceCheck);
-                changingItems = items;
-            }
-        }
-        if (priceCheck == priceChanged) {
-            //NE RADI KAKO TREBA
-            if (highestPrice != "") {
-                setItems(
-                    changingItems.filter(
-                        (item) => item.price <= parseInt(highestPrice)
-                    )
-                );
-                setPriceCheck(!priceCheck);
-                changingItems = items;
-            }
-        }
-    }, [category, priceChanged]);
+        fetchItems(page);
+    }, [page, category, priceChanged, condition, order]);
 
     const handleCategoryChange = (event: SelectChangeEvent<string>) => {
         setCategory(event.target.value);
+    };
+
+    const handleConditionChange = (event: SelectChangeEvent<string>) => {
+        setCondition(event.target.value);
+    };
+
+    const handleOrderChange = (event: SelectChangeEvent<string>) => {
+        setOrder(event.target.value);
     };
 
     const handleLowPriceChange = (
@@ -124,7 +134,6 @@ const Explore = () => {
     const handleLowPriceBlur = () => {
         setPriceChanged(!priceChanged);
     };
-
     const handleHighPriceChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
@@ -149,6 +158,38 @@ const Explore = () => {
                             sx={{
                                 backgroundColor: theme.palette.secondary.main,
                                 mt: 10,
+                                padding: 2,
+                                width: "300px",
+                                borderRadius: 2,
+                            }}
+                        >
+                            <Typography sx={{ marginBottom: 2 }} variant="h5">
+                                Filter by condition:
+                            </Typography>
+                            <FormControl fullWidth variant="outlined">
+                                <InputLabel id="select-label">
+                                    Choose condition
+                                </InputLabel>
+                                <Select
+                                    labelId="select-label"
+                                    value={condition}
+                                    onChange={handleConditionChange}
+                                >
+                                    <MenuItem value={"-All Conditions-"}>
+                                        -All Categories-
+                                    </MenuItem>
+                                    {conditions.map((condition, index) => (
+                                        <MenuItem key={index} value={condition}>
+                                            {condition}
+                                        </MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                        </Box>
+                        <Box
+                            sx={{
+                                backgroundColor: theme.palette.secondary.main,
+                                mt: 2,
                                 padding: 2,
                                 width: "300px",
                                 borderRadius: 2,
@@ -199,7 +240,7 @@ const Explore = () => {
                                     onChange={handleLowPriceChange}
                                     onKeyDown={(event) => {
                                         if (event.key === "Enter") {
-                                            handleLowPriceBlur(); // Call your existing function or a custom one
+                                            handleLowPriceBlur();
                                             event.preventDefault(); // Optional: Prevents form submission if inside a form
                                         }
                                     }}
@@ -227,7 +268,7 @@ const Explore = () => {
                                     onChange={handleHighPriceChange}
                                     onKeyDown={(event) => {
                                         if (event.key === "Enter") {
-                                            handleHighPriceBlur(); // Call your existing function or a custom one
+                                            handleHighPriceBlur();
                                             event.preventDefault(); // Optional: Prevents form submission if inside a form
                                         }
                                     }}
@@ -264,15 +305,44 @@ const Explore = () => {
                                 marginTop: 2,
                                 marginBottom: 1,
                                 padding: 1,
-                                backgroundColor: "#D9F0FF ",
+                                backgroundColor: theme.palette.secondary.main,
                                 color: "#1C2B36",
                                 borderRadius: 2,
+                                display: "flex",
+                                justifyContent: "space-around",
+                                alignItems: "center",
                             }}
                         >
                             <Typography variant="h6">
                                 {" "}
                                 Search results for: "{search}"
                             </Typography>
+                            <Box
+                                sx={{
+                                    backgroundColor:
+                                        theme.palette.secondary.main,
+                                    padding: 2,
+                                    width: "300px",
+                                    borderRadius: 2,
+                                }}
+                            >
+                                <FormControl fullWidth variant="outlined">
+                                    <InputLabel id="select-label">
+                                        Order by
+                                    </InputLabel>
+                                    <Select
+                                        labelId="select-label"
+                                        value={order}
+                                        onChange={handleOrderChange}
+                                    >
+                                        {orders.map((order, index) => (
+                                            <MenuItem key={index} value={order}>
+                                                {order}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
                         </Box>
                         <Box sx={{ border: "1px solid grey" }}>
                             <Button
@@ -283,9 +353,9 @@ const Explore = () => {
                             >
                                 Previous
                             </Button>
-                            <span>
+                            <Typography component="span">
                                 Page {page} of {totalPages}
-                            </span>
+                            </Typography>
                             <Button
                                 onClick={() =>
                                     setPage((prev) =>
@@ -321,7 +391,7 @@ const Explore = () => {
                             Relevant Products:
                         </Typography>
                         <Box>
-                            {exploreItems.map((item, index) => (
+                            {randomItems.map((item, index) => (
                                 <Box
                                     sx={{
                                         margin: 0.5,

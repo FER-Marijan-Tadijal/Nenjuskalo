@@ -22,7 +22,7 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                 justifyContent: "space-between",
                 borderRadius: 3,
                 border: "1px solid grey",
-                backgroundColor: "#FFFFFF",
+                backgroundColor: "#FFFFFF", //nepotrebno?!
                 color: "#1C2B36",
                 transition: "background-color 0.3s ease",
                 "&:hover": {
