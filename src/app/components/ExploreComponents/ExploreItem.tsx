@@ -1,16 +1,17 @@
 import React from "react";
 import { Box, Typography, Button } from "@mui/material";
 import theme from "@/app/styles/theme";
+import { getUser } from "@/app/util/getFromId";
 
 type Props = {
     title: string;
-    price: number;
-    city: string;
-    street: string;
+    price: string;
+    sellerId: string;
     category: string;
 };
 
-const ExploreItem = ({ title, price, city, street, category }: Props) => {
+const ExploreItem = ({ title, price, sellerId, category }: Props) => {
+    const user = getUser(sellerId);
     return (
         <Box
             sx={{
@@ -62,7 +63,8 @@ const ExploreItem = ({ title, price, city, street, category }: Props) => {
                     <Typography variant="body2">• {title}</Typography>
                     <Typography variant="body2">• Price: {price} €</Typography>
                     <Typography variant="body2">
-                        • Location: {city}, {street}
+                        • Location: Zagreb{/*user.city*/}, Croatia
+                        {/*user.street*/}
                     </Typography>
                     <Typography variant="body2">
                         • Category: {category}

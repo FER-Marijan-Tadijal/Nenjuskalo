@@ -82,29 +82,63 @@ const categories = ["Auto-Moto nautika", "Oprema", "Odjeca", "Obuca"];
 const conditions = ["new", "used", "old"];
 const orders = ["Lower Price", "Higher price", "Newer post", "Older post"];
 
+type Item = {
+    itemId: string;
+    title: string;
+    description: string;
+    category: string;
+    askingPrice: string;
+    sellerId: string;
+    buyerId?: string;
+    condition: ["new", "used"];
+};
+type Seller = {
+    sellerId: string;
+    name: string;
+    surname: string;
+    email: string;
+    googleId: string;
+    password?: string;
+    country?: string;
+    city?: string;
+    street?: string;
+    houseNo?: string;
+    registerTime: string;
+    role: string;
+};
+
 const Explore = () => {
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const [items, setItems] = useState(exploreItems);
-    const [randomItems, setRandomItems] = useState(exploreItems); //need function for random items
-    const [lowestPrice, setLowPrice] = useState("");
-    const [highestPrice, setHighPrice] = useState("");
+    const [items, setItems] = useState<Item[]>([]);
+    const [randomItems, setRandomItems] = useState<Item[]>([]);
+    const [minPrice, setMinPrice] = useState("");
+    const [maxPrice, setMaxPrice] = useState("");
     const [category, setCategory] = useState("");
     const [condition, setCondition] = useState("");
-    const [order, setOrder] = useState("");
+    const [orderBy, setorderBy] = useState("");
     const [priceChanged, setPriceChanged] = useState(false);
+
+    const fetchRandomItems = async () => {
+        const randoms = await fetch("https://localhost:3000/api/random");
+        const randomData = await randoms.json();
+        setRandomItems(randomData);
+    };
 
     const fetchItems = async (currentPage: number) => {
         const params = new URLSearchParams({
             page: currentPage.toString(),
             category,
             condition,
-            order,
-            lowestPrice,
-            highestPrice,
+            orderBy,
+            minPrice,
+            maxPrice,
         });
 
-        const res = await fetch(`http://localhost:3000/api/items?${params}`);
+        //const res = await fetch(`http://localhost:3000/api/items?${params}`);
+        const res = await fetch(
+            `http://localhost:3000/api/search?page=1&categoryId=1&conditionId=1&orderBy=newest&minPrice=100&maxPrice=2050`
+        );
         const data = await res.json();
         setItems(data.data);
         setTotalPages(data.totalPages);
@@ -112,7 +146,8 @@ const Explore = () => {
 
     useEffect(() => {
         fetchItems(page);
-    }, [page, category, priceChanged, condition, order]);
+        fetchRandomItems();
+    }, [page, category, priceChanged, condition, orderBy]);
 
     const handleCategoryChange = (event: SelectChangeEvent<string>) => {
         setCategory(event.target.value);
@@ -122,14 +157,14 @@ const Explore = () => {
         setCondition(event.target.value);
     };
 
-    const handleOrderChange = (event: SelectChangeEvent<string>) => {
-        setOrder(event.target.value);
+    const handleOrderByChange = (event: SelectChangeEvent<string>) => {
+        setorderBy(event.target.value);
     };
 
     const handleLowPriceChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        setLowPrice(event.target.value);
+        setMinPrice(event.target.value);
     };
     const handleLowPriceBlur = () => {
         setPriceChanged(!priceChanged);
@@ -137,7 +172,7 @@ const Explore = () => {
     const handleHighPriceChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        setHighPrice(event.target.value);
+        setMaxPrice(event.target.value);
     };
     const handleHighPriceBlur = () => {
         setPriceChanged(!priceChanged);
@@ -222,6 +257,7 @@ const Explore = () => {
                             sx={{
                                 backgroundColor: theme.palette.secondary.main,
                                 mt: 2,
+                                mb: 1,
                                 padding: 2,
                                 width: "300px",
                                 borderRadius: 2,
@@ -236,7 +272,7 @@ const Explore = () => {
                             >
                                 <OutlinedInput
                                     id="outlined-adornment-weight"
-                                    value={lowestPrice}
+                                    value={minPrice}
                                     onChange={handleLowPriceChange}
                                     onKeyDown={(event) => {
                                         if (event.key === "Enter") {
@@ -264,7 +300,7 @@ const Explore = () => {
                             >
                                 <OutlinedInput
                                     id="outlined-adornment-weight"
-                                    value={highestPrice}
+                                    value={maxPrice}
                                     onChange={handleHighPriceChange}
                                     onKeyDown={(event) => {
                                         if (event.key === "Enter") {
@@ -332,8 +368,8 @@ const Explore = () => {
                                     </InputLabel>
                                     <Select
                                         labelId="select-label"
-                                        value={order}
-                                        onChange={handleOrderChange}
+                                        value={orderBy}
+                                        onChange={handleOrderByChange}
                                     >
                                         {orders.map((order, index) => (
                                             <MenuItem key={index} value={order}>
@@ -370,9 +406,8 @@ const Explore = () => {
                         {items.map((e, key) => (
                             <ExploreItem
                                 title={e.title}
-                                price={e.price}
-                                city={e.city}
-                                street={e.street}
+                                price={e.askingPrice}
+                                sellerId={e.sellerId}
                                 category={e.category}
                                 key={key}
                             />
@@ -416,7 +451,7 @@ const Explore = () => {
                                             //color: "#1C2B36",
                                         }}
                                     >
-                                        {item.title} - {item.price} €
+                                        {item.title} - {item.askingPrice} €
                                     </Typography>
                                 </Box>
                             ))}

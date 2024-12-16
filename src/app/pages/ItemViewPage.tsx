@@ -85,6 +85,7 @@ const ItemView = (/*{ itemId, sellerId }: Props*/) => {
             }
         };
         const fetchSeller = async (sellerId: string) => {
+            //PROMIJENI OVO
             try {
                 const response = await fetch(`/api/sellers/${sellerId}`);
                 if (!response.ok) {
