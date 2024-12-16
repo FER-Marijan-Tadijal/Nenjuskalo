@@ -1,5 +1,4 @@
 import { prisma } from "@/prisma"
-import { auth } from "@/app/auth";
 
 export default async function SendMessages({ senderid, receiverid }: {senderid: string, receiverid: string}){
     async function sendMyMessage(formData: FormData) {

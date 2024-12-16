@@ -1,9 +1,16 @@
+// src/app/layout.tsx
+import React from "react";
 import Navbar from "./components/GlobalComponents/Navbar";
-import Footer from "./components/GlobalComponents/Footer";
 import { Container } from "@mui/material";
+import Footer from "./components/GlobalComponents/Footer";
+import type { Metadata } from "next";
 import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import { auth } from "./auth"; // Fetch the session on the server
+import localFont from "next/font/local";
 import "./globals.css";
+import { SessionProvider } from "next-auth/react";
+//import { ThemeProvider } from "@mui/material";
+import theme from "./styles/theme";
+import { auth } from "./auth";
 
 export default async function RootLayout({
     children,
@@ -35,4 +42,3 @@ export default async function RootLayout({
             </body>
         </html>
     );
-}

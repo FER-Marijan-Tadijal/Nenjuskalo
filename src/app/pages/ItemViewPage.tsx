@@ -1,4 +1,3 @@
-"use client";
 import { Container, Box } from "@mui/material";
 import React from "react";
 import ItemThumbnail from "../components/ItemViewComponents/ItemThumbnail";
@@ -6,8 +5,8 @@ import ItemDescription from "../components/ItemViewComponents/ItemDescription";
 import ItemTitle from "../components/ItemViewComponents/ItemTitle";
 import { useState, useContext, createContext } from "react";
 //import theme from "../styles/theme";
-import getItem from "../data/fetchItem";
-import getSeller from "../data/fetchSeller";
+import { getItem, getUser} from "@/app/util/getFromId";
+import theme from "../styles/theme";
 
 const item = {
     title: "Mercedes Benz 2022 EQ-class",
@@ -36,7 +35,7 @@ type Props = {
 
 const ItemView = ({ itemId, sellerId }: Props) => {
     const itemInfo = getItem(itemId); //FETCH FUNCTIONS
-    const sellerInfo = getSeller(sellerId); //FETCH FUNCTIONS
+    const sellerInfo = getUser(sellerId); //FETCH FUNCTIONS
 
     return (
         <>
@@ -45,7 +44,7 @@ const ItemView = ({ itemId, sellerId }: Props) => {
                 sx={{
                     width: "950px",
                     //backgroundColor: "#D9F0FF",
-                    color: "#1C2B36",
+                    color: theme.palette.textBlack.main,
                     height: "100vh",
                     padding: 2,
                     marginBottom: 20,
