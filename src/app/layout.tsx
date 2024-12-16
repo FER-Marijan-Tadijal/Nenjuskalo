@@ -10,12 +10,15 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 //import { ThemeProvider } from "@mui/material";
 import theme from "./styles/theme";
+import { auth } from "./auth";
 
-export default function RootLayout({
+export default async function RootLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const session = await auth(); // Fetch session server-side
+
     return (
         <html lang="en">
             <head>
@@ -26,40 +29,16 @@ export default function RootLayout({
                 />
             </head>
             <body>
-                <Container maxWidth={false} disableGutters>
-                    {/* Navbar at the top */}
-                    <Navbar />
-
-                    {/* Main content area */}
-                    <main style={{ minHeight: "calc(100vh - 128px)" }}>
-                        {" "}
-                        {/* Adjusts for Navbar and Footer height */}
-                        {children} {/* Render the content of page.tsx here */}
-                    </main>
-
-                    {/* Footer at the bottom */}
-                    <Footer />
-                </Container>
+                <AppRouterCacheProvider>
+                    <Container maxWidth={false} disableGutters>
+                        {/* Navbar passes session for conditional rendering */}
+                        <Navbar session={session} />
+                        <main style={{ minHeight: "calc(100vh - 128px)" }}>
+                            {children}
+                        </main>
+                        <Footer />
+                    </Container>
+                </AppRouterCacheProvider>
             </body>
         </html>
     );
-
-    /* In case the merge fiddles something up
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <AppRouterCacheProvider>
-          <SessionProvider>
-            {children}
-          </SessionProvider>
-        </AppRouterCacheProvider>
-      </body>
-    </html>
-  );
-*/
-}
