@@ -29,19 +29,18 @@ const seller = {
 };
 
 const data = { item, seller };
-//export const ItemViewContext = createContext(data);
 
 type Item = {
-    itemId: string;
+    itemid: string;
     title: string;
     description: string;
-    askingPrice: string;
-    sellerId: string;
-    buyerId?: string;
+    askingprice: string;
+    sellerid: string;
+    buyerid?: string;
     condition: ["new", "used"];
 };
-type Seller = {
-    sellerId: string;
+type User = {
+    userId: string;
     name: string;
     surname: string;
     email: string;
@@ -60,59 +59,39 @@ type ItemViewProps = {
 };
 
 const ItemView = ({ itemId }: ItemViewProps) => {
-    //const [itemId, setItemId] = useState<string | null>(null);
     const [item, setItem] = useState<Item | null>(null);
-    const [seller, setSeller] = useState<Seller | null>(null);
-    const [loading, setLoading] = useState<boolean>(true);
-    const [error, setError] = useState<string | null>(null);
+    const [User, setUser] = useState<User | null>(null);
+
+    const fetchItem = async (itemId: string) => {
+        try {
+            const res = await fetch(`/api/items/${itemId}`);
+            /*if (!response.ok) {
+                throw new Error("Failed to fetch item");
+            }*/
+            const data = await res.json();
+            setItem(data);
+        } catch (err: unknown) {
+            console.log(err);
+        }
+    };
+    const fetchUser = async (userId: string) => {
+        const res = await fetch(
+            `http://localhost:3000/api/getUser?id=${userId}`
+        );
+        const userData = await res.json();
+        console.log(userData);
+        setUser(userData);
+    };
 
     useEffect(() => {
-        if (!itemId) return; // Avoid making the fetch until `itemId` is available
-
-        const fetchItem = async () => {
-            try {
-                const response = await fetch(`/api/items/${itemId}`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch item");
-                }
-                const data = await response.json(); // Specify the expected type of the response
-                setItem(data);
-            } catch (err: unknown) {
-                console.log(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        const fetchSeller = async (sellerId: string) => {
-            //PROMIJENI OVO
-            try {
-                const response = await fetch(`/api/sellers/${sellerId}`);
-                if (!response.ok) {
-                    throw new Error("Failed to fetch seller");
-                }
-                const data = await response.json(); // Specify the expected type of the response
-                setItem(data);
-            } catch (err: unknown) {
-                console.log(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchItem();
-        if (item) {
-            const sellerId = item.sellerId;
-            fetchSeller(sellerId);
-        }
+        //fetchItem(itemId);
+        //const sellerId = item.sellerid;
+        //fetchUser(sellerId);
+        //}
     }, [itemId]);
-
-    if (loading) return <div>Loading...</div>;
-    if (error) return <div>Error: {error}</div>;
-    if (!item) return <NotFoundPage />;
 
     return (
         <>
-            {/*<ItemViewContext.Provider value={data}>*/}
             <Container
                 sx={{
                     width: "950px",
@@ -128,14 +107,10 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                     alignItems: "center",
                 }}
             >
-                <div>
-                    {itemId} and {/*sellerId*/}
-                </div>
                 <ItemThumbnail seller={data.seller} />
                 <ItemTitle item={data.item} />
-                <ItemDescription description={item.description} />
+                <ItemDescription description={data.item.description} />
             </Container>
-            {/*</ItemViewContext.Provider>*/}
         </>
     );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import theme from "@/app/styles/theme";
 import { getUser } from "@/app/util/getFromId";
@@ -9,9 +9,30 @@ type Props = {
     sellerId: string;
     category: string;
 };
+type User = {
+    id: string;
+    country: string;
+    city: string;
+    street: string;
+    houseNo: string;
+    roleId: string;
+};
 
 const ExploreItem = ({ title, price, sellerId, category }: Props) => {
-    const user = getUser(sellerId);
+    const [user, setUser] = useState<User>();
+
+    const fetchUser = async (userId: string) => {
+        const res = await fetch(
+            `http://localhost:3000/api/getUser?id=${userId}`
+        );
+        const userData = await res.json();
+        //console.log(userData);
+        setUser(userData);
+    };
+
+    useEffect(() => {
+        fetchUser(sellerId);
+    }, []);
     return (
         <Box
             sx={{
@@ -63,8 +84,8 @@ const ExploreItem = ({ title, price, sellerId, category }: Props) => {
                     <Typography variant="body2">• {title}</Typography>
                     <Typography variant="body2">• Price: {price} €</Typography>
                     <Typography variant="body2">
-                        • Location: Zagreb{/*user.city*/}, Croatia
-                        {/*user.street*/}
+                        • Location: Zagreb, Croatia{" "}
+                        {/*user.city},{user.street*/}
                     </Typography>
                     <Typography variant="body2">
                         • Category: {category}
