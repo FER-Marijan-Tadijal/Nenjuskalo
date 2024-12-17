@@ -1,11 +1,16 @@
-"use client";
 
 import React from "react";
 import Link from "next/link";
 import { Box, Typography, Grid } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
+import registerSiteUser from "@/app/util/registerSiteUser";
+import { auth } from "@/app/auth";
 
-const Footer = () => {
+async function Footer() {
+    // Note: These two lines create the siteuser if he does not exist. Do not remove pls kthxbai.
+    const session = await auth()
+    if (session != null) await registerSiteUser(session.user?.id ?? "")
+
     return (
         <Box
             component="footer"

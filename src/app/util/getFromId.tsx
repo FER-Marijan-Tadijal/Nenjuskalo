@@ -2,24 +2,35 @@ import { prisma } from "@/prisma";
 
 export async function getUser(Id: string) {
     const user = await prisma.user.findUnique({where: {id: Id}})
+    const siteuser = await prisma.siteuser.findUnique({where: {id: Id}})
 
-    // Return siteuser. Siteuser creation script must be placed into header first
-
-    return user
+    return {user: user, siteuser: siteuser,}
 }
 
 export async function getItem(Id: number) {
     const item = await prisma.item.findUnique({where: {id: Id}})
 
-    /*
-    This could also return:
-    an item's categories from belongsto,
-    an item's state from itemChangeState
-    an item's condition
-    an item's pictures from picture
-    */
+    const categories = await prisma.belongsto.findMany({
+        where: {
+            itemid: Id,
+        },
+    })
 
-    return item
+    const pictures = await prisma.picture.findMany({
+        where: {
+            itemid: Id,
+        },
+    })
+
+    const state = await prisma.itemchangestate.findMany({
+        where: {
+            itemid: Id,
+        },
+        orderBy: {changetime: "desc"},
+        take: 1,
+    })
+
+    return {item: item, categories: categories, state: state, pictures: pictures,}
 }
 
 export async function getCondition(Id: number) {
