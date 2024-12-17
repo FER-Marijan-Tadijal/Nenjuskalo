@@ -1,3 +1,4 @@
+"use client";
 import { Container, Box } from "@mui/material";
 import React, { useEffect } from "react";
 import ItemThumbnail from "../components/ItemViewComponents/ItemThumbnail";
@@ -54,14 +55,12 @@ type Seller = {
     role: string;
 };
 
-/*type Props = {
+type ItemViewProps = {
     itemId: string;
-    sellerId: string;
-};*/
+};
 
-const ItemView = (/*{ itemId, sellerId }: Props*/) => {
-    const router = useRouter();
-    const { itemId } = router.query as { itemId?: string };
+const ItemView = ({ itemId }: ItemViewProps) => {
+    //const [itemId, setItemId] = useState<string | null>(null);
     const [item, setItem] = useState<Item | null>(null);
     const [seller, setSeller] = useState<Seller | null>(null);
     const [loading, setLoading] = useState<boolean>(true);

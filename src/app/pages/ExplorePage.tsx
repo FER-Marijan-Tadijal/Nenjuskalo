@@ -78,8 +78,17 @@ const exploreItems = [
     },
 ];
 const search = "Mercedes car";
-const categories = ["Auto-Moto nautika", "Oprema", "Odjeca", "Obuca"];
-const conditions = ["new", "used", "old"];
+const categories = [
+    { name: "Auto-Moto nautika", id: 0 },
+    { name: "Oprema", id: 1 },
+    { name: "Odjeca", id: 2 },
+    { name: "Obuca", id: 3 },
+];
+const conditions = [
+    { name: "new", id: 0 },
+    { name: "used", id: 1 },
+    { name: "old", id: 2 },
+];
 const orders = ["Lower Price", "Higher price", "Newer post", "Older post"];
 
 type Item = {
@@ -107,7 +116,12 @@ type Seller = {
     role: string;
 };
 
-const Explore = () => {
+type ExplorePageProps = {
+    searchProp: string;
+};
+
+const Explore = ({ searchProp }: ExplorePageProps) => {
+    const q = searchProp;
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [items, setItems] = useState<Item[]>([]);
@@ -121,12 +135,14 @@ const Explore = () => {
 
     const fetchRandomItems = async () => {
         const randoms = await fetch("https://localhost:3000/api/random");
+        console.log("Random fetch:", randoms);
         const randomData = await randoms.json();
         setRandomItems(randomData);
     };
 
     const fetchItems = async (currentPage: number) => {
         const params = new URLSearchParams({
+            q,
             page: currentPage.toString(),
             category,
             condition,
@@ -137,16 +153,19 @@ const Explore = () => {
 
         //const res = await fetch(`http://localhost:3000/api/items?${params}`);
         const res = await fetch(
-            `http://localhost:3000/api/search?page=1&categoryId=1&conditionId=1&orderBy=newest&minPrice=100&maxPrice=2050`
+            `http://localhost:3000/api/search?q=abc&page=1&orderBy=newest&minPrice=100&maxPrice=2050`
         );
         const data = await res.json();
-        setItems(data.data);
-        setTotalPages(data.totalPages);
+        console.log(data);
+        if (data.status != 404) {
+            setItems(data.data);
+            setTotalPages(data.totalPages);
+        }
     };
 
     useEffect(() => {
         fetchItems(page);
-        fetchRandomItems();
+        //fetchRandomItems();
     }, [page, category, priceChanged, condition, orderBy]);
 
     const handleCategoryChange = (event: SelectChangeEvent<string>) => {
@@ -214,8 +233,11 @@ const Explore = () => {
                                         -All Categories-
                                     </MenuItem>
                                     {conditions.map((condition, index) => (
-                                        <MenuItem key={index} value={condition}>
-                                            {condition}
+                                        <MenuItem
+                                            key={index}
+                                            value={condition.id}
+                                        >
+                                            {condition.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -246,8 +268,8 @@ const Explore = () => {
                                         -All Categories-
                                     </MenuItem>
                                     {categories.map((cat, index) => (
-                                        <MenuItem key={index} value={cat}>
-                                            {cat}
+                                        <MenuItem key={index} value={cat.id}>
+                                            {cat.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
