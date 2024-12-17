@@ -153,14 +153,13 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
 
         //const res = await fetch(`http://localhost:3000/api/items?${params}`);
         const res = await fetch(
-            `http://localhost:3000/api/search?q=abc&page=1&orderBy=newest&minPrice=100&maxPrice=2050`
+            `http://localhost:3000/api/search?q=Ku&page=1&orderBy=newest&minPrice=0&maxPrice=20000000`
         );
         const data = await res.json();
         console.log(data);
-        if (data.status != 404) {
-            setItems(data.data);
-            setTotalPages(data.totalPages);
-        }
+        setItems(data);
+        console.log(items);
+        setTotalPages(data.totalPages);
     };
 
     useEffect(() => {
