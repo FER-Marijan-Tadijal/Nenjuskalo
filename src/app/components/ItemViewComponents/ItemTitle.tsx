@@ -1,26 +1,28 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
 import { useContext } from "react";
-//import { ItemViewContext } from "../../pages/ItemViewPage";
+import { conditionEnum } from "@/app/enums/conditionEnum";
 
-interface Prop {
+type Props = {
     item: {
+        itemid: string;
         title: string;
-        price: number;
         description: string;
-        condition: string;
+        askingprice: string;
+        sellerid: string;
+        buyerid?: string;
+        conditionid: number;
     };
-}
+};
 
-const ItemTitle = ({ item }: Prop) => {
-    //const data = useContext(ItemViewContext);
-    //const item = data.item;
+const ItemTitle = ({ item }: Props) => {
+    const conditionName =
+        conditionEnum[item.conditionid] ?? "unknown condition";
     return (
         <Box
             sx={{
                 width: "100%",
-                padding: 3,
-                paddintTop: 0,
+                padding: 2,
                 paddingLeft: 10,
                 display: "flex",
                 flexDirection: "column",
@@ -29,9 +31,15 @@ const ItemTitle = ({ item }: Prop) => {
                 //borderColor: "#003049",
             }}
         >
-            <Typography variant="h6">• {item.title}</Typography>
-            <Typography variant="h6">• Price: {item.price} $</Typography>
-            <Typography variant="h6">• Condition: {item.condition}</Typography>
+            <Typography variant="h4" sx={{ fontWeight: 400 }}>
+                • {item.title}
+            </Typography>
+            <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
+                • Price: {item.askingprice} $
+            </Typography>
+            <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
+                • Condition: {conditionName}
+            </Typography>
         </Box>
     );
 };

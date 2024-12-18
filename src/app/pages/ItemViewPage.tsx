@@ -1,12 +1,15 @@
+"use client";
 import { Container, Box } from "@mui/material";
-import React from "react";
+import React, { useEffect } from "react";
 import ItemThumbnail from "../components/ItemViewComponents/ItemThumbnail";
 import ItemDescription from "../components/ItemViewComponents/ItemDescription";
 import ItemTitle from "../components/ItemViewComponents/ItemTitle";
 import { useState, useContext, createContext } from "react";
 //import theme from "../styles/theme";
-import { getItem, getUser} from "@/app/util/getFromId";
+import { getItem, getUser } from "@/app/util/getFromId";
 import theme from "../styles/theme";
+import { useRouter } from "next/router";
+import NotFoundPage from "./NotFoundPage";
 
 const item = {
     title: "Mercedes Benz 2022 EQ-class",
@@ -26,20 +29,72 @@ const seller = {
 };
 
 const data = { item, seller };
-//export const ItemViewContext = createContext(data);
 
-type Props = {
-    itemId: string;
-    sellerId: string;
+type Item = {
+    itemid: string;
+    title: string;
+    description: string;
+    askingprice: string;
+    sellerid: string;
+    buyerid?: string;
+    conditionid: number;
+};
+type User = {
+    userId: string;
+    name: string;
+    surname: string;
+    email: string;
+    googleId: string;
+    password?: string;
+    country?: string;
+    city?: string;
+    street?: string;
+    houseno?: string;
+    registerTime: string;
+    role: string;
 };
 
-const ItemView = ({ itemId, sellerId }: Props) => {
-    const itemInfo = getItem(itemId); //FETCH FUNCTIONS
-    const sellerInfo = getUser(sellerId); //FETCH FUNCTIONS
+type ItemViewProps = {
+    itemId: string;
+};
+
+const ItemView = ({ itemId }: ItemViewProps) => {
+    const [item, setItem] = useState<Item | null>(null);
+    const [user, setUser] = useState<User | null>(null);
+
+    const fetchItem = async (itemId: string) => {
+        try {
+            const res = await fetch(`/api/getItem?id=${itemId}`);
+            /*if (!response.ok) {
+                throw new Error("Failed to fetch item");
+            }*/
+            const data = await res.json();
+            setItem(data.item);
+        } catch (err: unknown) {
+            console.log(err);
+        }
+    };
+    const fetchUser = async (userId: string) => {
+        const res = await fetch(
+            `http://localhost:3000/api/getUser?id=${userId}`
+        );
+        const userData = await res.json();
+        console.log(userData); //na backendu treba popravit da se dohvaća User kako treba
+        setUser(userData);
+    };
+
+    useEffect(() => {
+        fetchItem(itemId);
+    }, []);
+    useEffect(() => {
+        if (item) {
+            const sellerId = item.sellerid;
+            fetchUser(sellerId);
+        }
+    }, [item]);
 
     return (
         <>
-            {/*<ItemViewContext.Provider value={data}>*/}
             <Container
                 sx={{
                     width: "950px",
@@ -55,11 +110,29 @@ const ItemView = ({ itemId, sellerId }: Props) => {
                     alignItems: "center",
                 }}
             >
-                <ItemThumbnail seller={seller} />
-                <ItemTitle item={item} />
-                <ItemDescription description={item.description} />
+                {item && user && <ItemThumbnail user={user} />}
+                {item && user && <ItemTitle item={item} />}
+                {item && user && (
+                    <ItemDescription description={item.description} />
+                )}
+                {(!user || !item) && (
+                    <Box
+                        sx={{
+                            marginTop: 30,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: theme.palette.secondary.main,
+                            padding: 3,
+                            borderRadius: 2,
+                            fontSize: 30,
+                        }}
+                    >
+                        Loading your page...
+                    </Box> //NEMJESTI DA SE NIŠTA NE RENDERA DOK SVE NIJE SPREMNO
+                )}
             </Container>
-            {/*</ItemViewContext.Provider>*/}
         </>
     );
 };

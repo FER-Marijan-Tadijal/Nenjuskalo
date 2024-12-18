@@ -3,24 +3,25 @@ import { Box, Button, Typography } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
 
-//import { ItemViewContext } from "../../pages/ItemViewPage";
-
-interface Prop {
-    seller: {
+type Props = {
+    user: {
+        userId: string;
         name: string;
         surname: string;
-        contact: string;
-        country: string;
-        city: string;
-        street: string;
-        houseNo: string;
+        email: string;
+        googleId: string;
+        password?: string;
+        country?: string;
+        city?: string;
+        street?: string;
+        houseno?: string;
+        registerTime: string;
+        role: string;
     };
-}
+};
 
-const ItemThumbnail = ({ seller }: Prop) => {
-    //const data = useContext(ItemViewContext);
-    //const item = data.item;
-    //const seller = data.seller;
+const ItemThumbnail = ({ user }: Props) => {
+    console.log(user); //TREBA POPRAVIT DA BACKEND DAJE DOBROG USERA
     return (
         <Box
             sx={{
@@ -86,18 +87,22 @@ const ItemThumbnail = ({ seller }: Prop) => {
                 }}
             >
                 <Typography variant="body1">
-                    • Seller: {seller.name} {seller.surname}
+                    • Seller: {user.name} {user.surname}
+                </Typography>
+                <Typography variant="body1">• Email: {user.email}</Typography>
+                <Typography variant="body1">
+                    • Country: {user.country}
                 </Typography>
                 <Typography variant="body1">
-                    • Contact: {seller.contact}
+                    • Adress: {user.city} {user.street} {user.houseno}
                 </Typography>
-                <Typography variant="body1">
-                    • Country: {seller.country}
-                </Typography>
-                <Typography variant="body1">
-                    • Adress: {seller.city} {seller.street} {seller.houseNo}
-                </Typography>
-                <Button variant="contained" sx={{ mt: 2 }}>
+                <Button
+                    variant="contained"
+                    sx={{ mt: 2 }}
+                    href={`/message/${user.userId}`}
+                >
+                    {" "}
+                    {/*POSTAVI href NA MESSAGES */}
                     Message Seller
                 </Button>
             </Box>

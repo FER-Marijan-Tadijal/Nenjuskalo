@@ -1,10 +1,8 @@
 import React from "react";
 import ItemView from "@/app/pages/ItemViewPage";
 
-type Props = {};
-
-const page = (props: Props) => {
-    return <ItemView itemId="1" sellerId="User1" />;
+const page = (itemId: string) => {
+    return <ItemView itemId={itemId} />;
 };
 
 export default page;
