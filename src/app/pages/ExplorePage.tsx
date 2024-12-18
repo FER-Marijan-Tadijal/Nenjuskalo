@@ -85,21 +85,21 @@ const categories = [
     { name: "Obuca", id: 3 },
 ];
 const conditions = [
-    { name: "new", id: 0 },
-    { name: "used", id: 1 },
-    { name: "old", id: 2 },
+    { name: "novo", id: 0 },
+    { name: "rabljeno", id: 1 },
+    { name: "osteceno", id: 2 },
 ];
-const orders = ["lowestPrice", "highestPrice", "Newest", "Oldest"];
+const orders = ["lowestPrice", "highestPrice", "newest", "oldest"];
 
 type Item = {
     itemid: string;
     title: string;
     description: string;
-    category: string;
+    belongsto: { categoryid: number }[];
     askingprice: string;
     sellerid: string;
     buyerid?: string;
-    condition: ["new", "used"];
+    conditionid: number;
 };
 type Seller = {
     sellerId: string;
@@ -116,12 +116,11 @@ type Seller = {
     role: string;
 };
 type ExplorePageProps = {
-    searchProp: string;
+    searchTerm: string;
 };
 
-const Explore = ({ searchProp }: ExplorePageProps) => {
-    var q = searchProp;
-    q = "Kuc";
+const Explore = ({ searchTerm }: ExplorePageProps) => {
+    var q = searchTerm;
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [items, setItems] = useState<Item[]>([]);
@@ -134,8 +133,13 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
     const [priceChanged, setPriceChanged] = useState(false);
 
     const fetchRandomItems = async () => {
-        const randoms = await fetch("http://localhost:3000/api/random?n=5");
+        console.log(items[0].belongsto[0].categoryid);
+        const randoms = await fetch(
+            //`http://localhost:3000/api/getCategory?id=${items[0].belongsto[0].categoryid}`
+            `http://localhost:3000/api/random?n=5`
+        );
         const randomData = await randoms.json();
+        console.log(randomData);
         setRandomItems(randomData);
     };
 
@@ -148,7 +152,8 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
         if (orderBy) params.set("orderBy", orderBy);
         if (minPrice) params.set("minPrice", minPrice);
         if (maxPrice) params.set("maxPrice", maxPrice);
-        console.log(params);
+        const opa = params.toString();
+        console.log(opa);
         const res = await fetch(`http://localhost:3000/api/search?${params}`);
         //const res = await fetch(
         //    `http://localhost:3000/api/search?q=Ku&page=1&orderBy=newest&minPrice=0&maxPrice=20000000`
@@ -160,8 +165,10 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
 
     useEffect(() => {
         fetchItems(page);
-        fetchRandomItems();
     }, [page, categoryId, priceChanged, conditionId, orderBy]);
+    useEffect(() => {
+        fetchRandomItems();
+    }, []);
 
     const handleCategoryIdChange = (event: SelectChangeEvent<string>) => {
         setCategoryId(event.target.value);
@@ -227,12 +234,9 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
                                     <MenuItem value={""}>
                                         -All Conditions-
                                     </MenuItem>
-                                    {conditions.map((condition, index) => (
-                                        <MenuItem
-                                            key={index}
-                                            value={condition.id}
-                                        >
-                                            {condition.name}
+                                    {conditions.map((con, index) => (
+                                        <MenuItem key={index} value={con.id}>
+                                            {con.name}
                                         </MenuItem>
                                     ))}
                                 </Select>
@@ -368,7 +372,7 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
                         >
                             <Typography variant="h6">
                                 {" "}
-                                Search results for: "{search}"
+                                Search results for: "{searchTerm}"
                             </Typography>
                             <Box
                                 sx={{
@@ -425,7 +429,7 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
                                 title={e.title}
                                 price={e.askingprice}
                                 sellerId={e.sellerid}
-                                category={e.category}
+                                categoryId={e.belongsto[0].categoryid}
                                 key={key}
                             />
                         ))}

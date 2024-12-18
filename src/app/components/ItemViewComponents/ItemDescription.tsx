@@ -19,7 +19,7 @@ const ItemDescription = ({ description }: Prop) => {
                 color: theme.palette.textBlack.main,
                 borderRadius: 2,
                 padding: 2,
-                marginTop: 2,
+                marginTop: 4,
             }}
         >
             <Typography variant="body1">{description}</Typography>

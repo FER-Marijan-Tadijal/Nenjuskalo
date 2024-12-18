@@ -3,8 +3,6 @@ import { Box, Button, Typography } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
 
-//import { ItemViewContext } from "../../pages/ItemViewPage";
-
 type Props = {
     user: {
         userId: string;
@@ -23,9 +21,7 @@ type Props = {
 };
 
 const ItemThumbnail = ({ user }: Props) => {
-    //const data = useContext(ItemViewContext);
-    //const item = data.item;
-    //const seller = data.seller;
+    console.log(user); //TREBA POPRAVIT DA BACKEND DAJE DOBROG USERA
     return (
         <Box
             sx={{
@@ -93,14 +89,20 @@ const ItemThumbnail = ({ user }: Props) => {
                 <Typography variant="body1">
                     • Seller: {user.name} {user.surname}
                 </Typography>
-                <Typography variant="body1">• Contact: {user.email}</Typography>
+                <Typography variant="body1">• Email: {user.email}</Typography>
                 <Typography variant="body1">
                     • Country: {user.country}
                 </Typography>
                 <Typography variant="body1">
                     • Adress: {user.city} {user.street} {user.houseno}
                 </Typography>
-                <Button variant="contained" sx={{ mt: 2 }}>
+                <Button
+                    variant="contained"
+                    sx={{ mt: 2 }}
+                    href={`/message/${user.userId}`}
+                >
+                    {" "}
+                    {/*POSTAVI href NA MESSAGES */}
                     Message Seller
                 </Button>
             </Box>

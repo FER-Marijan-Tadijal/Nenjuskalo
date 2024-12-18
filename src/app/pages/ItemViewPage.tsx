@@ -37,7 +37,7 @@ type Item = {
     askingprice: string;
     sellerid: string;
     buyerid?: string;
-    condition: ["new", "used"];
+    conditionid: number;
 };
 type User = {
     userId: string;
@@ -69,7 +69,6 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                 throw new Error("Failed to fetch item");
             }*/
             const data = await res.json();
-            console.log(data.item);
             setItem(data.item);
         } catch (err: unknown) {
             console.log(err);
@@ -80,7 +79,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
             `http://localhost:3000/api/getUser?id=${userId}`
         );
         const userData = await res.json();
-        console.log(userData);
+        console.log(userData); //na backendu treba popravit da se dohvaća User kako treba
         setUser(userData);
     };
 
@@ -111,12 +110,28 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                     alignItems: "center",
                 }}
             >
-                {user && <ItemThumbnail user={user} />}
-                {item && <ItemTitle item={item} />}
-                {item && <ItemDescription description={item.description} />}
-                {/*!user || !item || (
-                    <Box sx={{ mt: 10 }}>Something went wrong!</Box>        //NEMJESTI DA SE NIŠTA NE RENDERA DOK SVE NIJE SPREMNO
-                )*/}
+                {item && user && <ItemThumbnail user={user} />}
+                {item && user && <ItemTitle item={item} />}
+                {item && user && (
+                    <ItemDescription description={item.description} />
+                )}
+                {(!user || !item) && (
+                    <Box
+                        sx={{
+                            marginTop: 30,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            backgroundColor: theme.palette.secondary.main,
+                            padding: 3,
+                            borderRadius: 2,
+                            fontSize: 30,
+                        }}
+                    >
+                        Loading your page...
+                    </Box> //NEMJESTI DA SE NIŠTA NE RENDERA DOK SVE NIJE SPREMNO
+                )}
             </Container>
         </>
     );

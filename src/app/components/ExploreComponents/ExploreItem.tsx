@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import theme from "@/app/styles/theme";
 import { getUser } from "@/app/util/getFromId";
+import { categoryEnum } from "@/app/enums/categoryEnum";
 
 type Props = {
     title: string;
     price: string;
     sellerId: string;
-    category: string;
+    categoryId: number;
 };
 type User = {
     id: string;
@@ -18,9 +19,11 @@ type User = {
     roleId: string;
 };
 
-const ExploreItem = ({ title, price, sellerId, category }: Props) => {
+const ExploreItem = ({ title, price, sellerId, categoryId }: Props) => {
+    //console.log(categoryId);
     const [user, setUser] = useState<User>();
-
+    const categoryName = categoryEnum[categoryId] ?? "unknown category";
+    //console.log(categoryName);
     const fetchUser = async (userId: string) => {
         const res = await fetch(
             `http://localhost:3000/api/getUser?id=${userId}`
@@ -57,14 +60,18 @@ const ExploreItem = ({ title, price, sellerId, category }: Props) => {
                     display: "flex",
                     flexDirection: "column",
                     justifyContent: "center",
+                    width: "50%",
+                    paddingRight: 1,
                 }}
             >
                 <img
                     src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fG5hdHVyZXxlbnwwfHx8fDE2MTg4NzU1MjA&ixlib=rb-1.2.1&q=80&w=400"
                     alt="Nature image from Unsplash"
                     style={{
-                        width: "250px",
-                        height: "145px",
+                        width: "100%",
+                        height: "auto",
+                        maxHeight: "100%",
+                        objectFit: "cover",
                         borderRadius: 4,
                     }}
                 />
@@ -88,7 +95,7 @@ const ExploreItem = ({ title, price, sellerId, category }: Props) => {
                         {/*user.city},{user.street*/}
                     </Typography>
                     <Typography variant="body2">
-                        • Category: {category}
+                        • Category: {categoryName}
                     </Typography>
                 </Box>
                 <Button variant="accentBtn" fullWidth>
