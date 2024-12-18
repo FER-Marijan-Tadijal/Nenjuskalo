@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     const categoryId = parseInt(url.searchParams.get('categoryId') || '-1');
     const conditionId = parseInt(url.searchParams.get('conditionId') || '-1');
     const page = parseInt(url.searchParams.get('page') || '1');
-    const pageSize = 25;
+    const pageSize = 10;
 
     const whereClause = {
         OR: [

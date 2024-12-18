@@ -49,7 +49,7 @@ type User = {
     country?: string;
     city?: string;
     street?: string;
-    houseNo?: string;
+    houseno?: string;
     registerTime: string;
     role: string;
 };
@@ -60,16 +60,17 @@ type ItemViewProps = {
 
 const ItemView = ({ itemId }: ItemViewProps) => {
     const [item, setItem] = useState<Item | null>(null);
-    const [User, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<User | null>(null);
 
     const fetchItem = async (itemId: string) => {
         try {
-            const res = await fetch(`/api/items/${itemId}`);
+            const res = await fetch(`/api/getItem?id=${itemId}`);
             /*if (!response.ok) {
                 throw new Error("Failed to fetch item");
             }*/
             const data = await res.json();
-            setItem(data);
+            console.log(data.item);
+            setItem(data.item);
         } catch (err: unknown) {
             console.log(err);
         }
@@ -84,11 +85,13 @@ const ItemView = ({ itemId }: ItemViewProps) => {
     };
 
     useEffect(() => {
-        //fetchItem(itemId);
-        //const sellerId = item.sellerid;
-        //fetchUser(sellerId);
-        //}
-    }, [itemId]);
+        fetchItem(itemId);
+    }, []);
+    useEffect(() => {
+        if (item) {
+            const sellerId = item.sellerid;
+        }
+    }, [item]);
 
     return (
         <>
@@ -107,9 +110,12 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                     alignItems: "center",
                 }}
             >
-                <ItemThumbnail seller={data.seller} />
-                <ItemTitle item={data.item} />
-                <ItemDescription description={data.item.description} />
+                {user && <ItemThumbnail user={user} />}
+                {item && <ItemTitle item={item} />}
+                {item && <ItemDescription description={item.description} />}
+                {/*!user || !item || (
+                    <Box sx={{ mt: 10 }}>Something went wrong!</Box>        //NEMJESTI DA SE NIŠTA NE RENDERA DOK SVE NIJE SPREMNO
+                )*/}
             </Container>
         </>
     );

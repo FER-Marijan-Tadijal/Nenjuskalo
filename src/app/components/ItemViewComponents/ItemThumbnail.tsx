@@ -5,19 +5,24 @@ import Image from "next/image";
 
 //import { ItemViewContext } from "../../pages/ItemViewPage";
 
-interface Prop {
-    seller: {
+type Props = {
+    user: {
+        userId: string;
         name: string;
         surname: string;
-        contact: string;
-        country: string;
-        city: string;
-        street: string;
-        houseNo: string;
+        email: string;
+        googleId: string;
+        password?: string;
+        country?: string;
+        city?: string;
+        street?: string;
+        houseno?: string;
+        registerTime: string;
+        role: string;
     };
-}
+};
 
-const ItemThumbnail = ({ seller }: Prop) => {
+const ItemThumbnail = ({ user }: Props) => {
     //const data = useContext(ItemViewContext);
     //const item = data.item;
     //const seller = data.seller;
@@ -86,16 +91,14 @@ const ItemThumbnail = ({ seller }: Prop) => {
                 }}
             >
                 <Typography variant="body1">
-                    • Seller: {seller.name} {seller.surname}
+                    • Seller: {user.name} {user.surname}
+                </Typography>
+                <Typography variant="body1">• Contact: {user.email}</Typography>
+                <Typography variant="body1">
+                    • Country: {user.country}
                 </Typography>
                 <Typography variant="body1">
-                    • Contact: {seller.contact}
-                </Typography>
-                <Typography variant="body1">
-                    • Country: {seller.country}
-                </Typography>
-                <Typography variant="body1">
-                    • Adress: {seller.city} {seller.street} {seller.houseNo}
+                    • Adress: {user.city} {user.street} {user.houseno}
                 </Typography>
                 <Button variant="contained" sx={{ mt: 2 }}>
                     Message Seller

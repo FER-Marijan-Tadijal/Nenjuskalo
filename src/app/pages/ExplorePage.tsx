@@ -120,40 +120,39 @@ type ExplorePageProps = {
 };
 
 const Explore = ({ searchProp }: ExplorePageProps) => {
-    const q = searchProp;
+    var q = searchProp;
+    q = "Kuc";
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
     const [items, setItems] = useState<Item[]>([]);
     const [randomItems, setRandomItems] = useState<Item[]>([]);
     const [minPrice, setMinPrice] = useState("");
     const [maxPrice, setMaxPrice] = useState("");
-    const [category, setCategory] = useState("");
-    const [condition, setCondition] = useState("");
+    const [categoryId, setCategoryId] = useState("");
+    const [conditionId, setConditionId] = useState("");
     const [orderBy, setorderBy] = useState("");
     const [priceChanged, setPriceChanged] = useState(false);
 
     const fetchRandomItems = async () => {
         const randoms = await fetch("http://localhost:3000/api/random?n=5");
         const randomData = await randoms.json();
-        console.log("Random fetch:", randomData);
         setRandomItems(randomData);
     };
 
     const fetchItems = async (currentPage: number) => {
-        const params = new URLSearchParams({
-            q,
-            page: currentPage.toString(),
-            categoryId: category,
-            conditionId: condition,
-            orderBy,
-            minPrice,
-            maxPrice,
-        });
-
-        //const res = await fetch(`http://localhost:3000/api/items?${params}`);
-        const res = await fetch(
-            `http://localhost:3000/api/search?q=Ku&page=1&orderBy=newest&minPrice=0&maxPrice=20000000`
-        );
+        const params = new URLSearchParams();
+        if (q) params.set("q", q);
+        if (currentPage) params.set("page", currentPage.toString());
+        if (categoryId) params.set("categoryId", categoryId);
+        if (conditionId) params.set("conditionId", conditionId);
+        if (orderBy) params.set("orderBy", orderBy);
+        if (minPrice) params.set("minPrice", minPrice);
+        if (maxPrice) params.set("maxPrice", maxPrice);
+        console.log(params);
+        const res = await fetch(`http://localhost:3000/api/search?${params}`);
+        //const res = await fetch(
+        //    `http://localhost:3000/api/search?q=Ku&page=1&orderBy=newest&minPrice=0&maxPrice=20000000`
+        //);
         const data = await res.json();
         setItems(data);
         setTotalPages(data.totalPages);
@@ -162,14 +161,14 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
     useEffect(() => {
         fetchItems(page);
         fetchRandomItems();
-    }, [page, category, priceChanged, condition, orderBy]);
+    }, [page, categoryId, priceChanged, conditionId, orderBy]);
 
-    const handleCategoryChange = (event: SelectChangeEvent<string>) => {
-        setCategory(event.target.value);
+    const handleCategoryIdChange = (event: SelectChangeEvent<string>) => {
+        setCategoryId(event.target.value);
     };
 
-    const handleConditionChange = (event: SelectChangeEvent<string>) => {
-        setCondition(event.target.value);
+    const handleConditionIdChange = (event: SelectChangeEvent<string>) => {
+        setConditionId(event.target.value);
     };
 
     const handleOrderByChange = (event: SelectChangeEvent<string>) => {
@@ -222,11 +221,11 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
                                 </InputLabel>
                                 <Select
                                     labelId="select-label"
-                                    value={condition}
-                                    onChange={handleConditionChange}
+                                    value={conditionId}
+                                    onChange={handleConditionIdChange}
                                 >
-                                    <MenuItem value={"-All Conditions-"}>
-                                        -All Categories-
+                                    <MenuItem value={""}>
+                                        -All Conditions-
                                     </MenuItem>
                                     {conditions.map((condition, index) => (
                                         <MenuItem
@@ -257,10 +256,10 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
                                 </InputLabel>
                                 <Select
                                     labelId="select-label"
-                                    value={category}
-                                    onChange={handleCategoryChange}
+                                    value={categoryId}
+                                    onChange={handleCategoryIdChange}
                                 >
-                                    <MenuItem value={"-All Categories-"}>
+                                    <MenuItem value={""}>
                                         -All Categories-
                                     </MenuItem>
                                     {categories.map((cat, index) => (
@@ -434,6 +433,10 @@ const Explore = ({ searchProp }: ExplorePageProps) => {
                     <Box
                         sx={{
                             backgroundColor: theme.palette.secondary.main,
+                            //position: "fixed",
+                            //top: 0,
+                            //right: 0,
+                            mr: 0,
                             mt: 10,
                             padding: 2,
                             width: "300px",

@@ -3,17 +3,19 @@ import { Box, Typography } from "@mui/material";
 import { useContext } from "react";
 //import { ItemViewContext } from "../../pages/ItemViewPage";
 
-interface Prop {
+type Props = {
     item: {
+        itemid: string;
         title: string;
-        price: number;
         description: string;
-        condition: string;
+        askingprice: string;
+        sellerid: string;
+        buyerid?: string;
+        condition: ["new", "used"];
     };
-}
+};
 
-const ItemTitle = ({ item }: Prop) => {
-    //const data = useContext(ItemViewContext);
+const ItemTitle = ({ item }: Props) => {
     //const item = data.item;
     return (
         <Box
@@ -29,9 +31,15 @@ const ItemTitle = ({ item }: Prop) => {
                 //borderColor: "#003049",
             }}
         >
-            <Typography variant="h6">• {item.title}</Typography>
-            <Typography variant="h6">• Price: {item.price} $</Typography>
-            <Typography variant="h6">• Condition: {item.condition}</Typography>
+            <Typography variant="h4" sx={{ fontStyle: "italic" }}>
+                • {item.title}
+            </Typography>
+            <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
+                • Price: {item.askingprice} $
+            </Typography>
+            <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
+                • Condition: {item.condition}
+            </Typography>
         </Box>
     );
 };
