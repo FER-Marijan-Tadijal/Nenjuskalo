@@ -90,6 +90,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
     useEffect(() => {
         if (item) {
             const sellerId = item.sellerid;
+            fetchUser(sellerId);
         }
     }, [item]);
 
