@@ -216,7 +216,7 @@ export default function HomePage() {
                                                 marginTop: "8px",
                                             }}
                                         >
-                                            Price: ${item.askingprice}
+                                            Cijena: {item.askingprice}€
                                         </Typography>
                                         <Button
                                             variant="contained"
@@ -301,8 +301,7 @@ export default function HomePage() {
                                                 marginTop: "8px",
                                             }}
                                         >
-                                            Price: ${item.askingprice}
-                                        </Typography>
+                                            Cijena: {item.askingprice}€                                       </Typography>
                                         <Button
                                             variant="contained"
                                             fullWidth
