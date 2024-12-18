@@ -230,7 +230,7 @@ export default function HomePage() {
                                                     bgcolor: "#E5A800",
                                                 },
                                             }}
-                                            href={`/item/${item.id}`}
+                                            href={`/item?id=${item.id}`}
                                         >
                                             Detalji
                                         </Button>
@@ -314,7 +314,7 @@ export default function HomePage() {
                                                     bgcolor: "#E5A800",
                                                 },
                                             }}
-                                            href={`/item/${item.id}`}
+                                            href={`/item?id=${item.id}`}
                                         >
                                             Detalji
                                         </Button>
