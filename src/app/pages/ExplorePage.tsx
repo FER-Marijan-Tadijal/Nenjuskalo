@@ -7,11 +7,7 @@ import {
     Typography,
     FormControl,
     InputLabel,
-    Menu,
     MenuItem,
-    OutlinedInput,
-    InputAdornment,
-    FormHelperText,
 } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
@@ -122,6 +118,8 @@ type ExplorePageProps = {
     searchTerm: string;
 };
 
+//MOŽDA JOŠ STAVITI DIO KODA U ExploreHeader KOMPONENTU
+
 const Explore = ({ searchTerm }: ExplorePageProps) => {
     var q = searchTerm;
     const [page, setPage] = useState(1);
@@ -176,7 +174,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         fetchItems(page);
     }, [page, categoryId, priceChanged, conditionId, orderBy]);
     useEffect(() => {
-        fetchRandomItems();
+        fetchRandomItems(); //ako stavimo da se dohvaćaju oglasi koji su ista kategorija, onda stavi useEffect kad god se promijeni items
     }, []);
 
     const handleCategoryIdChange = (event: SelectChangeEvent<string>) => {
