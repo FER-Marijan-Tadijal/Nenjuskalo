@@ -7,8 +7,8 @@ export async function GET(request: Request) {
     const url = new URL(request.url);
     const searchTerm = url.searchParams.get('q');
     const minPrice = parseFloat(url.searchParams.get('minPrice') || '0');
-    const maxPrice = parseFloat(url.searchParams.get('maxPrice') || 'Infinity');
-    const orderBy = url.searchParams.get('orderBy') as orderByEnum || orderByEnum.newest;
+    const maxPrice = parseFloat(url.searchParams.get('maxPrice') || '2147483646');
+    const orderBy = (url.searchParams.get('orderBy') || orderByEnum.newest) as orderByEnum;
     const categoryId = parseInt(url.searchParams.get('categoryId') || '-1');
     const conditionId = parseInt(url.searchParams.get('conditionId') || '-1');
     const page = parseInt(url.searchParams.get('page') || '1');
