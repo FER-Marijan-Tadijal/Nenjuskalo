@@ -143,7 +143,7 @@ export default function Navbar({ session }: NavbarProps) {
                         <NavbarLink>Istraži</NavbarLink>
                     </Link>
                     {session && (
-                        <Link href="/messages" passHref>
+                        <Link href="/message" passHref>
                             <NavbarLink>Poruke</NavbarLink>
                         </Link>
                     )}

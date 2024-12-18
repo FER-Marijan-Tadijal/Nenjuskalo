@@ -1,13 +1,6 @@
 "use client";
 
-//import { Container, Typography, Box, ThemeProvider } from "@mui/material";
-//import ItemView from "./pages/ItemViewPage";
-//import NotFoundPage from "./pages/NotFoundPage";
-import ExplorePage from "./ExplorePage";
-//import theme from "./styles/theme";
-//import ProfilePage from "./pages/ProfilePage";
-import Component from "@/app/Component";
-//import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Box,
     Typography,
@@ -18,9 +11,6 @@ import {
     CardContent,
     CardMedia,
 } from "@mui/material";
-import Carousel from "react-material-ui-carousel";
-import Image from "next/image";
-import Link from "next/link";
 import CarouselComponent from "../components/GlobalComponents/Carousel";
 
 // Custom font styles
@@ -43,6 +33,25 @@ const bodyStyle = {
 };
 
 export default function HomePage() {
+    const [randomItems, setRandomItems] = useState([]);
+
+    // Fetch 7 random items
+    useEffect(() => {
+        async function fetchRandomItems() {
+            try {
+                const response = await fetch("/api/random?n=7");
+                if (!response.ok) throw new Error("Failed to fetch random items");
+
+                const data = await response.json();
+                setRandomItems(data);
+            } catch (error) {
+                console.error("Error fetching random items:", error);
+            }
+        }
+
+        fetchRandomItems();
+    }, []);
+
     return (
         <Container
             maxWidth="lg"
@@ -61,7 +70,7 @@ export default function HomePage() {
             </Box>
 
             {/* Hero Section */}
-            <Box sx={{ marginBottom: "40px", textAlign: "center" }}>
+            <Box sx={{ marginBottom: "10px", textAlign: "center" }}>
                 <Typography
                     variant="h2"
                     gutterBottom
@@ -77,15 +86,14 @@ export default function HomePage() {
                         fontSize: "1.1rem",
                     }}
                 >
-                    Pogledajte našu ponudu i
-                    pronađite ono što vam je potrebno!
+                    Pogledajte našu ponudu i pronađite ono što vam je potrebno!
                 </Typography>
                 <Button
                     variant="contained"
                     sx={{
                         bgcolor: "#FFC300",
                         color: "#003049",
-                        mt: 2,
+                        mt: 4,
                         fontWeight: "600",
                         textTransform: "uppercase",
                         "&:hover": { bgcolor: "#E5A800" },
@@ -105,20 +113,19 @@ export default function HomePage() {
                         ...titleStyle,
                         color: "#FFC300",
                         fontSize: "2rem",
+                        marginBottom: "30px",
                     }}
                 >
-                    {" "}
-                    {/* Yellow */}
-                    Explore Categories
+                    Istraži Kategorije
                 </Typography>
                 <Grid container spacing={4} justifyContent="center">
                     {[
-                        { label: "Auto Moto Nautika" },
+                        { label: "Auto Moto" },
                         { label: "Nekretnine" },
-                        { label: "Marketplace" },
-                        { label: "Turistički smještaj" },
-                        { label: "Katalozi" },
-                        { label: "Poslovi" },
+                        { label: "Nekretnine" },
+                        { label: "Pijac" },
+                        { label: "Odjevni predmeti" },
+                        { label: "Militarija" },
                     ].map((category, index) => (
                         <Grid
                             item
@@ -139,8 +146,7 @@ export default function HomePage() {
                                     fontFamily: "'Poppins', sans-serif",
                                     color: "white",
                                     backgroundColor: "#003049",
-                                    boxShadow:
-                                        "0px 4px 12px rgba(0, 0, 0, 0.2)",
+                                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
                                     "&:hover": {
                                         backgroundColor: "#1c4a6e",
                                         transform: "scale(1.05)",
@@ -169,60 +175,80 @@ export default function HomePage() {
                         fontSize: "2rem",
                     }}
                 >
-                    Featured Products
+                    Istaknuti Proizvodi
                 </Typography>
                 <Grid container spacing={4} justifyContent="center">
-                    {[1, 2, 3].map((_, index) => (
-                        <Grid item xs={12} sm={6} md={4} key={index}>
-                            <Card>
-                                <CardMedia
-                                    component="img"
-                                    height="200"
-                                    image="/images/banner1.jpg"
-                                    alt="Featured Product"
-                                />
-                                <CardContent>
-                                    <Typography
-                                        variant="h6"
-                                        component="div"
-                                        sx={{
-                                            ...subtitleStyle,
-                                            color: "#003049",
-                                        }}
-                                    >
-                                        Product Name
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            ...bodyStyle,
-                                            color: "text.secondary",
-                                        }}
-                                    >
-                                        Description of the product.
-                                    </Typography>
-                                    <Button
-                                        variant="contained"
-                                        fullWidth
-                                        sx={{
-                                            mt: 2,
-                                            bgcolor: "#FFC300",
-                                            color: "#003049",
-                                            fontWeight: "600",
-                                            "&:hover": { bgcolor: "#E5A800" },
-                                        }}
-                                        href="/item"
-                                    >
-                                        View Details
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    ))}
+                {randomItems.length > 0 ? (
+                        randomItems.slice(0, 3).map((item: any) => (
+                            <Grid item xs={12} sm={6} md={3} key={item.id}>
+                                <Card>
+                                    <CardMedia
+                                        component="img"
+                                        height="200"
+                                        image="/images/banner1.jpg" // Placeholder image
+                                        alt={item.title}
+                                    />
+                                    <CardContent>
+                                        <Typography
+                                            variant="h6"
+                                            component="div"
+                                            sx={{
+                                                ...subtitleStyle,
+                                                color: "#003049",
+                                            }}
+                                        >
+                                            {item.title}
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                ...bodyStyle,
+                                                color: "text.secondary",
+                                            }}
+                                        >
+                                            {item.description}
+                                        </Typography>
+                                        <Typography
+                                            variant="body1"
+                                            sx={{
+                                                fontWeight: "bold",
+                                                color: "#003049",
+                                                marginTop: "8px",
+                                            }}
+                                        >
+                                            Price: ${item.askingprice}
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            fullWidth
+                                            sx={{
+                                                mt: 2,
+                                                bgcolor: "#FFC300",
+                                                color: "#003049",
+                                                fontWeight: "600",
+                                                "&:hover": {
+                                                    bgcolor: "#E5A800",
+                                                },
+                                            }}
+                                            href={`/item/${item.id}`}
+                                        >
+                                            Detalji
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))
+                    ) : (
+                        <Typography
+                            sx={{ textAlign: "center", color: "gray", mt: 4 }}
+                        >
+                            Učitavam istaknute artikle...
+                        </Typography>
+                    )}
                 </Grid>
             </Box>
 
-            {/* Recommended/Popular Items Section */}
+            {/* Popular Section */}
             <Box sx={{ width: "100%", marginTop: "40px" }}>
                 <Typography
                     variant="h4"
@@ -234,59 +260,78 @@ export default function HomePage() {
                         fontSize: "2rem",
                     }}
                 >
-                    Recommended for You
+                    Popularno danas
                 </Typography>
                 <Grid container spacing={4} justifyContent="center">
-                    {[1, 2, 3, 4].map((_, index) => (
-                        <Grid item xs={12} sm={6} md={3} key={index}>
-                            <Card>
-                                <CardMedia
-                                    component="img"
-                                    height="200"
-                                    image="/images/banner2.jpg"
-                                    alt="Recommended item"
-                                />
-                                <CardContent>
-                                    <Typography
-                                        variant="h6"
-                                        component="div"
-                                        sx={{
-                                            ...subtitleStyle,
-                                            color: "#003049",
-                                        }}
-                                    >
-                                        Item Title
-                                    </Typography>
-                                    <Typography
-                                        variant="body2"
-                                        sx={{
-                                            ...bodyStyle,
-                                            color: "text.secondary",
-                                        }}
-                                    >
-                                        Description of the item.
-                                    </Typography>
-                                    <Button
-                                        variant="contained"
-                                        fullWidth
-                                        sx={{
-                                            mt: 2,
-                                            bgcolor: "#FFC300",
-                                            color: "#003049",
-                                            fontWeight: "600",
-                                            "&:hover": { bgcolor: "#E5A800" },
-                                        }}
-                                        href={`/item/${index}`} //POPRAVI PATH
-                                    >
-                                        View Details
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                        </Grid>
-                    ))}
+                    {randomItems.length > 0 ? (
+                        randomItems.slice(3, 7).map((item: any) => (
+                            <Grid item xs={12} sm={6} md={3} key={item.id}>
+                                <Card>
+                                    <CardMedia
+                                        component="img"
+                                        height="200"
+                                        image="/images/banner1.jpg" // Placeholder image
+                                        alt={item.title}
+                                    />
+                                    <CardContent>
+                                        <Typography
+                                            variant="h6"
+                                            component="div"
+                                            sx={{
+                                                ...subtitleStyle,
+                                                color: "#003049",
+                                            }}
+                                        >
+                                            {item.title}
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                ...bodyStyle,
+                                                color: "text.secondary",
+                                            }}
+                                        >
+                                            {item.description}
+                                        </Typography>
+                                        <Typography
+                                            variant="body1"
+                                            sx={{
+                                                fontWeight: "bold",
+                                                color: "#003049",
+                                                marginTop: "8px",
+                                            }}
+                                        >
+                                            Price: ${item.askingprice}
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            fullWidth
+                                            sx={{
+                                                mt: 2,
+                                                bgcolor: "#FFC300",
+                                                color: "#003049",
+                                                fontWeight: "600",
+                                                "&:hover": {
+                                                    bgcolor: "#E5A800",
+                                                },
+                                            }}
+                                            href={`/item/${item.id}`}
+                                        >
+                                            Detalji
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))
+                    ) : (
+                        <Typography
+                            sx={{ textAlign: "center", color: "gray", mt: 4 }}
+                        >
+                            Učitavam popularne artikle...
+                        </Typography>
+                    )}
                 </Grid>
             </Box>
         </Container>
     );
 }
-
