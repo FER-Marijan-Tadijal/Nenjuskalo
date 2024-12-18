@@ -4,7 +4,7 @@ export async function getUser(Id: string) {
     const user = await prisma.user.findUnique({where: {id: Id}})
     const siteuser = await prisma.siteuser.findUnique({where: {id: Id}})
 
-    return {user: user, siteuser: siteuser,}
+    return {...user, ...siteuser}
 }
 
 export async function getItem(Id: number) {
