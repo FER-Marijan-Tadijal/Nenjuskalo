@@ -85,7 +85,7 @@ const conditions = [
 const orders = ["lowestPrice", "highestPrice", "newest", "oldest"];
 
 type Item = {
-    itemid: string;
+    id: string;
     title: string;
     description: string;
     belongsto: { categoryid: number }[];
@@ -327,6 +327,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                             </Box>
                             {items.map((e, key) => (
                                 <ExploreItem
+                                    itemId={e.id}
                                     title={e.title}
                                     price={e.askingprice}
                                     sellerId={e.sellerid}

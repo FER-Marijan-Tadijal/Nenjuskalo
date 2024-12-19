@@ -4,6 +4,7 @@ import theme from "@/app/styles/theme";
 import { getUser } from "@/app/util/getFromId";
 
 type Props = {
+    itemId: string;
     title: string;
     price: string;
     sellerId: string;
@@ -24,15 +25,18 @@ type User = {
 };
 
 const ExploreItem = ({
+    itemId,
     title,
     price,
     sellerId,
     categoryObjects,
     categories,
 }: Props) => {
+    console.log(itemId);
     const [user, setUser] = useState<User>();
     const [itemCategories, setItemCategories] = useState<string[]>([]);
     const categoryIds = categoryObjects.map((obj) => obj.categoryid);
+    var check = true;
 
     const fetchUser = async (userId: string) => {
         const res = await fetch(
@@ -44,7 +48,10 @@ const ExploreItem = ({
     };
 
     useEffect(() => {
-        if (categories && categories.length > 0) {
+        if (categories && categories.length > 0 && check) {
+            check = false;
+            console.log(categories);
+            console.log(categoryIds);
             categories.forEach((cat) => {
                 if (categoryIds.includes(cat.id)) {
                     console.log("IN HERE BRO ", cat.name);
@@ -122,7 +129,11 @@ const ExploreItem = ({
                                 • Category: {itemCategories.join(",")}
                             </Typography>
                         </Box>
-                        <Button variant="accentBtn" fullWidth>
+                        <Button
+                            variant="accentBtn"
+                            fullWidth
+                            href={`/item?id=${itemId}`}
+                        >
                             View Details
                         </Button>
                     </Box>

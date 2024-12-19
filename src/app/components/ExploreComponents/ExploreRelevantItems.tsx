@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import theme from "@/app/styles/theme";
 
 type Item = {
-    itemid: string;
+    id: string;
     title: string;
     description: string;
     belongsto: { categoryid: number }[];
@@ -52,7 +52,7 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
                     >
                         <Typography
                             component="a"
-                            href={`/item/${item.itemid}`}
+                            href={`/item?id=${item.id}`}
                             sx={{
                                 textDecoration: "none",
                                 //color: "#1C2B36",
