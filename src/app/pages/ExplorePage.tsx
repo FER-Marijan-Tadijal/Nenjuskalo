@@ -77,12 +77,6 @@ const exploreItems = [
     },
 ];
 const search = "Mercedes car";
-const categories = [
-    { name: "Auto-Moto nautika", id: 0 },
-    { name: "Oprema", id: 1 },
-    { name: "Odjeca", id: 2 },
-    { name: "Obuca", id: 3 },
-];
 const conditions = [
     { name: "novo", id: 0 },
     { name: "rabljeno", id: 1 },
@@ -114,6 +108,11 @@ type Seller = {
     registerTime: string;
     role: string;
 };
+type categoryType = {
+    id: number;
+    name: string;
+    supercategoryid: string | null;
+};
 type ExplorePageProps = {
     searchTerm: string;
 };
@@ -121,6 +120,8 @@ type ExplorePageProps = {
 //MOŽDA JOŠ STAVITI DIO KODA U ExploreHeader KOMPONENTU
 
 const Explore = ({ searchTerm }: ExplorePageProps) => {
+    const [categoryNames, setCategoryNames] = useState([]);
+    const [categories, setCategories] = useState<categoryType[]>([]);
     var q = searchTerm;
     const [page, setPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -133,6 +134,13 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const [orderBy, setorderBy] = useState("");
     const [priceChanged, setPriceChanged] = useState(false);
 
+    const fetchCategories = async () => {
+        const res = await fetch("http://localhost:3000/api/categories");
+        const data = await res.json();
+        setCategoryNames(data.map((el: categoryType) => el.name));
+        setCategories(data);
+    };
+
     const fetchRandomItems = async () => {
         //console.log(items[0].belongsto[0].categoryid);
         const randoms = await fetch(
@@ -140,7 +148,6 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
             `http://localhost:3000/api/random?n=5`
         );
         const randomData = await randoms.json();
-        console.log(randomData);
         setRandomItems(randomData);
     };
 
@@ -159,21 +166,19 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         //    `http://localhost:3000/api/search?q=Ku&page=1&orderBy=newest&minPrice=0&maxPrice=20000000`
         //);
         const data = await res.json();
-        console.log("Fetched items:", data);
 
-        if (Array.isArray(data)) {
-            setItems(data);
-        } else {
-            console.error("No data matches you search!!!"); //KASNIJE NAPRAVI DA IZBACI TO I KORISNIKU
-            setItems([]);
+        if (Array.isArray(data.data)) {
+            setItems(data.data);
         }
-        setTotalPages(data.totalPages);
+        const pageNum = Math.round(data.totalCount / 10);
+        setTotalPages(pageNum);
     };
 
     useEffect(() => {
         fetchItems(page);
     }, [page, categoryId, priceChanged, conditionId, orderBy]);
     useEffect(() => {
+        fetchCategories();
         fetchRandomItems(); //ako stavimo da se dohvaćaju oglasi koji su ista kategorija, onda stavi useEffect kad god se promijeni items
     }, []);
 
@@ -229,7 +234,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                 filterName="category"
                                 filter={categoryId}
                                 onChange={handleCategoryIdChange}
-                                filterOptions={categories}
+                                filterOptions={categoryNames}
                             />
                             <ExplorePriceRange
                                 minPrice={minPrice}
@@ -302,7 +307,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                             <Box sx={{ border: "1px solid grey" }}>
                                 <Button
                                     onClick={() =>
-                                        setPage((prev) => Math.max(prev - 1, 1))
+                                        setPage(Math.max(page - 1, 1))
                                     }
                                     disabled={page === 1}
                                 >
@@ -313,9 +318,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                 </Typography>
                                 <Button
                                     onClick={() =>
-                                        setPage((prev) =>
-                                            Math.min(prev + 1, totalPages)
-                                        )
+                                        setPage(Math.min(page + 1, totalPages))
                                     }
                                     disabled={page === totalPages}
                                 >
@@ -327,8 +330,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                     title={e.title}
                                     price={e.askingprice}
                                     sellerId={e.sellerid}
-                                    categoryId={e.belongsto[0].categoryid}
+                                    categoryObjects={e.belongsto}
                                     key={key}
+                                    categories={categories}
                                 />
                             ))}
                         </Container>

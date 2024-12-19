@@ -79,7 +79,6 @@ const ItemView = ({ itemId }: ItemViewProps) => {
             `http://localhost:3000/api/getUser?id=${userId}`
         );
         const userData = await res.json();
-        console.log(userData); //na backendu treba popravit da se dohvaća User kako treba
         setUser(userData);
     };
 

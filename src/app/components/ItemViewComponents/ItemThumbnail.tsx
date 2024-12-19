@@ -21,7 +21,6 @@ type Props = {
 };
 
 const ItemThumbnail = ({ user }: Props) => {
-    console.log(user); //TREBA POPRAVIT DA BACKEND DAJE DOBROG USERA
     return (
         <Box
             sx={{
