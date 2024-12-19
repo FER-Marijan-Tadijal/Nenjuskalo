@@ -14,6 +14,7 @@ import { Search, ShoppingCart } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import Link from "next/link";
 import Image from "next/image";
+import { useRouter } from "next/navigation"; // Import useRouter for navigation
 import { signIn, signOut } from "next-auth/react";
 import type { Session } from "next-auth";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -64,6 +65,7 @@ const NavbarLink = styled(Button)(({ theme }) => ({
 
 export default function Navbar({ session }: NavbarProps) {
     const [query, setQuery] = useState("");
+    const router = useRouter(); // Initialize useRouter for navigation
 
     const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -71,7 +73,7 @@ export default function Navbar({ session }: NavbarProps) {
             alert("Unesite pojam za pretragu!");
             return;
         }
-        console.log("Searching for:", query);
+        router.push(`/explore?search=${encodeURIComponent(query)}`); // Navigate to the explore page with the search query
     };
 
     return (
@@ -143,7 +145,7 @@ export default function Navbar({ session }: NavbarProps) {
                         <NavbarLink>Istraži</NavbarLink>
                     </Link>
                     {session && (
-                        <Link href="/messages" passHref>
+                        <Link href="/message" passHref>
                             <NavbarLink>Poruke</NavbarLink>
                         </Link>
                     )}
