@@ -1,33 +1,34 @@
+import CategoryViewPage from "@/app/pages/CategoryViewPage";
 import { prisma } from "@/prisma";
 import Link from "next/link";
 import { parse } from "path";
 
-export default async function Category({ params }: {params: {id: string}}) {
+export default async function Category({ params }: { params: { id: string } }) {
     const { id } = await params;
     const category_id: number = parseInt(id);
 
     async function getSeller(sellerid: string) {
         return await prisma.siteuser.findUnique({
             where: {
-                id: sellerid
-            }
-        })
+                id: sellerid,
+            },
+        });
     }
 
     const category = await prisma.category.findUnique({
         where: {
-            id: category_id
-        }
-    })
+            id: category_id,
+        },
+    });
 
     const items = await prisma.belongsto.findMany({
         where: {
-            categoryid: category_id
+            categoryid: category_id,
         },
         select: {
-            item: true
-        }
-    })
+            item: true,
+        },
+    });
     //odkomentirati i pogledati log u browseru radi lakseg razumijevanja
     //console.log(category);
     //console.log(items);
@@ -37,28 +38,23 @@ export default async function Category({ params }: {params: {id: string}}) {
     for (let i = 0; i < items.length; i++) {
         const sellerName = await prisma.user.findUnique({
             where: {
-                id: items[i].item.sellerid
+                id: items[i].item.sellerid,
             },
             select: {
-                name: true
-            }
-        })
+                name: true,
+            },
+        });
         items_and_sellers.push({ item: items[i].item, seller: sellerName });
     }
-    //console.log(items_and_sellers);
-
 
     return (
         <>
-            <br />
-            <br />
-            <h1>Category: {category?.name}</h1>
-            <ul>
-                {items_and_sellers.map((item, i) => (
-                    <li key={item.item.id}>{`Item ${i + 1}: ${item.item.title}, price: ${item.item.askingprice}, seller: ${item.seller?.name}`}</li>
-                ))}
-            </ul>
-            <Link href={"/categories"}><b>Go back to categories</b></Link>
+            {category && items_and_sellers && (
+                <CategoryViewPage
+                    category={category}
+                    items_and_sellers={items_and_sellers}
+                />
+            )}
         </>
     );
 }

@@ -4,7 +4,7 @@ import theme from "@/app/styles/theme";
 import { getUser } from "@/app/util/getFromId";
 
 type Props = {
-    itemId: string;
+    itemId: number;
     title: string;
     price: string;
     sellerId: string;

@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import theme from "@/app/styles/theme";
 
 type Item = {
-    id: string;
+    id: number;
     title: string;
     description: string;
     belongsto: { categoryid: number }[];

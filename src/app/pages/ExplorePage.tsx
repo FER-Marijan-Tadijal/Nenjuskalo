@@ -85,7 +85,7 @@ const conditions = [
 const orders = ["lowestPrice", "highestPrice", "newest", "oldest"];
 
 type Item = {
-    id: string;
+    id: number;
     title: string;
     description: string;
     belongsto: { categoryid: number }[];
@@ -137,6 +137,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const fetchCategories = async () => {
         const res = await fetch("http://localhost:3000/api/categories");
         const data = await res.json();
+        console.log(categories);
         setCategoryNames(data.map((el: categoryType) => el.name));
         setCategories(data);
     };
@@ -181,6 +182,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         fetchCategories();
         fetchRandomItems(); //ako stavimo da se dohvaćaju oglasi koji su ista kategorija, onda stavi useEffect kad god se promijeni items
     }, []);
+    useEffect(() => {
+        console.log(items);
+    }, [items]);
 
     const handleCategoryIdChange = (event: SelectChangeEvent<string>) => {
         setCategoryId(event.target.value);
