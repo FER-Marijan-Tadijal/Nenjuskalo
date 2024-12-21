@@ -77,6 +77,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const fetchCategories = async () => {
         const res = await fetch("http://localhost:3000/api/categories");
         const data = await res.json();
+        console.log(data);
         setCategories(data);
     };
 
@@ -94,12 +95,14 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         const params = new URLSearchParams();
         if (q) params.set("q", q);
         if (currentPage) params.set("page", currentPage.toString());
-        if (categoryId) params.set("categoryId", categoryId);
-        if (conditionId) params.set("conditionId", conditionId);
+        if (categoryId || categoryId == "0")
+            params.set("categoryId", categoryId);
+        if (conditionId || conditionId == "0")
+            params.set("conditionId", conditionId);
         if (orderBy) params.set("orderBy", orderBy);
         if (minPrice) params.set("minPrice", minPrice);
         if (maxPrice) params.set("maxPrice", maxPrice);
-        //console.log(params.toString());
+        console.log(params.toString());
         const res = await fetch(`http://localhost:3000/api/search?${params}`);
         //const res = await fetch(
         //    `http://localhost:3000/api/search?q=Ku&page=1&orderBy=newest&minPrice=0&maxPrice=20000000`
@@ -107,8 +110,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         const data = await res.json();
 
         if (Array.isArray(data.data)) {
-            console.log(data.data);
             setItems(data.data);
+        } else {
+            setItems([]);
         }
         const pageNum = Math.round(data.totalCount / 10);
         if (pageNum) {
