@@ -18,65 +18,6 @@ import { ThemeProvider } from "@mui/material";
 import ExplorePriceRange from "../components/ExploreComponents/ExplorePriceRange";
 import ExploreRelevantItems from "../components/ExploreComponents/ExploreRelevantItems";
 
-const exploreItems = [
-    {
-        id: 4,
-        title: "Mercedes Benz S-class 2020",
-        price: 2003,
-        city: "Zagreb",
-        street: "Donji Dupci",
-        category: "luxury cars",
-    },
-    {
-        id: 1,
-        title: "Mercedes Benz S-class 2020",
-        price: 98000,
-        city: "Zagreb",
-        street: "Donji Dupci",
-        category: "Auto-Moto nautika",
-    },
-    {
-        id: 2,
-        title: "Mercedes Benz S-class 2020",
-        price: 123,
-        city: "Zagreb",
-        street: "Donji Dupci",
-        category: "Oprema",
-    },
-    {
-        id: 3,
-        title: "Mercedes Benz S-class 2020",
-        price: 10,
-        city: "Zagreb",
-        street: "Donji Dupci",
-        category: "Oprema",
-    },
-    {
-        id: 4,
-        title: "Mercedes Benz S-class 2020",
-        price: 2003,
-        city: "Zagreb",
-        street: "Donji Dupci",
-        category: "luxury cars",
-    },
-    {
-        id: 1,
-        title: "Mercedes Benz S-class 2020",
-        price: 98000,
-        city: "Zagreb",
-        street: "Donji Dupci",
-        category: "Auto-Moto nautika",
-    },
-    {
-        id: 2,
-        title: "Mercedes Benz S-class 2020",
-        price: 123,
-        city: "Zagreb",
-        street: "Donji Dupci",
-        category: "Oprema",
-    },
-];
-const search = "Mercedes car";
 const conditions = [
     { name: "novo", id: 0 },
     { name: "rabljeno", id: 1 },
@@ -120,7 +61,6 @@ type ExplorePageProps = {
 //MOŽDA JOŠ STAVITI DIO KODA U ExploreHeader KOMPONENTU
 
 const Explore = ({ searchTerm }: ExplorePageProps) => {
-    const [categoryNames, setCategoryNames] = useState([]);
     const [categories, setCategories] = useState<categoryType[]>([]);
     var q = searchTerm;
     const [page, setPage] = useState(1);
@@ -137,8 +77,6 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const fetchCategories = async () => {
         const res = await fetch("http://localhost:3000/api/categories");
         const data = await res.json();
-        console.log(categories);
-        setCategoryNames(data.map((el: categoryType) => el.name));
         setCategories(data);
     };
 
@@ -161,7 +99,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         if (orderBy) params.set("orderBy", orderBy);
         if (minPrice) params.set("minPrice", minPrice);
         if (maxPrice) params.set("maxPrice", maxPrice);
-        console.log(params.toString());
+        //console.log(params.toString());
         const res = await fetch(`http://localhost:3000/api/search?${params}`);
         //const res = await fetch(
         //    `http://localhost:3000/api/search?q=Ku&page=1&orderBy=newest&minPrice=0&maxPrice=20000000`
@@ -169,22 +107,25 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         const data = await res.json();
 
         if (Array.isArray(data.data)) {
+            console.log(data.data);
             setItems(data.data);
         }
         const pageNum = Math.round(data.totalCount / 10);
-        setTotalPages(pageNum);
+        if (pageNum) {
+            setTotalPages(pageNum);
+        } else {
+            setTotalPages(1);
+        }
     };
 
     useEffect(() => {
+        console.log("Something changed");
         fetchItems(page);
     }, [page, categoryId, priceChanged, conditionId, orderBy]);
     useEffect(() => {
         fetchCategories();
         fetchRandomItems(); //ako stavimo da se dohvaćaju oglasi koji su ista kategorija, onda stavi useEffect kad god se promijeni items
     }, []);
-    useEffect(() => {
-        console.log(items);
-    }, [items]);
 
     const handleCategoryIdChange = (event: SelectChangeEvent<string>) => {
         setCategoryId(event.target.value);
@@ -229,16 +170,16 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                     >
                         <Box>
                             <ExploreFilter
-                                filterName="condition"
+                                filterName="stanje"
                                 filter={conditionId}
                                 onChange={handleConditionIdChange}
                                 filterOptions={conditions}
                             />
                             <ExploreFilter
-                                filterName="category"
+                                filterName="kategorija"
                                 filter={categoryId}
                                 onChange={handleCategoryIdChange}
-                                filterOptions={categoryNames}
+                                filterOptions={categories}
                             />
                             <ExplorePriceRange
                                 minPrice={minPrice}
@@ -276,7 +217,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                             >
                                 <Typography variant="h6">
                                     {" "}
-                                    Search results for: "{searchTerm}"
+                                    Rezultati pretraživanja: "{searchTerm}"
                                 </Typography>
                                 <Box
                                     sx={{
@@ -289,7 +230,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                 >
                                     <FormControl fullWidth variant="outlined">
                                         <InputLabel id="select-label">
-                                            Order by
+                                            Sortiraj
                                         </InputLabel>
                                         <Select
                                             labelId="select-label"
@@ -315,10 +256,10 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                     }
                                     disabled={page === 1}
                                 >
-                                    Previous
+                                    Prijašnja
                                 </Button>
                                 <Typography component="span">
-                                    Page {page} of {totalPages}
+                                    Stranica {page} od {totalPages}
                                 </Typography>
                                 <Button
                                     onClick={() =>
@@ -326,7 +267,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                     }
                                     disabled={page === totalPages}
                                 >
-                                    Next
+                                    Sljedeća
                                 </Button>
                             </Box>
                             {items.map((e, key) => (

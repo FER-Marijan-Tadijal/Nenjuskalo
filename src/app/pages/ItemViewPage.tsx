@@ -40,7 +40,7 @@ type Item = {
     conditionid: number;
 };
 type User = {
-    userId: string;
+    id: string;
     name: string;
     surname: string;
     email: string;
@@ -128,7 +128,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                             fontSize: 30,
                         }}
                     >
-                        Loading your page...
+                        Stranica se učitava...
                     </Box> //NEMJESTI DA SE NIŠTA NE RENDERA DOK SVE NIJE SPREMNO
                 )}
             </Container>

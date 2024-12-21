@@ -39,16 +39,16 @@ const ExploreFilter = ({
             }}
         >
             <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Filter by {filterName}:
+                Filtriraj po {filterName}:
             </Typography>
             <FormControl fullWidth variant="outlined">
-                <InputLabel id="select-label">Choose {filterName}</InputLabel>
+                <InputLabel id="select-label">{filterName}</InputLabel>
                 <Select
                     labelId="select-label"
                     value={filter}
                     onChange={onChange}
                 >
-                    <MenuItem value={""}>-No {filterName}-</MenuItem>
+                    <MenuItem value={""}>-Bez filtera-</MenuItem>
                     {filterOptions.map((fo, index) => (
                         <MenuItem key={index} value={fo.id}>
                             {fo.name}

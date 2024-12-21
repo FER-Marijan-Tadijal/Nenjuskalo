@@ -32,7 +32,7 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
             }}
         >
             <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Relevant Products:
+                Predloženi proizvodi:
             </Typography>
             <Box>
                 {randomItems.map((item, index) => (
