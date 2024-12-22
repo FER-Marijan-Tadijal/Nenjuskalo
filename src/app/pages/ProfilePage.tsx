@@ -1,7 +1,7 @@
 "use client";
 
-import React from "react";
-import { Container, Typography, Box, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Container, Typography, Box, Button, Card, Grid, CardContent, CardMedia } from "@mui/material";
 import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import type { Session } from "next-auth";
@@ -11,11 +11,30 @@ interface ProfilePageProps {
 }
 
 export default function ProfilePage({ session }: ProfilePageProps) {
+    const [userAds, setUserAds] = useState([]);
+
+    // Fetch 2 random items
+    useEffect(() => {
+        async function fetchRandomItems() {
+            try {
+                const response = await fetch("/api/random?n=2");
+                if (!response.ok) throw new Error("Failed to fetch random items");
+
+                const data = await response.json();
+                setUserAds(data);
+            } catch (error) {
+                console.error("Error fetching random items:", error);
+            }
+        }
+
+        fetchRandomItems();
+    }, []);
+
     if (!session) {
         return (
             <Container
                 sx={{
-                    mt: 8, // Push content down to avoid Navbar overlap
+                    mt: 8,
                     textAlign: "center",
                 }}
             >
@@ -63,13 +82,14 @@ export default function ProfilePage({ session }: ProfilePageProps) {
     return (
         <Container
             sx={{
-                mt: 10, // Adjust to account for the Navbar height
+                mt: 10,
                 maxWidth: "lg",
                 textAlign: "center",
                 paddingBottom: "64px",
             }}
         >
             <Box>
+                {/* Welcome Section */}
                 <Typography
                     variant="h4"
                     sx={{
@@ -91,6 +111,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 >
                     Email: {session.user?.email}
                 </Typography>
+
                 <Box
                     component="img"
                     src={session.user?.image || "/images/default-profile.png"}
@@ -103,52 +124,135 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                         boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
                     }}
                 />
-                <Box
+
+
+            </Box>
+
+            {/* User Ads */}
+            <Box sx={{ mt: 6 }}>
+                <Typography
+                    variant="h5"
                     sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: 2,
-                        mt: 4,
-                        alignItems: "center",
+                        color: "#003049",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: "bold",
+                        textAlign: "center",
                     }}
                 >
-                  {/* New Ad Button */}
-                  <Link href="/newAd" passHref>
-                        <Button
-                            variant="contained"
-                            sx={{
-                                bgcolor: "#003049", // Dark blue for contrast
-                                color: "#FFC300",
-                                fontFamily: "'Poppins', sans-serif",
-                                fontWeight: "bold",
-                                textTransform: "uppercase",
-                                "&:hover": {
-                                    bgcolor: "#1C4A6E",
-                                },
-                            }}
-                        >
-                            Napravi Novi Oglas
-                        </Button>
-                    </Link>
-                    
-                    {/* Sign Out Button */}
+                    Vaši Oglasi:
+                </Typography>
+                {userAds.length > 0 ? (
+                    <Grid container spacing={4} justifyContent="center" sx={{ mt: 0 }}>
+                        {userAds.map((item: any) => (
+                            <Grid item xs={12} sm={6} md={3} key={item.id}>
+                                <Card>
+                                    <CardMedia
+                                        component="img"
+                                        height="200"
+                                        image="/images/banner1.jpg" // Placeholder image
+                                        alt={item.title}
+                                    />
+                                    <CardContent>
+                                        <Typography
+                                            variant="h6"
+                                            component="div"
+                                            sx={{
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontWeight: "600",
+                                                color: "#003049",
+                                            }}
+                                        >
+                                            {item.title}
+                                        </Typography>
+                                        <Typography
+                                            variant="body2"
+                                            sx={{
+                                                fontFamily: "'Roboto', sans-serif",
+                                                color: "text.secondary",
+                                            }}
+                                        >
+                                            {item.description}
+                                        </Typography>
+                                        <Typography
+                                            variant="body1"
+                                            sx={{
+                                                fontWeight: "bold",
+                                                color: "#003049",
+                                                marginTop: "8px",
+                                            }}
+                                        >
+                                            Cijena: {item.askingprice}€
+                                        </Typography>
+                                        <Button
+                                            variant="contained"
+                                            fullWidth
+                                            sx={{
+                                                mt: 2,
+                                                bgcolor: "#FFC300",
+                                                color: "#003049",
+                                                fontWeight: "600",
+                                                "&:hover": {
+                                                    bgcolor: "#E5A800",
+                                                },
+                                            }}
+                                            href={`/item?id=${item.id}`}
+                                        >
+                                            Detalji
+                                        </Button>
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                        ))}
+                    </Grid>
+                ) : (
+                    <Typography
+                        variant="body2"
+                        sx={{ mt: 4, textAlign: "center", color: "gray" }}
+                    >
+                        Trenutno nemate oglasa.
+                    </Typography>
+                )}
+            </Box>
+
+
+            {/* New Ad Button */}
+            <Box sx={{ mt: 4 }}> {/* Added margin-top to create space */}
+                <Link href="/newAd" passHref>
                     <Button
                         variant="contained"
                         sx={{
-                            bgcolor: "#FFC300",
-                            color: "#003049",
+                            bgcolor: "#003049", // Dark blue for contrast
+                            color: "#FFC300",
                             fontFamily: "'Poppins', sans-serif",
                             fontWeight: "bold",
                             textTransform: "uppercase",
                             "&:hover": {
-                                bgcolor: "#E5A800",
+                                bgcolor: "#1C4A6E",
                             },
                         }}
-                        onClick={() => signOut()}
                     >
-                        Odjava
+                        Napravi Novi Oglas
                     </Button>
-                </Box>
+                </Link>
+            </Box>
+
+            {/* Sign Out Button */}
+            <Box sx={{ mt: 3.5 }}>
+                <Button
+                    variant="contained"
+                    sx={{
+                        bgcolor: "#FFC300",
+                        color: "#003049",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: "bold",
+                        "&:hover": {
+                            bgcolor: "#E5A800",
+                        },
+                    }}
+                    onClick={() => signOut()}
+                >
+                    Odjava
+                </Button>
             </Box>
         </Container>
     );
