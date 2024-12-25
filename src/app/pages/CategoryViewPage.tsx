@@ -16,6 +16,9 @@ import {
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 import theme from "../styles/theme";
 import { ThemeProvider } from "@mui/material";
+import { orderByEnum } from "../enums/orderByEnum";
+
+const orders = ["lowestPrice", "highestPrice", "newest", "oldest"];
 
 type Item = {
     id: number; //promjena
@@ -27,131 +30,196 @@ type Item = {
     buyerid?: string | null; //promjena
     conditionid: number;
 };
+type User = {
+    id: string;
+    country: string;
+    city: string;
+    street: string;
+    houseNo: string;
+    roleId: string;
+};
 type items_and_sellersType = {
     item: Item;
-    seller: {
-        name: string | null;
-    } | null;
+    seller: User;
 };
-type Props = {
-    category: {
-        id: number;
-        name: string;
-        supercategoryid: number | null;
-    };
-    items_and_sellers: items_and_sellersType[];
+type Category = {
+    id: number;
+    name: string;
+    supercategoryid: number | null;
 };
+interface Props {
+    categoryId: string;
+}
 
-const CategoryViewPage = ({ category, items_and_sellers }: Props) => {
+const CategoryViewPage = ({ categoryId }: Props) => {
+    var baseUrl = "http://localhost:3000";
+    const [category, setCategory] = useState<Category>();
+    const [items_and_sellers, setItems_and_sellers] = useState<
+        items_and_sellersType[]
+    >([]);
+    //const [nPerPage, setNPerPage] = useState();
+    const [pageNum, setPageNum] = useState(1);
+    const [sortMethod, setSortMethod] = useState("");
+
+    async function getCategory(id: string) {
+        try {
+            var res = await fetch(`${baseUrl}/api/getCategory?id=${id}`);
+            if (res) {
+                var categoryjson = await res.json();
+                setCategory(categoryjson);
+            }
+        } catch (e) {
+            console.log("Error while getting category!");
+            console.log(e);
+        }
+    }
+
+    async function getItemsAndSellers(pageNum: number, sort_method: string) {
+        try {
+            var res = await fetch(
+                `${baseUrl}/api/getItemsByCategoryId?id=${categoryId}&orderBy=${sort_method}&pageNum=${pageNum}`
+            );
+
+            if (res) {
+                var itemsjson = await res.json();
+                setItems_and_sellers(itemsjson);
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    useEffect(() => {
+        getCategory(categoryId);
+        getItemsAndSellers(pageNum, sortMethod);
+    }, []);
+
+    const handleSortMethodChange = (event: SelectChangeEvent<string>) => {
+        setSortMethod(event.target.value);
+    };
+
+    useEffect(() => {
+        console.log(category);
+    }, [category]);
+    useEffect(() => {
+        console.log("items_and_sellers:");
+        console.log(items_and_sellers);
+    }, [items_and_sellers]);
+
     return (
         <>
-            <ThemeProvider theme={theme}>
-                <Container
-                    sx={{
-                        width: "65%",
-                        //backgroundColor: "#D9F0FF ",
-                        //color: "#F1E9DA",
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "center",
-                        paddingBottom: 1,
-                        mt: 8,
-                    }}
-                >
-                    <Link href={"/categories"}>
-                        <b>Go back to categories</b>
-                    </Link>
-                    <Box
+            {category && (
+                <ThemeProvider theme={theme}>
+                    <Container
                         sx={{
-                            marginTop: 2,
-                            marginBottom: 1,
-                            padding: 1,
-                            backgroundColor: theme.palette.secondary.main,
-                            color: "#1C2B36",
-                            borderRadius: 2,
-                            //display: "flex",
-                            //justifyContent: "space-around",
-                            //alignItems: "center",
+                            width: "65%",
+                            //backgroundColor: "#D9F0FF ",
+                            //color: "#F1E9DA",
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            paddingBottom: 1,
+                            mt: 8,
                         }}
                     >
-                        <Typography variant="h4">
-                            {" "}
-                            Category: "{category.name}"
-                        </Typography>
-                        {/*
+                        <Link href={"/categories"}>
+                            <b>Go back to categories</b>
+                        </Link>
                         <Box
                             sx={{
+                                marginTop: 2,
+                                marginBottom: 1,
+                                padding: 1,
                                 backgroundColor: theme.palette.secondary.main,
-                                padding: 2,
-                                width: "300px",
+                                color: "#1C2B36",
                                 borderRadius: 2,
+                                //display: "flex",
+                                //justifyContent: "space-around",
+                                //alignItems: "center",
                             }}
                         >
-                            <FormControl fullWidth variant="outlined">
-                                <InputLabel id="select-label">
-                                    Order by
-                                </InputLabel>
-                                <Select
-                                    labelId="select-label"
-                                    value={orderBy}
-                                    onChange={handleOrderByChange}
-                                >
-                                    {orders.map((order, index) => (
-                                        <MenuItem key={index} value={order}>
-                                            {order}
-                                        </MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        </Box>
-                        */}
-                    </Box>
-                    {/*
+                            <Typography variant="h4">
+                                {" "}
+                                Category: "{category.name}"
+                            </Typography>
 
-                    <Box sx={{ border: "1px solid grey" }}>
-                        <Button
-                            onClick={() => setPage(Math.max(page - 1, 1))}
-                            disabled={page === 1}
+                            <Box
+                                sx={{
+                                    backgroundColor:
+                                        theme.palette.secondary.main,
+                                    padding: 2,
+                                    width: "300px",
+                                    borderRadius: 2,
+                                }}
+                            >
+                                <FormControl fullWidth variant="outlined">
+                                    <InputLabel id="select-label">
+                                        Order by
+                                    </InputLabel>
+                                    <Select
+                                        labelId="select-label"
+                                        value={sortMethod}
+                                        onChange={handleSortMethodChange}
+                                    >
+                                        {orders.map((order, index) => (
+                                            <MenuItem key={index} value={order}>
+                                                {order}
+                                            </MenuItem>
+                                        ))}
+                                    </Select>
+                                </FormControl>
+                            </Box>
+                        </Box>
+
+                        <Box sx={{ border: "1px solid grey" }}>
+                            <Button
+                                onClick={() =>
+                                    setPageNum(Math.max(pageNum - 1, 1))
+                                }
+                                disabled={pageNum === 1}
+                            >
+                                Previous
+                            </Button>
+                            <Typography component="span">
+                                Page {pageNum} of {totalPages}
+                            </Typography>
+                            <Button
+                                onClick={() =>
+                                    setPageNum(
+                                        Math.min(pageNum + 1, totalPages)
+                                    )
+                                }
+                                disabled={pageNum === totalPages}
+                            >
+                                Next
+                            </Button>
+                        </Box>
+
+                        <Box
+                            sx={{
+                                mt: 3,
+                                display: "grid",
+                                gridTemplateColumns: {
+                                    sm: "400px", // Single column on extra small screens
+                                    md: "repeat(2, 400px)", // Two columns on small screens and up
+                                },
+                                gap: 2, // Spacing between items
+                            }}
                         >
-                            Previous
-                        </Button>
-                        <Typography component="span">
-                            Page {page} of {totalPages}
-                        </Typography>
-                        <Button
-                            onClick={() =>
-                                setPage(Math.min(page + 1, totalPages))
-                            }
-                            disabled={page === totalPages}
-                        >
-                            Next
-                        </Button>
-                    </Box>
-                    */}
-                    <Box
-                        sx={{
-                            mt: 3,
-                            display: "grid",
-                            gridTemplateColumns: {
-                                sm: "400px", // Single column on extra small screens
-                                md: "repeat(2, 400px)", // Two columns on small screens and up
-                            },
-                            gap: 2, // Spacing between items
-                        }}
-                    >
-                        {items_and_sellers.map((el, index) => (
-                            <CategoryItem
-                                itemId={el.item.id}
-                                title={el.item.title}
-                                //price={el.item.askingprice.toNumber()}
-                                sellerId={el.item.sellerid}
-                                key={index}
-                                category={category}
-                            />
-                        ))}
-                    </Box>
-                </Container>
-            </ThemeProvider>
+                            {items_and_sellers.map((el, index) => (
+                                <CategoryItem
+                                    itemId={el.item.id}
+                                    title={el.item.title}
+                                    //price={el.item.askingprice.toNumber()}
+                                    key={index}
+                                    category={category}
+                                    user={el.seller}
+                                />
+                            ))}
+                        </Box>
+                    </Container>
+                </ThemeProvider>
+            )}
         </>
     );
 };

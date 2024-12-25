@@ -4,16 +4,17 @@ import theme from "@/app/styles/theme";
 import { getUser } from "@/app/util/getFromId";
 import { Decimal } from "@prisma/client/runtime/library";
 
+type categoryType = {
+    id: number;
+    name: string;
+    supercategoryid: number | null;
+};
 type Props = {
     itemId: number;
     title: string;
     //price: number;
-    sellerId: string;
-    category: {
-        id: number;
-        name: string;
-        supercategoryid: number | null;
-    };
+    category: categoryType;
+    user: User;
 };
 type User = {
     id: string;
@@ -24,20 +25,7 @@ type User = {
     roleId: string;
 };
 
-const CategoryItem = ({ itemId, title, sellerId, category }: Props) => {
-    const [user, setUser] = useState<User>();
-
-    const fetchUser = async (userId: string) => {
-        const res = await fetch(
-            `http://localhost:3000/api/getUser?id=${userId}`
-        );
-        const userData = await res.json();
-        setUser(userData);
-    };
-
-    useEffect(() => {
-        fetchUser(sellerId);
-    }, []);
+const CategoryItem = ({ itemId, title, category, user }: Props) => {
     return (
         <>
             {user && (
