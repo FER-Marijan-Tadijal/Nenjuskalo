@@ -42,9 +42,9 @@ export default function Category({ params }: { params: { id: string } }) {
         }
     }
 
-    async function getItems(category_id: number, nPerPage: number, pageNum: number, sort_method: orderByEnum) {
+    async function getItems(category_id: number, pageNum: number, sort_method: orderByEnum) {
         try {
-            var res = await fetch(`${baseUrl}/api/getItemsByCategoryId?id=${category_id}&orderBy=${sort_method}&nPerPage=${nPerPage}&pageNum=${pageNum}`)
+            var res = await fetch(`${baseUrl}/api/getItemsByCategoryId?id=${category_id}&orderBy=${sort_method}&pageNum=${pageNum}`);
 
             if (res) {
                 var itemsjson = await res.json();
@@ -59,25 +59,26 @@ export default function Category({ params }: { params: { id: string } }) {
         //getSeller("cm52kz7dp0000pax4vkm5wkmz");
         getCategory(category_id);
         console.log(category);
-        getItems(category_id, 5, 0, orderByEnum.newest);
+        getItems(category_id, 1, orderByEnum.newest);
     }, []);
 
-    useEffect(() => {
+    /* useEffect(() => {
         console.log(category);
     }, [category]);
 
     useEffect(() => {
         console.log(seller);
-    }, [seller]);
+    }, [seller]); */
 
     useEffect(() => {
         console.log("items:");
         console.log(items);
-        console.log("items and sellers: ")
-        if (items)
-            for (var i = 0; i < items.length; i++) {
-                console.log(items[i].item.item.title + ": " + items[i].sellerinfo.name);
+        if (items) {
+            console.log("items and sellers: ")
+            for (var i = 0; i < items.finalItems.length; i++) {
+                console.log(i + " - " + items.finalItems[i].item.title + ": " + items.finalItems[i].sellerinfo.name);
             }
+        }
     }, [items]);
 
 
