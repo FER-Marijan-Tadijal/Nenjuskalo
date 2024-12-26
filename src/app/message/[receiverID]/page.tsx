@@ -3,6 +3,7 @@ import { auth } from "@/app/auth";
 import { prisma } from "@/prisma";
 import SendMessages from "@/app/message/sendMessage";
 import MessageList from "@/app/message/messageList";
+import SignInProp from "@/app/components/MessageComponents/SignInProp";
 
 export default async function Page({
     params,
@@ -84,6 +85,7 @@ export default async function Page({
                 >
                     <MessageList senderID={senderID} receiverID={receiverID} />
                 </Paper>
+
 
                 <Box
                     sx={{

@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import theme from "@/app/styles/theme";
 
 type Item = {
-    id: string;
+    id: number;
     title: string;
     description: string;
     belongsto: { categoryid: number }[];
@@ -32,7 +32,7 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
             }}
         >
             <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Relevant Products:
+                Predloženi proizvodi:
             </Typography>
             <Box>
                 {randomItems.map((item, index) => (

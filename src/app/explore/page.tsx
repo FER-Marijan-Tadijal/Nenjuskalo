@@ -4,7 +4,7 @@ import { useSearchParams } from "next/navigation";
 
 export default function Page() {
     const searchParams = useSearchParams();
-    const search = searchParams.get("search"); // Get "id" from the query string    const id = typeof itemid === "string" ? itemid : "";
+    const search = searchParams.get("search");
     const searchTerm = typeof search === "string" ? search : "";
     return <ExplorePage searchTerm={searchTerm} />;
 }

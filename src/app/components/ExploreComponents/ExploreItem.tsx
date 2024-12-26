@@ -4,7 +4,7 @@ import theme from "@/app/styles/theme";
 import { getUser } from "@/app/util/getFromId";
 
 type Props = {
-    itemId: string;
+    itemId: number;
     title: string;
     price: string;
     sellerId: string;
@@ -32,7 +32,6 @@ const ExploreItem = ({
     categoryObjects,
     categories,
 }: Props) => {
-    console.log(itemId);
     const [user, setUser] = useState<User>();
     const [itemCategories, setItemCategories] = useState<string[]>([]);
     const categoryIds = categoryObjects.map((obj) => obj.categoryid);
@@ -50,11 +49,8 @@ const ExploreItem = ({
     useEffect(() => {
         if (categories && categories.length > 0 && check) {
             check = false;
-            console.log(categories);
-            console.log(categoryIds);
             categories.forEach((cat) => {
                 if (categoryIds.includes(cat.id)) {
-                    console.log("IN HERE BRO ", cat.name);
                     setItemCategories((prevCategories) =>
                         prevCategories.concat(cat.name)
                     );
@@ -119,14 +115,14 @@ const ExploreItem = ({
                         >
                             <Typography variant="body2">• {title}</Typography>
                             <Typography variant="body2">
-                                • Price: {price} €
+                                • Cijena: {price} €
                             </Typography>
                             <Typography variant="body2">
-                                • Location: {user.city || "- "},
+                                • Lokacija: {user.city || "- "},
                                 {user.street || " -"}
                             </Typography>
                             <Typography variant="body2">
-                                • Category: {itemCategories.join(",")}
+                                • Kategorija: {itemCategories.join(",")}
                             </Typography>
                         </Box>
                         <Button

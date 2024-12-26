@@ -5,7 +5,7 @@ import Image from "next/image";
 
 type Props = {
     user: {
-        userId: string;
+        id: string;
         name: string;
         surname: string;
         email: string;
@@ -21,6 +21,7 @@ type Props = {
 };
 
 const ItemThumbnail = ({ user }: Props) => {
+    console.log(user);
     return (
         <Box
             sx={{
@@ -86,23 +87,21 @@ const ItemThumbnail = ({ user }: Props) => {
                 }}
             >
                 <Typography variant="body1">
-                    • Seller: {user.name} {user.surname}
+                    • Prodavač: {user.name} {user.surname}
                 </Typography>
                 <Typography variant="body1">• Email: {user.email}</Typography>
                 <Typography variant="body1">
-                    • Country: {user.country}
+                    • Zemlja: {user.country}
                 </Typography>
                 <Typography variant="body1">
-                    • Adress: {user.city} {user.street} {user.houseno}
+                    • Adresa: {user.city} {user.street} {user.houseno}
                 </Typography>
                 <Button
                     variant="contained"
                     sx={{ mt: 2 }}
-                    href={`/message/${user.userId}`}
+                    href={`/message/${user.id}`}
                 >
-                    {" "}
-                    {/*POSTAVI href NA MESSAGES */}
-                    Message Seller
+                    Pošalji poruku
                 </Button>
             </Box>
         </Box>
