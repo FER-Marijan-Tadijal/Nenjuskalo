@@ -8,7 +8,7 @@ export async function GET(request: Request) {
     const idAsString = (url.searchParams.get('id')) ?? "0";
     const orderBy = (url.searchParams.get('orderBy') || orderByEnum.newest) as orderByEnum;
     const pageNum = parseInt((url.searchParams.get('pageNum') || '0'));
-    const nPerPage = parseInt((url.searchParams.get('nPerPage') || '1'));
+    const nPerPage = 10;
 
 
     if (!idAsString) {
@@ -29,6 +29,7 @@ export async function GET(request: Request) {
             categoryid: category_id,
         }
     })
+    const total_count = Items.length
 
 
     //include only active items
@@ -59,10 +60,15 @@ export async function GET(request: Request) {
         return NextResponse.json({ message: "invalid sort", status: 404 }); //console.log("invalid sort");
 
     //pagination
+    if (pageNum != Math.ceil(total_count / nPerPage))
+        var pagedItems = orderedItems.slice((pageNum - 1) * nPerPage, pageNum * nPerPage);
+    else
+        var pagedItems = orderedItems.slice((pageNum - 1) * nPerPage, orderedItems.length - 1);
 
-    const pagedItems = orderedItems.slice(pageNum * nPerPage, (pageNum + 1) * nPerPage);
-
-
+    console.log("pageNum: ", pageNum);
+    console.log("Math.ceil(total_count / nPerPage: ", Math.ceil(total_count / nPerPage - 1));
+    console.log("orderedItems.length", orderedItems.length);
+    console.log("pagedItems: ", pagedItems);
 
 
     if (Items.length == 0) {
@@ -73,18 +79,18 @@ export async function GET(request: Request) {
     var finalItems = [];
     var seller;
 
-    for(var i = 0; i < pagedItems.length; i++){
+    for (var i = 0; i < pagedItems.length; i++) {
         seller = await prisma.user.findFirst({
             where: {
                 id: pagedItems[i].item.sellerId
             }
         })
-        finalItems.push({item: pagedItems[i], sellerinfo: seller});
+        finalItems.push({ item: pagedItems[i].item, sellerinfo: seller });
     }
 
 
 
 
-    return Response.json(finalItems);
+    return Response.json({ totapages: Math.ceil(total_count / nPerPage), finalItems: finalItems });
 
 }
