@@ -80,13 +80,10 @@ export async function GET(request: Request) {
             orderedItems.length - 1
         );
 
-    console.log("pageNum: ", pageNum);
-    console.log(
-        "Math.ceil(total_count / nPerPage: ",
-        Math.ceil(total_count / nPerPage - 1)
-    );
+    /* console.log("pageNum: ", pageNum);
+    console.log("Math.ceil(total_count / nPerPage: ", Math.ceil(total_count / nPerPage - 1));
     console.log("orderedItems.length", orderedItems.length);
-    console.log("pagedItems: ", pagedItems);
+    console.log("pagedItems: ", pagedItems); */
 
     if (Items.length == 0) {
         return NextResponse.json({ message: "no items found", status: 404 });
@@ -94,19 +91,39 @@ export async function GET(request: Request) {
 
     //include seller details
     var finalItems = [];
-    var seller;
+    var seller1;
+    var seller2;
 
     for (var i = 0; i < pagedItems.length; i++) {
-        seller = await prisma.user.findFirst({
+        seller1 = await prisma.user.findFirst({
             where: {
                 id: pagedItems[i].item.sellerId,
             },
         });
-        finalItems.push({ item: pagedItems[i].item, sellerinfo: seller });
+        seller2 = await prisma.siteuser.findFirst({
+            where: {
+                id: pagedItems[i].item.sellerId,
+            },
+        });
+        finalItems.push({
+            item: pagedItems[i].item,
+            sellerinfo: { seller1: seller1, seller2: seller2 },
+        });
     }
 
+    //cast askingprice to number
+
+    for (var i = 0; i < finalItems.length; i++) {
+        finalItems[i].item.askingprice = parseFloat(
+            finalItems[i].item.askingprice
+        );
+    }
+
+    //typeof(askingprice)
+    //console.log(typeof (finalItems[0].item.askingprice));
+
     return Response.json({
-        totalPages: Math.ceil(total_count / nPerPage),
+        totapages: Math.ceil(total_count / nPerPage),
         finalItems: finalItems,
     });
 }
