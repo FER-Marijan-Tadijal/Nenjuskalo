@@ -21,6 +21,7 @@ async function Footer() {
                 color: "#F1E9DA",
                 py: 6,
                 px: 2,
+                boxSizing: "border-box",
             }}
         >
             <Box sx={{ maxWidth: "1200px", mx: "auto", px: 4 }}>
