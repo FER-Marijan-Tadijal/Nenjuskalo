@@ -1,5 +1,4 @@
-import React from "react";
-import Link from "next/link";
+import React, { useEffect } from "react";
 import {
     Typography,
     Container,
@@ -7,17 +6,66 @@ import {
     ThemeProvider,
     Button,
 } from "@mui/material";
+import { useState } from "react";
 import theme from "../styles/theme";
+import CategoryItem from "../components/CategoryViewComponents/CategoryItem";
 
-type category = {
+type Item = {
+    id: number;
+    title: string;
+    description: string;
+    belongsto: { categoryid: number }[];
+    askingprice: string;
+    sellerid: string;
+    buyerid?: string;
+    conditionid: number;
+};
+type CatObjectType = { catItems: Item[]; cat: Category };
+type Category = {
     id: number;
     name: string;
 };
 type Props = {
-    categories: category[];
+    categories: Category[];
 };
 
 const CategoriesPage = ({ categories }: Props) => {
+    const [allItems, setAllItems] = useState<CatObjectType[]>([]);
+
+    async function fetchItems(categoryId: string): Promise<Item[]> {
+        const params = new URLSearchParams();
+        if (categoryId) params.set("categoryId", categoryId);
+        console.log(params.toString());
+        const res = await fetch(`http://localhost:3000/api/search?${params}`);
+        const data = await res.json();
+
+        if (Array.isArray(data.data)) {
+            return data.data;
+        } else {
+            return [];
+        }
+    }
+
+    useEffect(() => {
+        async function fetchAllItems() {
+            try {
+                const allItemsCopy: CatObjectType[] = [];
+                for (const category of categories) {
+                    const catItems = await fetchItems(category.id.toString());
+                    const catObject = {
+                        catItems: catItems,
+                        cat: category,
+                    };
+                    allItemsCopy.push(catObject); // Append items for the category
+                }
+                setAllItems(allItemsCopy); // Update state once after fetching all items
+            } catch (error) {
+                console.error("Failed to fetch items:", error);
+            }
+        }
+        fetchAllItems();
+    }, [categories]);
+
     return (
         <>
             {categories && (
@@ -46,11 +94,19 @@ const CategoriesPage = ({ categories }: Props) => {
                                 mt: 2,
                             }}
                         >
-                            {categories.map((category, index) => (
-                                <Box key={index} sx={{ height: "100px" }}>
+                            {allItems.map((catObject, index) => (
+                                <Box
+                                    key={index}
+                                    sx={{
+                                        height: "100px",
+                                        display: "flex",
+                                        alignContent: "center",
+                                        justifyContent: "space-around",
+                                    }}
+                                >
                                     <Button
                                         variant="contained"
-                                        href={`/categories/${category.id}`}
+                                        href={`/categories/${catObject.cat.id}`}
                                         sx={{
                                             width: "150px",
                                             height: "80px",
@@ -72,8 +128,28 @@ const CategoriesPage = ({ categories }: Props) => {
                                                 "transform 0.2s ease-in-out",
                                         }}
                                     >
-                                        {category.name}
+                                        {catObject.cat.name}
                                     </Button>
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            alignContent: "center",
+                                            justifyContent: "space-around",
+                                        }}
+                                    >
+                                        {catObject.catItems.map(
+                                            (item, index) => (
+                                                <CategoryItem
+                                                    itemId={item.id}
+                                                    title={item.title}
+                                                    //price={el.item.askingprice}
+                                                    key={index}
+                                                    category={category}
+                                                    sellerinfo={item.sellerid}
+                                                />
+                                            )
+                                        )}
+                                    </Box>
                                 </Box>
                             ))}
                         </Box>

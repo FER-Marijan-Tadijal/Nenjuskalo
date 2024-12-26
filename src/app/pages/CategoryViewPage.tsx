@@ -31,12 +31,23 @@ type Item = {
     conditionid: number;
 };
 type User = {
-    id: string;
-    country: string;
-    city: string;
-    street: string;
-    houseNo: string;
-    roleId: string;
+    seller1: {
+        name: string | null;
+        id: string;
+        email: string;
+        emailVerified: Date | null;
+        image: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+    };
+    seller2: {
+        id: string;
+        country: string | null;
+        city: string | null;
+        street: string | null;
+        houseno: string | null;
+        roleid: number;
+    };
 };
 type items_and_sellersType = {
     item: Item;
