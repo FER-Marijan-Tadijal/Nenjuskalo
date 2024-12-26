@@ -38,7 +38,7 @@ const ExplorePriceRange = ({
             }}
         >
             <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Filter by price range:
+                Filtriraj po cijeni:
             </Typography>
             <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
                 <OutlinedInput
@@ -60,7 +60,7 @@ const ExplorePriceRange = ({
                     }}
                 />
                 <FormHelperText id="outlined-weight-helper-text">
-                    Lowest Price
+                    Najniža cijena
                 </FormHelperText>
             </FormControl>
             <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
@@ -83,7 +83,7 @@ const ExplorePriceRange = ({
                     }}
                 />
                 <FormHelperText id="outlined-weight-helper-text">
-                    Highest Price
+                    Najviša cijena
                 </FormHelperText>
             </FormControl>
         </Box>

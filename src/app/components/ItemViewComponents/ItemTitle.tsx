@@ -35,10 +35,10 @@ const ItemTitle = ({ item }: Props) => {
                 • {item.title}
             </Typography>
             <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
-                • Price: {item.askingprice} $
+                • Cijena: {item.askingprice} $
             </Typography>
             <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
-                • Condition: {conditionName}
+                • Stanje: {conditionName}
             </Typography>
         </Box>
     );
