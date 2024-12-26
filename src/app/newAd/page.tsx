@@ -1,50 +1,116 @@
-import { prisma } from "@/prisma";
-import Link from "next/link";
-import { format } from "path";
+
+import React from "react";
 import { auth } from "@/app/auth";
 import NewAdForm from "../components/forms/NewAdForm";
+import { Box, Container, Typography, Button } from "@mui/material";
+import Link from "next/link";
 
 export default async function makeNewAd() {
-    
     const session = await auth();
 
-    if (session == null) return (
-    <div>
-        <br />
-        <br />
-        <br />
-        <h1>you must be logged in to make an ad</h1>
-    </div>)
-
-    /* console.log(await prisma.siteuser.findMany());
-    console.log(await prisma.condition.findMany());
-    console.log(await prisma.item.findMany());
-    console.log(await prisma.belongsto.findMany());
-    console.log(await prisma.category.findMany()); */
-
-    /* await prisma.belongsto.delete({
-        where: {
-            categoryid_itemid: {
-                categoryid: 4,
-                itemid: 12,
-            }
-        }
-    }) */
-
-    /* await prisma.item.delete({
-        where:{
-            id: 12
-        }
-    })
- */
+    if (session == null) {
+        return (
+            <Container
+                sx={{
+                    textAlign: "center",
+                    mt: 10,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 4,
+                }}
+            >
+                <Typography
+                    variant="h4"
+                    sx={{
+                        color: "#003049",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Morate biti prijavljeni za izradu oglasa!
+                </Typography>
+                <Typography
+                    variant="body1"
+                    sx={{
+                        color: "text.secondary",
+                        fontFamily: "'Roboto', sans-serif",
+                        fontSize: "1rem",
+                    }}
+                >
+                    Prijavite se sada kako biste kreirali novi oglas i pronašli
+                    kupce!
+                </Typography>
+                <Button
+                    variant="contained"
+                    sx={{
+                        bgcolor: "#FFC300",
+                        color: "#003049",
+                        fontWeight: "bold",
+                        fontFamily: "'Poppins', sans-serif",
+                        "&:hover": {
+                            bgcolor: "#E5A800",
+                        },
+                        textTransform: "uppercase",
+                        px: 4,
+                    }}
+                    href="/auth/signin" // Update with the actual sign-in route
+                >
+                    Prijavi se
+                </Button>
+            </Container>
+        );
+    }
 
     return (
-        <div>
-            <br />
-            <br />
-            <h1>Create New Ad here</h1>
-            <NewAdForm></NewAdForm>
+        <Container
+            sx={{
+                mt: 14,
+                mb: 10,
+                maxWidth: "md",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 6,
+            }}
+        >
 
-        </div>
-    )
+            {/* New Ad Form */}
+            <Box
+                sx={{
+                    bgcolor: "#003049",
+                    padding: 4,
+                    borderRadius: "16px",
+                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                    width: "100%",
+                }}
+            >
+                <NewAdForm />
+            </Box>
+
+            {/* Back to Profile */}
+            <Box sx={{ mt: 1.5 ,textAlign: "center", width: "100%" }}>
+                <Link href="/profile" passHref>
+                    <Button
+                        variant="outlined"
+                        sx={{
+                            color: "#003049",
+                            borderColor: "#FFC300",
+                            fontWeight: "bold",
+                            fontFamily: "'Poppins', sans-serif",
+                            "&:hover": {
+                                bgcolor: "#FFC300",
+                                color: "#003049",
+                                borderColor: "#FFC300",
+                            },
+                            textTransform: "uppercase",
+                            px: 4,
+                        }}
+                    >
+                        Povratak na Profil
+                    </Button>
+                </Link>
+            </Box>
+        </Container>
+    );
 }
