@@ -25,7 +25,7 @@ type Item = {
     title: string;
     description: string | null; //promjena
     //belongsto: { categoryid: number }[]; //maknuto
-    askingprice: Decimal; //promjena
+    askingprice: number; //promjena
     sellerid: string;
     buyerid?: string | null; //promjena
     conditionid: number;
@@ -115,10 +115,6 @@ const CategoryViewPage = ({ categoryId }: Props) => {
     const handleSortMethodChange = (event: SelectChangeEvent<string>) => {
         setSortMethod(event.target.value);
     };
-    useEffect(() => {
-        console.log("items_and_sellers:");
-        console.log(items_and_sellers);
-    }, [items_and_sellers]);
 
     return (
         <>
@@ -172,7 +168,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                             >
                                 <FormControl fullWidth variant="outlined">
                                     <InputLabel id="select-label">
-                                        Order by
+                                        Sortiraj
                                     </InputLabel>
                                     <Select
                                         labelId="select-label"
@@ -196,10 +192,10 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                 }
                                 disabled={pageNum === 1}
                             >
-                                Previous
+                                Prijašnja
                             </Button>
                             <Typography component="span">
-                                Page {pageNum} of {totalPages}
+                                Stranica {pageNum} od {totalPages}
                             </Typography>
                             <Button
                                 onClick={() =>
@@ -209,7 +205,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                 }
                                 disabled={pageNum === totalPages}
                             >
-                                Next
+                                Sljedeća
                             </Button>
                         </Box>
 
@@ -228,7 +224,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                 <CategoryItem
                                     itemId={el.item.id}
                                     title={el.item.title}
-                                    //price={el.item.askingprice}
+                                    price={el.item.askingprice}
                                     key={index}
                                     category={category}
                                     sellerinfo={el.sellerinfo}

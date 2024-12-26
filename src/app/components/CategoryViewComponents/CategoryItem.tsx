@@ -12,7 +12,7 @@ type categoryType = {
 type Props = {
     itemId: number;
     title: string;
-    //price: number;
+    price: number;
     category: categoryType;
     sellerinfo: User;
 };
@@ -39,11 +39,10 @@ type User = {
 const CategoryItem = ({
     itemId,
     title,
-    //price,
+    price,
     category,
     sellerinfo,
 }: Props) => {
-    console.log(sellerinfo);
     return (
         <>
             {sellerinfo && (
@@ -51,7 +50,6 @@ const CategoryItem = ({
                     sx={{
                         width: "90%",
                         height: "150px",
-                        margin: 0.7,
                         padding: 2,
                         display: "flex",
                         justifyContent: "space-between",
@@ -100,7 +98,7 @@ const CategoryItem = ({
                         >
                             <Typography variant="body2">• {title}</Typography>
                             <Typography variant="body2">
-                                • Price: {} €
+                                • Price: {price} €
                             </Typography>
                             <Typography variant="body2">
                                 • Location: {sellerinfo.seller2.city || "- "},

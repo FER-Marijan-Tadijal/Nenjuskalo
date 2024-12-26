@@ -5,13 +5,14 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import CategoriesPage from "../pages/CategoriesPage";
 
-type category = {
+type Category = {
     id: number;
     name: string;
+    supercategoryid: number | null;
 };
 
 export default function CategorySelection() {
-    const [categories, setCategories] = useState<category[]>();
+    const [categories, setCategories] = useState<Category[]>();
 
     const getCategories = async () => {
         try {
