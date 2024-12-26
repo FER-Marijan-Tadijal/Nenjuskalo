@@ -40,7 +40,7 @@ type User = {
 };
 type items_and_sellersType = {
     item: Item;
-    seller: User;
+    sellerinfo: User;
 };
 type Category = {
     id: number;
@@ -57,9 +57,9 @@ const CategoryViewPage = ({ categoryId }: Props) => {
     const [items_and_sellers, setItems_and_sellers] = useState<
         items_and_sellersType[]
     >([]);
-    //const [nPerPage, setNPerPage] = useState();
     const [pageNum, setPageNum] = useState(1);
     const [sortMethod, setSortMethod] = useState("");
+    const [totalPages, setTotalPages] = useState(1);
 
     async function getCategory(id: string) {
         try {
@@ -82,7 +82,11 @@ const CategoryViewPage = ({ categoryId }: Props) => {
 
             if (res) {
                 var itemsjson = await res.json();
-                setItems_and_sellers(itemsjson);
+                if (itemsjson.finalItems)
+                    setItems_and_sellers(itemsjson.finalItems);
+                else setItems_and_sellers([]);
+                if (itemsjson.totalPages) setTotalPages(itemsjson.totalPages);
+                else setTotalPages(1);
             }
         } catch (e) {
             console.log(e);
@@ -93,14 +97,13 @@ const CategoryViewPage = ({ categoryId }: Props) => {
         getCategory(categoryId);
         getItemsAndSellers(pageNum, sortMethod);
     }, []);
+    useEffect(() => {
+        getItemsAndSellers(pageNum, sortMethod);
+    }, [pageNum]);
 
     const handleSortMethodChange = (event: SelectChangeEvent<string>) => {
         setSortMethod(event.target.value);
     };
-
-    useEffect(() => {
-        console.log(category);
-    }, [category]);
     useEffect(() => {
         console.log("items_and_sellers:");
         console.log(items_and_sellers);
@@ -122,9 +125,13 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                             mt: 8,
                         }}
                     >
-                        <Link href={"/categories"}>
+                        <Button
+                            variant="accentBtn"
+                            href={"/categories"}
+                            sx={{ mt: 1 }}
+                        >
                             <b>Go back to categories</b>
-                        </Link>
+                        </Button>
                         <Box
                             sx={{
                                 marginTop: 2,
@@ -133,9 +140,9 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                 backgroundColor: theme.palette.secondary.main,
                                 color: "#1C2B36",
                                 borderRadius: 2,
-                                //display: "flex",
-                                //justifyContent: "space-around",
-                                //alignItems: "center",
+                                display: "flex",
+                                flexDirection: "column",
+                                alignItems: "center",
                             }}
                         >
                             <Typography variant="h4">
@@ -197,7 +204,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
 
                         <Box
                             sx={{
-                                mt: 3,
+                                mt: 1,
                                 display: "grid",
                                 gridTemplateColumns: {
                                     sm: "400px", // Single column on extra small screens
@@ -210,10 +217,10 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                 <CategoryItem
                                     itemId={el.item.id}
                                     title={el.item.title}
-                                    //price={el.item.askingprice.toNumber()}
+                                    //price={el.item.askingprice}
                                     key={index}
                                     category={category}
-                                    user={el.seller}
+                                    sellerinfo={el.sellerinfo}
                                 />
                             ))}
                         </Box>

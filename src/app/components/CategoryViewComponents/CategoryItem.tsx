@@ -14,7 +14,7 @@ type Props = {
     title: string;
     //price: number;
     category: categoryType;
-    user: User;
+    sellerinfo: User;
 };
 type User = {
     id: string;
@@ -25,10 +25,17 @@ type User = {
     roleId: string;
 };
 
-const CategoryItem = ({ itemId, title, category, user }: Props) => {
+const CategoryItem = ({
+    itemId,
+    title,
+    //price,
+    category,
+    sellerinfo,
+}: Props) => {
+    console.log(sellerinfo);
     return (
         <>
-            {user && (
+            {sellerinfo && (
                 <Box
                     sx={{
                         width: "90%",
@@ -82,11 +89,11 @@ const CategoryItem = ({ itemId, title, category, user }: Props) => {
                         >
                             <Typography variant="body2">• {title}</Typography>
                             <Typography variant="body2">
-                                • Price: {} €
+                                • Price: {/*price*/} €
                             </Typography>
                             <Typography variant="body2">
-                                • Location: {user.city || "- "},
-                                {user.street || " -"}
+                                • Location: {sellerinfo.city || "- "},
+                                {sellerinfo.street || " -"}
                             </Typography>
                             <Typography variant="body2">
                                 • Category: {category.name}
