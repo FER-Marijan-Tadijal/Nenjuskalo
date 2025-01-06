@@ -133,8 +133,9 @@ export default async function Page() {
                         sx={{
                             fontFamily: "'Roboto', sans-serif",
                             textAlign: "center",
-                            color: "#003049", // Dark blue for fallback message
+                            color: "#FFC300",
                             opacity: 0.8,
+                            fontWeight: "bold",
                         }}
                     >
                         Trenutno nemate otvorenih razgovora.

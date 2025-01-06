@@ -1,5 +1,7 @@
-import { Container, Typography, Box, Paper } from "@mui/material";
-import { auth } from "@/app/auth";
+import { Container, Typography, Box, Paper, Button } from "@mui/material";
+import GoogleIcon from '@mui/icons-material/Google';
+import GitHubIcon from '@mui/icons-material/GitHub';
+import { auth, signIn } from "@/app/auth";
 import { prisma } from "@/prisma";
 import SendMessages from "@/app/message/sendMessage";
 import MessageList from "@/app/message/messageList";
@@ -18,13 +20,75 @@ export default async function Page({
         return (
             <Container
                 sx={{
+                    mt: 10,
+                    maxWidth: "lg",
+                    textAlign: "center",
+                    paddingBottom: "64px",
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
-                    justifyContent: "center",
-                    height: "100vh",
+                    gap: 4,
                 }}
             >
-                <Typography variant="h5">Morate biti prijavljeni da biste slali poruke.</Typography>
+                <Typography
+                    variant="h4"
+                    sx={{
+                        color: "#003049",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: "bold",
+                    }}
+                >
+                    Morate biti prijavljeni za pristup ovoj stranici!
+                </Typography>
+                <Typography
+                    variant="body1"
+                    sx={{
+                        color: "text.secondary",
+                        fontFamily: "'Roboto', sans-serif",
+                        fontSize: "1rem",
+                    }}
+                >
+                    Prijavite se sada kako biste pristupili svom profilu i upravljali oglasima.
+                </Typography>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                    <Button
+                        variant="contained"
+                        startIcon={<GoogleIcon />}
+                        sx={{
+                            bgcolor: "#FFC300",
+                            color: "#003049",
+                            fontFamily: "'Poppins', sans-serif",
+                            fontWeight: "bold",
+                            "&:hover": {
+                                bgcolor: "#E5A800",
+                            },
+                            textTransform: "none",
+                            px: 2,
+                        }}
+                        onClick={() => signIn("google")}
+                    >
+                        Prijava
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        startIcon={<GitHubIcon />}
+                        sx={{
+                            bgcolor: "#FFC300",
+                            color: "#003049",
+                            fontFamily: "'Poppins', sans-serif",
+                            fontWeight: "bold",
+                            "&:hover": {
+                                bgcolor: "#E5A800",
+                            },
+                            textTransform: "none",
+                            px: 2,
+                        }}
+                        onClick={() => signIn("github")}
+                    >
+                        Prijava
+                    </Button>
+                </Box>
             </Container>
         );
     }
@@ -36,7 +100,7 @@ export default async function Page({
     return (
         <Container
             sx={{
-                height: "80vh", // Full height of the viewport
+                height: "95vh", 
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
