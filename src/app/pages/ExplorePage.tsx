@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
 
-import ExploreItem from "../components/ExploreComponents/ExploreItem";
+import ExploreItem from "../components/GlobalComponents/AdCard";
 import ExploreFilter from "../components/ExploreComponents/ExploreFilter";
 import theme from "../styles/theme";
 import { ThemeProvider } from "@mui/material";
@@ -23,7 +23,12 @@ const conditions = [
     { name: "rabljeno", id: 1 },
     { name: "osteceno", id: 2 },
 ];
-const orders = ["lowestPrice", "highestPrice", "newest", "oldest"];
+const orders = [
+    ["lowestPrice", "najniža cijena"],
+    ["highestPrice", "najviša cijena"],
+    ["newest", "najnovije"],
+    ["oldest", "najstarije"],
+];
 
 type Item = {
     id: number;
@@ -92,7 +97,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
 
     const fetchItems = async (currentPage: number) => {
         const params = new URLSearchParams();
+        params.set("pageSize", "8");
         if (q) params.set("q", q);
+        else params.set("q", "");
         if (currentPage) params.set("page", currentPage.toString());
         if (categoryId || categoryId == "0")
             params.set("categoryId", categoryId);
@@ -128,6 +135,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     useEffect(() => {
         fetchCategories();
         fetchRandomItems(); //ako stavimo da se dohvaćaju oglasi koji su ista kategorija, onda stavi useEffect kad god se promijeni items
+        fetchItems(page);
     }, []);
 
     const handleCategoryIdChange = (event: SelectChangeEvent<string>) => {
@@ -243,9 +251,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                             {orders.map((order, index) => (
                                                 <MenuItem
                                                     key={index}
-                                                    value={order}
+                                                    value={order[0]}
                                                 >
-                                                    {order}
+                                                    {order[1]}
                                                 </MenuItem>
                                             ))}
                                         </Select>
@@ -273,15 +281,16 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                     Sljedeća
                                 </Button>
                             </Box>
-                            {items.map((e, key) => (
+                            {items.map((e, index) => (
                                 <ExploreItem
                                     itemId={e.id}
                                     title={e.title}
                                     price={e.askingprice}
                                     sellerId={e.sellerid}
                                     categoryObjects={e.belongsto}
-                                    key={key}
+                                    key={index}
                                     categories={categories}
+                                    checkPage={true}
                                 />
                             ))}
                         </Container>

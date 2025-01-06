@@ -14,6 +14,7 @@ type Props = {
         name: string;
         supercategoryid: string | null;
     }[];
+    checkPage: boolean;
 };
 type User = {
     id: string;
@@ -31,6 +32,7 @@ const ExploreItem = ({
     sellerId,
     categoryObjects,
     categories,
+    checkPage,
 }: Props) => {
     const [user, setUser] = useState<User>();
     const [itemCategories, setItemCategories] = useState<string[]>([]);
@@ -64,9 +66,9 @@ const ExploreItem = ({
             {user && (
                 <Box
                     sx={{
-                        width: "55%",
+                        width: checkPage ? "55%" : "90%",
                         height: "150px",
-                        margin: 0.7,
+                        margin: checkPage ? 0.7 : 0,
                         padding: 2,
                         display: "flex",
                         justifyContent: "space-between",
