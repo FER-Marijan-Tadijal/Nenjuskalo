@@ -10,19 +10,15 @@ import {
     InputBase,
     Button,
 } from "@mui/material";
-import { Search, ShoppingCart } from "@mui/icons-material";
+import { Search } from "@mui/icons-material";
 import { styled } from "@mui/system";
 import Link from "next/link";
 import Image from "next/image";
-import { useRouter } from "next/navigation"; // Import useRouter for navigation
-import { signIn, signOut } from "next-auth/react";
-import type { Session } from "next-auth";
+import { useRouter } from "next/navigation";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
-
-interface NavbarProps {
-    session: Session | null; // Accepts session as a prop
-}
+import type { Session } from "next-auth";
+import { signIn, signOut } from "next-auth/react";
 
 // Styled Components
 const SearchBox = styled("form")(({ theme }) => ({
@@ -63,9 +59,13 @@ const NavbarLink = styled(Button)(({ theme }) => ({
     },
 }));
 
+interface NavbarProps {
+    session: Session | null;
+}
+
 export default function Navbar({ session }: NavbarProps) {
     const [query, setQuery] = useState("");
-    const router = useRouter(); // Initialize useRouter for navigation
+    const router = useRouter();
 
     const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -73,7 +73,7 @@ export default function Navbar({ session }: NavbarProps) {
             alert("Unesite pojam za pretragu!");
             return;
         }
-        router.push(`/explore?search=${encodeURIComponent(query)}`); // Navigate to the explore page with the search query
+        router.push(`/explore?search=${encodeURIComponent(query)}`);
     };
 
     return (
@@ -201,29 +201,47 @@ export default function Navbar({ session }: NavbarProps) {
                     }}
                 >
                     {!session ? (
-                        <Button
-                            variant="contained"
-                            startIcon={
-                                <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-                                    <GoogleIcon />
-                                    <GitHubIcon />
-                                </Box>
-                            }
-                            sx={{
-                                bgcolor: "#FFC300",
-                                color: "#003049",
-                                fontFamily: "'Poppins', sans-serif",
-                                fontWeight: "bold",
-                                "&:hover": {
-                                    bgcolor: "#E5A800",
-                                },
-                                textTransform: "none",
-                                px: 2,
-                            }}
-                            onClick={() => signIn()}
-                        >
-                            Prijava
-                        </Button>
+                        <>
+                            {/* Google Login Button */}
+                            <Button
+                                variant="contained"
+                                startIcon={<GoogleIcon />}
+                                sx={{
+                                    bgcolor: "#FFC300",
+                                    color: "#003049",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontWeight: "bold",
+                                    "&:hover": {
+                                        bgcolor: "#E5A800",
+                                    },
+                                    textTransform: "none",
+                                    px: 2,
+                                }}
+                                onClick={() => signIn("google")}
+                            >
+                                Prijava s Google-om
+                            </Button>
+
+                            {/* GitHub Login Button */}
+                            <Button
+                                variant="contained"
+                                startIcon={<GitHubIcon />}
+                                sx={{
+                                    bgcolor: "#FFC300",
+                                    color: "#003049",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontWeight: "bold",
+                                    "&:hover": {
+                                        bgcolor: "#E5A800",
+                                    },
+                                    textTransform: "none",
+                                    px: 2,
+                                }}
+                                onClick={() => signIn("github")}
+                            >
+                                Prijava s GitHub-om
+                            </Button>
+                        </>
                     ) : (
                         <Button
                             variant="contained"
