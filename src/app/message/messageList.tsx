@@ -51,13 +51,22 @@ export default function MessageList({
         <Paper
             elevation={3}
             sx={{
-                maxHeight: "400px",
+                flex: 1,
                 overflowY: "auto",
                 bgcolor: "#f5f5f5",
                 p: 2,
                 borderRadius: "8px",
                 boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                scrollbarWidth: "thin",
+                "&::-webkit-scrollbar": {
+                    width: "6px",
+                },
+                "&::-webkit-scrollbar-thumb": {
+                    background: "#FFC300",
+                    borderRadius: "8px",
+                },
             }}
+            
         >
             <Typography
                 variant="h6"
@@ -101,9 +110,15 @@ export default function MessageList({
                             secondary={
                                 <Typography
                                     variant="caption"
-                                    sx={{ color: "gray", fontSize: "0.75rem" }}
+                                    sx={{ color: "gray", fontSize: "0.6rem" }}
                                 >
-                                    {new Date(message.senttime).toLocaleTimeString()}
+                                    {new Date(message.senttime).toLocaleTimeString("hr-HR", {
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        day: "2-digit",
+                                        month: "2-digit",
+                                        year: "numeric",
+                                    })}
                                 </Typography>
                             }
                         />
