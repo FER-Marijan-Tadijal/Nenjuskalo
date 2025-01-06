@@ -219,7 +219,7 @@ export default function Navbar({ session }: NavbarProps) {
                                 }}
                                 onClick={() => signIn("google")}
                             >
-                                Prijava s Google-om
+                                Prijava
                             </Button>
 
                             {/* GitHub Login Button */}
@@ -239,7 +239,7 @@ export default function Navbar({ session }: NavbarProps) {
                                 }}
                                 onClick={() => signIn("github")}
                             >
-                                Prijava s GitHub-om
+                                Prijava
                             </Button>
                         </>
                     ) : (

@@ -39,7 +39,7 @@ export default function HomePage() {
     useEffect(() => {
         async function fetchRandomItems() {
             try {
-                const response = await fetch("/api/random?n=7");
+                const response = await fetch("/api/random?n=4");
                 if (!response.ok) throw new Error("Failed to fetch random items");
 
                 const data = await response.json();
@@ -65,7 +65,7 @@ export default function HomePage() {
             }}
         >
             {/* Main Banner/Carousel Section */}
-            <Box sx={{ width: "100%", mb: 4 }}>
+            <Box sx={{ width: "95%", mb: 4 }}>
                 <CarouselComponent />
             </Box>
 
@@ -175,11 +175,11 @@ export default function HomePage() {
                         fontSize: "2rem",
                     }}
                 >
-                    Istaknuti Proizvodi
+                    Najnoviji Proizvodi
                 </Typography>
                 <Grid container spacing={4} justifyContent="center">
                 {randomItems.length > 0 ? (
-                        randomItems.slice(0, 3).map((item: any) => (
+                        randomItems.map((item: any) => (
                             <Grid item xs={12} sm={6} md={3} key={item.id}>
                                 <Card>
                                     <CardMedia
@@ -260,11 +260,11 @@ export default function HomePage() {
                         fontSize: "2rem",
                     }}
                 >
-                    Popularno danas
+                    Nasumično Odabrani Proizvodi
                 </Typography>
                 <Grid container spacing={4} justifyContent="center">
                     {randomItems.length > 0 ? (
-                        randomItems.slice(3, 7).map((item: any) => (
+                        randomItems.map((item: any) => (
                             <Grid item xs={12} sm={6} md={3} key={item.id}>
                                 <Card>
                                     <CardMedia
