@@ -8,9 +8,9 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import theme from "../styles/theme";
-import CategoryItem from "../components/CategoryViewComponents/CategoryItem";
+import CategoryItem from "../components/GlobalComponents/AdCard";
 
-type Item = {
+type Item2 = {
     id: number; //promjena
     title: string;
     description: string | null; //promjena
@@ -18,6 +18,17 @@ type Item = {
     askingprice: number; //promjena
     sellerid: string;
     buyerid?: string | null; //promjena
+    conditionid: number;
+};
+
+type Item = {
+    id: number;
+    title: string;
+    description: string;
+    belongsto: { categoryid: number }[];
+    askingprice: string;
+    sellerid: string;
+    buyerid?: string;
     conditionid: number;
 };
 type User = {
@@ -42,14 +53,14 @@ type User = {
 type Category = {
     id: number;
     name: string;
-    supercategoryid: number | null;
+    supercategoryid: string | null;
 };
 type items_and_sellersType = {
     item: Item;
     sellerinfo: User;
 };
 type CatObjectType = {
-    catItemsAndSellers: items_and_sellersType[];
+    items: Item[];
     cat: Category;
 };
 type Props = {
@@ -59,33 +70,41 @@ type Props = {
 const CategoriesPage = ({ categories }: Props) => {
     var baseUrl = "http://localhost:3000";
     const [allItems, setAllItems] = useState<CatObjectType[]>([]);
+    const [propCategories, setPropCategories] = useState<Category[]>([]);
 
-    async function getItemsAndSellers(categoryId: number) {
-        try {
-            var res = await fetch(
-                `${baseUrl}/api/getItemsByCategoryId?id=${categoryId}&orderBy=newest&pageNum=1`
-            );
-            //&orderBy=${sort_method}&pageNum=${pageNum}
-            if (res) {
-                var itemsjson = await res.json();
-                if (itemsjson.finalItems) return itemsjson.finalItems;
-                else return [];
-            }
-        } catch (e) {
-            console.log(e);
+    const fetchCategories = async () => {
+        const res = await fetch("http://localhost:3000/api/categories");
+        const data = await res.json();
+        setPropCategories(data);
+    };
+
+    const fetchItems = async (categoryId: number) => {
+        const params = new URLSearchParams();
+        params.set("q", "");
+        params.set("page", "1");
+        params.set("categoryId", categoryId.toString());
+        //params.set("limit", "1")
+        console.log(params.toString());
+        const res = await fetch(`http://localhost:3000/api/search?${params}`);
+        const data = await res.json();
+
+        if (Array.isArray(data.data)) {
+            return data.data;
+        } else {
+            return [];
         }
-    }
+    };
 
     useEffect(() => {
         async function fetchAllItems() {
             try {
                 const allItemsCopy: CatObjectType[] = [];
                 for (const category of categories) {
-                    const catItems = await getItemsAndSellers(category.id);
+                    const catItems = await fetchItems(category.id);
                     console.log(catItems);
                     if (catItems.length > 1) catItems.length = 1;
                     const catObject = {
-                        catItemsAndSellers: catItems,
+                        items: catItems,
                         cat: category,
                     };
                     allItemsCopy.push(catObject); // Append items for the category
@@ -170,32 +189,20 @@ const CategoriesPage = ({ categories }: Props) => {
                                         {catObject.cat.name}
                                     </Button>
 
-                                    {catObject.catItemsAndSellers.map(
-                                        (itemAndSeller, index) => (
-                                            <Box
+                                    {catObject.items.map((item, index) => (
+                                        <Box key={index} sx={{ p: 2, pt: 0 }}>
+                                            <CategoryItem
+                                                itemId={item.id}
+                                                title={item.title}
+                                                price={item.askingprice.toString()}
                                                 key={index}
-                                                sx={{ p: 2, pt: 0 }}
-                                            >
-                                                <CategoryItem
-                                                    itemId={
-                                                        itemAndSeller.item.id
-                                                    }
-                                                    title={
-                                                        itemAndSeller.item.title
-                                                    }
-                                                    price={
-                                                        itemAndSeller.item
-                                                            .askingprice
-                                                    }
-                                                    key={index}
-                                                    category={catObject.cat}
-                                                    sellerinfo={
-                                                        itemAndSeller.sellerinfo
-                                                    }
-                                                />
-                                            </Box>
-                                        )
-                                    )}
+                                                categoryObjects={item.belongsto}
+                                                sellerId={item.sellerid}
+                                                checkPage={false}
+                                                categories={propCategories}
+                                            />
+                                        </Box>
+                                    ))}
                                 </Box>
                             ))}
                         </Box>

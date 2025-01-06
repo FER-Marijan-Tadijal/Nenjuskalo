@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import { Decimal } from "@prisma/client/runtime/library";
 import { useState, useEffect } from "react";
-import CategoryItem from "../components/CategoryViewComponents/CategoryItem";
+import CategoryItem from "../components/GlobalComponents/AdCard";
 import {
     Box,
     Button,
@@ -18,9 +18,14 @@ import theme from "../styles/theme";
 import { ThemeProvider } from "@mui/material";
 import { orderByEnum } from "../enums/orderByEnum";
 
-const orders = ["lowestPrice", "highestPrice", "newest", "oldest"];
+const orders = [
+    ["lowestPrice", "najniža cijena"],
+    ["highestPrice", "najviša cijena"],
+    ["newest", "najnovije"],
+    ["oldest", "najstarije"],
+];
 
-type Item = {
+type Item2 = {
     id: number; //promjena
     title: string;
     description: string | null; //promjena
@@ -28,6 +33,16 @@ type Item = {
     askingprice: number; //promjena
     sellerid: string;
     buyerid?: string | null; //promjena
+    conditionid: number;
+};
+type Item = {
+    id: number;
+    title: string;
+    description: string;
+    belongsto: { categoryid: number }[];
+    askingprice: string;
+    sellerid: string;
+    buyerid?: string;
     conditionid: number;
 };
 type User = {
@@ -56,7 +71,7 @@ type items_and_sellersType = {
 type Category = {
     id: number;
     name: string;
-    supercategoryid: number | null;
+    supercategoryid: string | null;
 };
 interface Props {
     categoryId: string;
@@ -64,20 +79,19 @@ interface Props {
 
 const CategoryViewPage = ({ categoryId }: Props) => {
     var baseUrl = "http://localhost:3000";
-    const [category, setCategory] = useState<Category>();
-    const [items_and_sellers, setItems_and_sellers] = useState<
-        items_and_sellersType[]
-    >([]);
-    const [pageNum, setPageNum] = useState(1);
-    const [sortMethod, setSortMethod] = useState("");
+    const [categories, setCategories] = useState<Category[]>([]);
+    const [selectedCategory, setSelectedCategory] = useState<Category>();
+    const [items, setItems] = useState<Item[]>([]);
+    const [page, setPage] = useState(1);
+    const [orderBy, setOrderBy] = useState("");
     const [totalPages, setTotalPages] = useState(1);
 
-    async function getCategory(id: string) {
+    async function getSelectedCategory(id: string) {
         try {
             var res = await fetch(`${baseUrl}/api/getCategory?id=${id}`);
             if (res) {
                 var categoryjson = await res.json();
-                setCategory(categoryjson);
+                setSelectedCategory(categoryjson);
             }
         } catch (e) {
             console.log("Error while getting category!");
@@ -85,40 +99,51 @@ const CategoryViewPage = ({ categoryId }: Props) => {
         }
     }
 
-    async function getItemsAndSellers(pageNum: number, sort_method: string) {
-        try {
-            var res = await fetch(
-                `${baseUrl}/api/getItemsByCategoryId?id=${categoryId}&orderBy=${sort_method}&pageNum=${pageNum}`
-            );
+    const fetchCategories = async () => {
+        const res = await fetch("http://localhost:3000/api/categories");
+        const data = await res.json();
+        setCategories(data);
+    };
 
-            if (res) {
-                var itemsjson = await res.json();
-                if (itemsjson.finalItems)
-                    setItems_and_sellers(itemsjson.finalItems);
-                else setItems_and_sellers([]);
-                if (itemsjson.totalPages) setTotalPages(itemsjson.totalPages);
-                else setTotalPages(1);
-            }
-        } catch (e) {
-            console.log(e);
+    const fetchItems = async (currentPage: number) => {
+        const params = new URLSearchParams();
+        params.set("q", "");
+        if (currentPage) params.set("page", currentPage.toString());
+        params.set("categoryId", categoryId);
+        if (orderBy) params.set("orderBy", orderBy);
+        console.log(params.toString());
+        const res = await fetch(`http://localhost:3000/api/search?${params}`);
+        const data = await res.json();
+
+        if (Array.isArray(data.data)) {
+            setItems(data.data);
+        } else {
+            setItems([]);
         }
-    }
+        const pageNum = Math.round(data.totalCount / 10);
+        if (pageNum) {
+            setTotalPages(pageNum);
+        } else {
+            setTotalPages(1);
+        }
+    };
 
     useEffect(() => {
-        getCategory(categoryId);
-        getItemsAndSellers(pageNum, sortMethod);
+        getSelectedCategory(categoryId);
+        fetchCategories();
+        fetchItems(page);
     }, []);
     useEffect(() => {
-        getItemsAndSellers(pageNum, sortMethod);
-    }, [pageNum]);
+        fetchItems(page);
+    }, [page, orderBy]);
 
-    const handleSortMethodChange = (event: SelectChangeEvent<string>) => {
-        setSortMethod(event.target.value);
+    const handleOrderByChange = (event: SelectChangeEvent<string>) => {
+        setOrderBy(event.target.value);
     };
 
     return (
         <>
-            {category && (
+            {selectedCategory && (
                 <ThemeProvider theme={theme}>
                     <Container
                         sx={{
@@ -137,7 +162,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                             href={"/categories"}
                             sx={{ mt: 1 }}
                         >
-                            <b>Go back to categories</b>
+                            <b>Povratak na kategorije</b>
                         </Button>
                         <Box
                             sx={{
@@ -154,7 +179,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                         >
                             <Typography variant="h4">
                                 {" "}
-                                Category: "{category.name}"
+                                Category: "{selectedCategory.name}"
                             </Typography>
 
                             <Box
@@ -172,12 +197,15 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                     </InputLabel>
                                     <Select
                                         labelId="select-label"
-                                        value={sortMethod}
-                                        onChange={handleSortMethodChange}
+                                        value={orderBy}
+                                        onChange={handleOrderByChange}
                                     >
                                         {orders.map((order, index) => (
-                                            <MenuItem key={index} value={order}>
-                                                {order}
+                                            <MenuItem
+                                                key={index}
+                                                value={order[0]}
+                                            >
+                                                {order[1]}
                                             </MenuItem>
                                         ))}
                                     </Select>
@@ -187,23 +215,19 @@ const CategoryViewPage = ({ categoryId }: Props) => {
 
                         <Box sx={{ border: "1px solid grey" }}>
                             <Button
-                                onClick={() =>
-                                    setPageNum(Math.max(pageNum - 1, 1))
-                                }
-                                disabled={pageNum === 1}
+                                onClick={() => setPage(Math.max(page - 1, 1))}
+                                disabled={page === 1}
                             >
                                 Prijašnja
                             </Button>
                             <Typography component="span">
-                                Stranica {pageNum} od {totalPages}
+                                Stranica {page} od {totalPages}
                             </Typography>
                             <Button
                                 onClick={() =>
-                                    setPageNum(
-                                        Math.min(pageNum + 1, totalPages)
-                                    )
+                                    setPage(Math.min(page + 1, totalPages))
                                 }
-                                disabled={pageNum === totalPages}
+                                disabled={page === totalPages}
                             >
                                 Sljedeća
                             </Button>
@@ -220,14 +244,16 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                 gap: 2, // Spacing between items
                             }}
                         >
-                            {items_and_sellers.map((el, index) => (
+                            {items.map((e, index) => (
                                 <CategoryItem
-                                    itemId={el.item.id}
-                                    title={el.item.title}
-                                    price={el.item.askingprice}
+                                    itemId={e.id}
+                                    title={e.title}
+                                    price={e.askingprice}
+                                    sellerId={e.sellerid}
+                                    categoryObjects={e.belongsto}
                                     key={index}
-                                    category={category}
-                                    sellerinfo={el.sellerinfo}
+                                    categories={categories}
+                                    checkPage={false}
                                 />
                             ))}
                         </Box>
