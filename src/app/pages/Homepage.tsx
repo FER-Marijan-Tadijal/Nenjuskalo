@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, use } from "react";
 import {
     Box,
     Typography,
@@ -33,9 +33,11 @@ const bodyStyle = {
 };
 
 export default function HomePage() {
+    
+    // Fetch 4 random items
+
     const [randomItems, setRandomItems] = useState([]);
 
-    // Fetch 7 random items
     useEffect(() => {
         async function fetchRandomItems() {
             try {
@@ -52,6 +54,31 @@ export default function HomePage() {
         fetchRandomItems();
     }, []);
 
+    // Fetch 4 newest items
+
+    const [newestItems, setNewestItems] = useState<any[]>([]); 
+    const [isLoading, setIsLoading] = useState(true); // Loading state
+
+    useEffect(() => {
+        async function fetchNewestItems() {
+            try {
+                const response = await fetch("/api/newestAds?n=4"); // Fetch 6 newest items
+                if (!response.ok) {
+                    throw new Error("Failed to fetch newest items");
+                }
+                const data = await response.json();
+                setNewestItems(data); 
+            } catch (error) {
+                console.error("Error fetching newest items:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+
+        fetchNewestItems();
+    }, []);
+
+    // Render the homepage
     return (
         <Container
             maxWidth="lg"
@@ -163,7 +190,7 @@ export default function HomePage() {
                 </Grid>
             </Box>
 
-            {/* Featured Products Section */}
+            {/* Newest Products Section */}
             <Box sx={{ width: "100%", marginTop: "40px" }}>
                 <Typography
                     variant="h4"
@@ -178,8 +205,8 @@ export default function HomePage() {
                     Najnoviji Proizvodi
                 </Typography>
                 <Grid container spacing={4} justifyContent="center">
-                {randomItems.length > 0 ? (
-                        randomItems.map((item: any) => (
+                {newestItems.length > 0 ? (
+                        newestItems.map((item: any) => (
                             <Grid item xs={12} sm={6} md={3} key={item.id}>
                                 <Card>
                                     <CardMedia
@@ -242,13 +269,13 @@ export default function HomePage() {
                         <Typography
                             sx={{ textAlign: "center", color: "gray", mt: 4 }}
                         >
-                            Učitavam istaknute artikle...
+                            Učitavam Najnovije Artikle...
                         </Typography>
                     )}
                 </Grid>
             </Box>
 
-            {/* Popular Section */}
+            {/* Random Section */}
             <Box sx={{ width: "100%", marginTop: "40px" }}>
                 <Typography
                     variant="h4"
