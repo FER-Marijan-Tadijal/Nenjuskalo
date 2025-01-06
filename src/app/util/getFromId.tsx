@@ -8,7 +8,9 @@ export async function getUser(Id: string) {
 }
 
 export async function getItem(Id: number) {
-    const item = await prisma.item.findUnique({where: {id: Id}})
+    const item = await prisma.item.findUnique({
+        where: {id: Id},
+    })
 
     const categories = await prisma.belongsto.findMany({
         where: {
@@ -33,6 +35,16 @@ export async function getItem(Id: number) {
     return {item: item, categories: categories, state: state, pictures: pictures,}
 }
 
+export async function getItemsFromUser(Id: string) {
+    const itemList = await prisma.item.findMany({
+        where: {
+            sellerid: Id,
+        }
+    })
+
+    return itemList;
+}
+
 export async function getCondition(Id: number) {
     const condition = await prisma.condition.findUnique({where: {id: Id}});
 
@@ -41,6 +53,12 @@ export async function getCondition(Id: number) {
 
 export async function getCategory(Id: number) {
     const category = await prisma.category.findUnique({where: {id: Id}});
+
+    return category;
+}
+
+export async function getCategoryChildren(Id: number | null) {
+    const category = await prisma.category.findMany({where: {supercategoryid: null}});
 
     return category;
 }

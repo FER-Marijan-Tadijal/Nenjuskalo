@@ -69,10 +69,10 @@ model message {
 }
 
 model picture {
-  url    String @unique(map: "URL_unique")
-  itemid Int
-  index  Int
-  item   item   @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  itemid  Int
+  index   Int
+  picdata Bytes
+  item    item  @relation(fields: [itemid], references: [id], onDelete: NoAction, onUpdate: NoAction)
 
   @@id([itemid, index])
 }
