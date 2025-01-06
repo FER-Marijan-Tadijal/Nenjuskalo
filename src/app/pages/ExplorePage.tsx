@@ -97,6 +97,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
 
     const fetchItems = async (currentPage: number) => {
         const params = new URLSearchParams();
+        params.set("pageSize", "8");
         if (q) params.set("q", q);
         else params.set("q", "");
         if (currentPage) params.set("page", currentPage.toString());
