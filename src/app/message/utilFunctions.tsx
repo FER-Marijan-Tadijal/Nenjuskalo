@@ -9,6 +9,12 @@ export async function getListOfConversations(userID: string) {
             receiverid: true,
         },
         distinct: ["senderid", "receiverid"],
+        where: {
+            OR: [
+                {senderid: userID},
+                {receiverid: userID},
+            ]
+        },
     });
 
     let otherIDs: string[] = [];

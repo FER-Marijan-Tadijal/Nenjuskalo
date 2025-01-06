@@ -3,7 +3,7 @@ import getRandomItems from "@/app/util/random";
 export async function GET(request: Request) {
     const numAsString = (new URL(request.url).searchParams.get('n')) ?? "0";
 
-    if (!numAsString) {
+    if (isNaN(parseInt(numAsString))) {
         return Response.json({ message: 'Please provide a number', status: 400 });
     }
 
