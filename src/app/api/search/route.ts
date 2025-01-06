@@ -27,6 +27,15 @@ export async function GET(request: Request) {
         ],
     };
 
+    const orderByClause =
+        orderBy === orderByEnum.newest
+            ? { itemchangestate: { changetime: 'desc' } }
+            : orderBy === orderByEnum.oldest
+                ? { itemchangestate: { changetime: 'asc' } }
+                : orderBy === orderByEnum.highestPrice
+                    ? { askingprice: 'desc' }
+                    : { askingprice: 'asc' };
+
     const query: Prisma.itemFindManyArgs = {
         include: {
             belongsto: {
@@ -46,6 +55,7 @@ export async function GET(request: Request) {
             }
         },
         where: whereClause,
+        orderBy: orderByClause,
         skip: (page - 1) * pageSize,
         take: pageSize,
     };
@@ -59,15 +69,6 @@ export async function GET(request: Request) {
         return NextResponse.json({message: 'No items found', status: 404});
     } else {
         const filteredItems = items.filter(item => item.itemchangestate[0].stateid === stateEnum.active);
-
-        const sortedItems = orderBy === orderByEnum.newest
-            ? filteredItems.sort((a, b) => b.itemchangestate[0].changetime - a.itemchangestate[0].changetime)
-            : orderBy === orderByEnum.oldest
-                ? filteredItems.sort((a, b) => a.itemchangestate[0].changetime - b.itemchangestate[0].changetime)
-                : orderBy === orderByEnum.highestPrice
-                    ? filteredItems.sort((a, b) => b.askingprice - a.askingprice)
-                    : filteredItems.sort((a, b) => a.askingprice - b.askingprice);
-
-        return NextResponse.json({data: sortedItems, totalCount: count});
+        return NextResponse.json({data: filteredItems, totalCount: count});
     }
 }
