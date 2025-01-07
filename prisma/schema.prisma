@@ -39,6 +39,8 @@ model item {
   sellerid                         String
   buyerid                          String?
   conditionid                      Int
+  productId                        String?
+  priceId                          String?
   belongsto                        belongsto[]
   siteuser_item_buyeridTositeuser  siteuser?         @relation("item_buyeridTositeuser", fields: [buyerid], references: [id], onDelete: NoAction, onUpdate: NoAction)
   condition                        condition         @relation(fields: [conditionid], references: [id], onDelete: NoAction, onUpdate: NoAction)
