@@ -21,7 +21,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
             if (!session?.user?.id) return;
 
             try {
-                const response = await fetch(`/api/getUserItems?id=${session.user.id}`);
+                const response = await fetch(`/api/getItemsByUser?id=${session.user.id}`);
                 if (!response.ok) throw new Error("Failed to fetch user items");
 
                 const data = await response.json();
