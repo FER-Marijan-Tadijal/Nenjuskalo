@@ -6,7 +6,7 @@ import {Prisma} from "@prisma/client";
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
-    const searchTerm = url.searchParams.get('q');
+    const searchTerm = url.searchParams.get('q') || "";
     const minPrice = parseFloat(url.searchParams.get('minPrice') || '0');
     const maxPrice = parseFloat(url.searchParams.get('maxPrice') || '2147483646');
     const orderBy = (url.searchParams.get('orderBy') || orderByEnum.newest) as orderByEnum;
