@@ -180,7 +180,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                         >
                             <Typography variant="h4">
                                 {" "}
-                                Category: "{selectedCategory.name}"
+                                Kategorija: "{selectedCategory.name}"
                             </Typography>
 
                             <Box

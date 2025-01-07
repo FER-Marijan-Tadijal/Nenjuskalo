@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
+import theme from "@/app/styles/theme";
 
 type Props = {
     user: {
@@ -102,6 +103,13 @@ const ItemThumbnail = ({ user }: Props) => {
                     href={`/message/${user.id}`}
                 >
                     Pošalji poruku
+                </Button>
+                <Button
+                    variant="contained"
+                    sx={{ mt: 2, backgroundColor: theme.palette.accent.main }}
+                    href={`/`}
+                >
+                    Kupi
                 </Button>
             </Box>
         </Box>

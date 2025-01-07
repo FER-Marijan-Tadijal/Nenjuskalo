@@ -59,6 +59,7 @@ type ItemViewProps = {
 };
 
 const ItemView = ({ itemId }: ItemViewProps) => {
+    console.log(itemId);
     const [item, setItem] = useState<Item | null>(null);
     const [user, setUser] = useState<User | null>(null);
 
@@ -69,6 +70,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
                 throw new Error("Failed to fetch item");
             }*/
             const data = await res.json();
+            console.log(data);
             setItem(data.item);
         } catch (err: unknown) {
             console.log(err);
@@ -86,6 +88,7 @@ const ItemView = ({ itemId }: ItemViewProps) => {
         fetchItem(itemId);
     }, []);
     useEffect(() => {
+        console.log(item);
         if (item) {
             const sellerId = item.sellerid;
             fetchUser(sellerId);

@@ -37,7 +37,6 @@ const ExploreItem = ({
     const [user, setUser] = useState<User>();
     const [itemCategories, setItemCategories] = useState<string[]>([]);
     const categoryIds = categoryObjects.map((obj) => obj.categoryid);
-    console.log(categoryIds);
     var check = true;
 
     const fetchUser = async (userId: string) => {
