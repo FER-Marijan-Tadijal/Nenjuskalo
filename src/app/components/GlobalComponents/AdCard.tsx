@@ -37,6 +37,7 @@ const ExploreItem = ({
     const [user, setUser] = useState<User>();
     const [itemCategories, setItemCategories] = useState<string[]>([]);
     const categoryIds = categoryObjects.map((obj) => obj.categoryid);
+    console.log(categoryIds);
     var check = true;
 
     const fetchUser = async (userId: string) => {
@@ -67,7 +68,7 @@ const ExploreItem = ({
                 <Box
                     sx={{
                         width: checkPage ? "55%" : "90%",
-                        height: "150px",
+                        height: "160px",
                         margin: checkPage ? 0.7 : 0,
                         padding: 2,
                         display: "flex",

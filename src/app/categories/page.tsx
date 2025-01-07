@@ -8,7 +8,7 @@ import CategoriesPage from "../pages/CategoriesPage";
 type Category = {
     id: number;
     name: string;
-    supercategoryid: number | null;
+    supercategoryid: string | null;
 };
 
 export default function CategorySelection() {
