@@ -18,7 +18,7 @@ export async function getItem(Id: number) {
         },
     })
 
-    const pictures = await prisma.picture.findMany({
+    const noOfPictures = await prisma.picture.count({
         where: {
             itemid: Id,
         },
@@ -32,7 +32,7 @@ export async function getItem(Id: number) {
         take: 1,
     })
 
-    return {item: item, categories: categories, state: state, pictures: pictures,}
+    return {item: item, categories: categories, state: state, noOfPictures: noOfPictures,}
 }
 
 export async function getItemsFromUser(Id: string) {
