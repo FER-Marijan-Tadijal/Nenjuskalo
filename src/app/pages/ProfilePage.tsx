@@ -5,6 +5,8 @@ import { Container, Typography, Box, Button, Card, Grid, CardContent, CardMedia 
 import { signIn, signOut } from "next-auth/react";
 import Link from "next/link";
 import type { Session } from "next-auth";
+import GoogleIcon from "@mui/icons-material/Google";
+import GitHubIcon from "@mui/icons-material/GitHub";
 
 interface ProfilePageProps {
     session: Session | null; // Accepts session as a prop
@@ -13,29 +15,37 @@ interface ProfilePageProps {
 export default function ProfilePage({ session }: ProfilePageProps) {
     const [userAds, setUserAds] = useState([]);
 
-    // Fetch 2 random items
+    // Fetch all user items
     useEffect(() => {
-        async function fetchRandomItems() {
+        async function fetchUserItems() {
+            if (!session?.user?.id) return;
+
             try {
-                const response = await fetch("/api/random?n=2");
-                if (!response.ok) throw new Error("Failed to fetch random items");
+                const response = await fetch(`/api/getUserItems?id=${session.user.id}`);
+                if (!response.ok) throw new Error("Failed to fetch user items");
 
                 const data = await response.json();
                 setUserAds(data);
             } catch (error) {
-                console.error("Error fetching random items:", error);
+                console.error("Error fetching user items:", error);
             }
         }
 
-        fetchRandomItems();
-    }, []);
+        fetchUserItems();
+    }, [session?.user?.id]);
 
     if (!session) {
         return (
             <Container
                 sx={{
-                    mt: 8,
+                    mt: 10,
+                    maxWidth: "lg",
                     textAlign: "center",
+                    paddingBottom: "64px",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 4,
                 }}
             >
                 <Typography
@@ -46,35 +56,57 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                         fontWeight: "bold",
                     }}
                 >
-                    Pristup Odbijen!
+                    Morate biti prijavljeni za pristup ovoj stranici!
                 </Typography>
                 <Typography
                     variant="body1"
                     sx={{
-                        mt: 2,
                         color: "text.secondary",
                         fontFamily: "'Roboto', sans-serif",
                         fontSize: "1rem",
                     }}
                 >
-                    Morate biti prijavljeni da biste pristupili ovoj stranici.
+                    Prijavite se sada kako biste pristupili svom profilu i upravljali oglasima.
                 </Typography>
-                <Button
-                    variant="contained"
-                    sx={{
-                        mt: 4,
-                        bgcolor: "#FFC300",
-                        color: "#003049",
-                        fontFamily: "'Poppins', sans-serif",
-                        fontWeight: "bold",
-                        "&:hover": {
-                            bgcolor: "#E5A800",
-                        },
-                    }}
-                    onClick={() => signIn()}
-                >
-                    Prijava
-                </Button>
+                <Box sx={{ display: "flex", gap: 2 }}>
+                    <Button
+                        variant="contained"
+                        startIcon={<GoogleIcon />}
+                        sx={{
+                            bgcolor: "#FFC300",
+                            color: "#003049",
+                            fontFamily: "'Poppins', sans-serif",
+                            fontWeight: "bold",
+                            "&:hover": {
+                                bgcolor: "#E5A800",
+                            },
+                            textTransform: "none",
+                            px: 2,
+                        }}
+                        onClick={() => signIn("google")}
+                    >
+                        Prijava
+                    </Button>
+
+                    <Button
+                        variant="contained"
+                        startIcon={<GitHubIcon />}
+                        sx={{
+                            bgcolor: "#FFC300",
+                            color: "#003049",
+                            fontFamily: "'Poppins', sans-serif",
+                            fontWeight: "bold",
+                            "&:hover": {
+                                bgcolor: "#E5A800",
+                            },
+                            textTransform: "none",
+                            px: 2,
+                        }}
+                        onClick={() => signIn("github")}
+                    >
+                        Prijava
+                    </Button>
+                </Box>
             </Container>
         );
     }
@@ -124,8 +156,6 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                         boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
                     }}
                 />
-
-
             </Box>
 
             {/* User Ads */}
@@ -214,14 +244,13 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 )}
             </Box>
 
-
             {/* New Ad Button */}
-            <Box sx={{ mt: 4 }}> {/* Added margin-top to create space */}
+            <Box sx={{ mt: 4 }}>
                 <Link href="/newAd" passHref>
                     <Button
                         variant="contained"
                         sx={{
-                            bgcolor: "#003049", // Dark blue for contrast
+                            bgcolor: "#003049",
                             color: "#FFC300",
                             fontFamily: "'Poppins', sans-serif",
                             fontWeight: "bold",
