@@ -1,16 +1,16 @@
 import {NextApiRequest, NextApiResponse} from 'next';
-import {prisma} from "@/prisma";
+import {prisma} from '@/prisma';
 
-export default async function handler(
+export default async function POST(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    if (req.method !== 'POST') {
+    if (req.method === 'POST') {
         try {
             const {itemId} = req.body;
 
             const item = await prisma.item.findUnique({
-                where: {id: itemId}
+                where: {id: itemId},
             });
 
             if (!item) {

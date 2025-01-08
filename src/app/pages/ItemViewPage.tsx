@@ -7,6 +7,7 @@ import ItemTitle from "../components/ItemViewComponents/ItemTitle";
 import {useState} from "react";
 import theme from "../styles/theme";
 import type {Session} from "next-auth";
+import ItemThumbnailWrapper from "../components/ItemViewComponents/ItemThumbnail";
 
 type Item = {
     itemid: string;
@@ -93,7 +94,7 @@ const ItemView = ({itemId, session}: ItemViewProps) => {
             >
                 {item && user && (
                     <>
-                        <ItemThumbnail user={user} itemId={item.itemid} session={session}/>
+                        <ItemThumbnailWrapper user={user} itemId={itemId} session={session}/>
                         <ItemTitle item={item}/>
                         <ItemDescription description={item.description}/>
                     </>

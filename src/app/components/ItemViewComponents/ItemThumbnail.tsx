@@ -29,6 +29,7 @@ type Props = {
 };
 
 const ItemThumbnail = ({user, session, itemId}: Props) => {
+    console.log("itemTHumbnail itemId: ", itemId);
     const [check, setCheck] = useState(false);
     useEffect(() => {
         if (session?.user?.id == user.id) {
