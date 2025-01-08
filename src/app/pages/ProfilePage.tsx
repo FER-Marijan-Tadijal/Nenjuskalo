@@ -64,7 +64,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
 
             try {
                 setLoadingProfile(true);
-                const response = await fetch(`/api/getSiteUserInfo?id=${session.user.id}`);
+                const response = await fetch(`/api/getUser?id=${session.user.id}`);
                 if (!response.ok) throw new Error("Failed to fetch profile data");
 
                 const data = await response.json();
