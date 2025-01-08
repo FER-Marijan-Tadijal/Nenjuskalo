@@ -22,7 +22,7 @@ export async function HandleEditAdForm(formData: FormData) {
         let picture = formData.get("picture") as File;
 
         let data = null
-        if (picture != null) {
+        if (typeof picture === "object") { // Eh, it's probably a picture file then.
             data = await picture.bytes()
         }
 
@@ -56,7 +56,7 @@ export async function HandleEditAdForm(formData: FormData) {
         await prisma.itemchangestate.create({
             data: {
                 itemid: id,
-                stateid: 1,
+                stateid: state,
                 changetime: new Date(),
             }
         })

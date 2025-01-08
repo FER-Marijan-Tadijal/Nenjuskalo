@@ -15,7 +15,7 @@ export async function HandleNewAdForm(formData: FormData) {
         let picture = formData.get("picture") as File;
 
         let data = null
-        if (picture != null) {
+        if (typeof picture === "object") {
             data = await picture.bytes()
         }
 

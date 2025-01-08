@@ -8,10 +8,10 @@ import Link from "next/link";
 export default async function editAd({
     params,
   }: {
-    params: Promise<{ id: number }>
+    params: Promise<{ id: string }>
   }) {
     const session = await auth();
-    const itemId = (await params).id;
+    const itemId = parseInt((await params).id);
 
     if (session == null) {
         return (
