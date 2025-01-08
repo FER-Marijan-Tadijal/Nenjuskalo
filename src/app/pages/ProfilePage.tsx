@@ -375,17 +375,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                         >
                                             {item.title}
                                         </Typography>
-                                        <Typography
-                                            variant="h6"
-                                            component="div"
-                                            sx={{
-                                                fontFamily: "'Poppins', sans-serif",
-                                                fontWeight: "600",
-                                                color: "#003049",
-                                            }}
-                                        >
-                                            Stanje: {item.itemchangestate?.[0]?.stateid ? stateEnum[item.itemchangestate[0].stateid] : "Nije definirano"}
-                                        </Typography>
+
                                         <Typography
                                             variant="body2"
                                             sx={{
@@ -398,6 +388,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                         >
                                             {item.description}
                                         </Typography>
+                                        
                                         <Typography
                                             variant="body1"
                                             sx={{

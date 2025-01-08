@@ -21,8 +21,10 @@ const CarouselComponent = () => {
             indicators={true}
         >
             {[
-                { image: "/images/banner1.jpg", title: "Otkrij odlične ponude" },
-                { image: "/images/banner2.jpg", title: "Odličan omjer cijene i kvalitete" }
+                { image: "/images/carousel1.png", title: "Lako do najboljih cijena" },
+                { image: "/images/carousel2.png", title: "Jednostavna komunikacija" },
+                { image: "/images/carousel3.png", title: "Pronađi točno ono što ti treba" },
+                { image: "/images/carousel4.png", title: "Najprivlačnije ponude" }
             ].map((item, index) => (
                 <Box
                     key={`carousel-item-${index}`} // Ensure unique key
