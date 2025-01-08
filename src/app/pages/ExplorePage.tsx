@@ -79,7 +79,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const [conditionId, setConditionId] = useState("");
     const [orderBy, setorderBy] = useState("");
     const [priceChanged, setPriceChanged] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchCategories = async () => {
         const res = await fetch("http://localhost:3000/api/categories");
@@ -101,8 +101,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         setIsLoading(true);
         const params = new URLSearchParams();
         params.set("pageSize", "8");
-        if (q) params.set("q", q);
-        else params.set("q", "");
+        params.set("q", q);
         if (currentPage) params.set("page", currentPage.toString());
         if (categoryId || categoryId == "0")
             params.set("categoryId", categoryId);
@@ -138,13 +137,15 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     };
 
     useEffect(() => {
+        console.log(q);
         console.log("Something changed");
-        fetchItems(page);
+        if (q.length >= 2) fetchItems(page);
     }, [page, categoryId, priceChanged, conditionId, orderBy]);
     useEffect(() => {
+        console.log(q);
         fetchCategories();
         fetchRandomItems(); //ako stavimo da se dohvaćaju oglasi koji su ista kategorija, onda stavi useEffect kad god se promijeni items
-        fetchItems(page);
+        if (q.length >= 2) fetchItems(page);
     }, []);
 
     const handleCategoryIdChange = (event: SelectChangeEvent<string>) => {

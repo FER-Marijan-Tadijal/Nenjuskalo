@@ -1,12 +1,15 @@
 import React from "react";
 import ItemView from "@/app/pages/ItemViewPage";
-import { useSearchParams } from "next/navigation";
 import { auth } from "@/app/auth"; // Adjust the path to your `auth` helper
 
-export default async function Page() {
+type PageProps = {
+    params: {
+        id: string; // Define the type of your route parameter
+    };
+};
+
+export default async function Page({ params }: PageProps) {
     const session = await auth(); // Fetch session server-side
-    const searchParams = useSearchParams();
-    const itemid = searchParams.get("id"); // Get "id" from the query string
-    const id = typeof itemid === "string" ? itemid : "";
+    const { id } = params;
     return <ItemView itemId={id} session={session} />;
 }

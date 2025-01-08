@@ -31,7 +31,6 @@ const ItemThumbnail = ({ user, session }: Props) => {
         }
     }, []);
 
-    console.log(user);
     return (
         <Box
             sx={{
@@ -109,10 +108,10 @@ const ItemThumbnail = ({ user, session }: Props) => {
                 {check && (
                     <Button
                         variant="contained"
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 2, backgroundColor: "grey" }}
                         href={`/message/${user.id}`}
                     >
-                        Pošalji poruku
+                        Ažuriraj oglas
                     </Button>
                 )}
                 {!check && (
@@ -122,6 +121,18 @@ const ItemThumbnail = ({ user, session }: Props) => {
                         href={`/message/${user.id}`}
                     >
                         Pošalji poruku
+                    </Button>
+                )}
+                {!check && (
+                    <Button
+                        variant="contained"
+                        sx={{
+                            mt: 2,
+                            backgroundColor: theme.palette.accent.main,
+                        }}
+                        href={`/`}
+                    >
+                        Kupi
                     </Button>
                 )}
             </Box>

@@ -130,7 +130,7 @@ const ExploreItem = ({
                         <Button
                             variant="accentBtn"
                             fullWidth
-                            href={`/item?id=${itemId}`}
+                            href={`/item/${itemId}`}
                         >
                             View Details
                         </Button>
