@@ -82,7 +82,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const fetchCategories = async () => {
-        const res = await fetch("http://localhost:3000/api/categories");
+        const res = await fetch("/api/categories");
         const data = await res.json();
         setCategories(data);
     };
@@ -91,7 +91,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         //console.log(items[0].belongsto[0].categoryid);
         const randoms = await fetch(
             //`http://localhost:3000/api/getCategory?id=${items[0].belongsto[0].categoryid}`
-            `http://localhost:3000/api/random?n=5`
+            `/api/random?n=5`
         );
         const randomData = await randoms.json();
         setRandomItems(randomData);
@@ -111,7 +111,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         console.log(params.toString());
         try {
             const res = await fetch(
-                `http://localhost:3000/api/search?${params}`
+                `/api/search?${params}`
             );
             const data = await res.json();
             console.log(data);
