@@ -67,7 +67,7 @@ const ExploreItem = ({
                 <Box
                     sx={{
                         width: checkPage ? "55%" : "90%",
-                        height: "150px",
+                        height: "160px",
                         margin: checkPage ? 0.7 : 0,
                         padding: 2,
                         display: "flex",
@@ -130,7 +130,7 @@ const ExploreItem = ({
                         <Button
                             variant="accentBtn"
                             fullWidth
-                            href={`/item?id=${itemId}`}
+                            href={`/item/${itemId}`}
                         >
                             View Details
                         </Button>

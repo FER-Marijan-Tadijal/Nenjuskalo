@@ -17,6 +17,7 @@ import theme from "../styles/theme";
 import { ThemeProvider } from "@mui/material";
 import ExplorePriceRange from "../components/ExploreComponents/ExplorePriceRange";
 import ExploreRelevantItems from "../components/ExploreComponents/ExploreRelevantItems";
+import { CircularProgress } from "@mui/material";
 
 const conditions = [
     { name: "novo", id: 0 },
@@ -78,6 +79,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const [conditionId, setConditionId] = useState("");
     const [orderBy, setorderBy] = useState("");
     const [priceChanged, setPriceChanged] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const fetchCategories = async () => {
         const res = await fetch("http://localhost:3000/api/categories");
@@ -96,46 +98,52 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     };
 
     const fetchItems = async (currentPage: number) => {
+        setIsLoading(true);
         const params = new URLSearchParams();
         params.set("pageSize", "8");
-        if (q) params.set("q", q);
-        else params.set("q", "");
-        if (currentPage) params.set("page", currentPage.toString());
-        if (categoryId || categoryId == "0")
-            params.set("categoryId", categoryId);
-        if (conditionId || conditionId == "0")
-            params.set("conditionId", conditionId);
-        if (orderBy) params.set("orderBy", orderBy);
-        if (minPrice) params.set("minPrice", minPrice);
-        if (maxPrice) params.set("maxPrice", maxPrice);
+        params.set("q", q);
+        params.set("page", currentPage.toString());
+        params.set("categoryId", categoryId);
+        params.set("conditionId", conditionId);
+        params.set("orderBy", orderBy);
+        params.set("minPrice", minPrice);
+        params.set("maxPrice", maxPrice);
         console.log(params.toString());
-        const res = await fetch(`http://localhost:3000/api/search?${params}`);
-        //const res = await fetch(
-        //    `http://localhost:3000/api/search?q=Ku&page=1&orderBy=newest&minPrice=0&maxPrice=20000000`
-        //);
-        const data = await res.json();
-
-        if (Array.isArray(data.data)) {
-            setItems(data.data);
-        } else {
+        try {
+            const res = await fetch(
+                `http://localhost:3000/api/search?${params}`
+            );
+            const data = await res.json();
+            console.log(data);
+            if (Array.isArray(data.data)) {
+                setItems(data.data);
+            } else {
+                setItems([]);
+            }
+            const pageNum = Math.round(data.totalCount / 10);
+            if (pageNum) {
+                setTotalPages(pageNum);
+            } else {
+                setTotalPages(1);
+            }
+        } catch (error) {
+            console.error("Error fetching data:", error);
             setItems([]);
-        }
-        const pageNum = Math.round(data.totalCount / 10);
-        if (pageNum) {
-            setTotalPages(pageNum);
-        } else {
-            setTotalPages(1);
+        } finally {
+            setIsLoading(false);
         }
     };
 
     useEffect(() => {
+        console.log(q);
         console.log("Something changed");
-        fetchItems(page);
+        if (q.length >= 2) fetchItems(page);
     }, [page, categoryId, priceChanged, conditionId, orderBy]);
     useEffect(() => {
+        console.log(q);
         fetchCategories();
         fetchRandomItems(); //ako stavimo da se dohvaćaju oglasi koji su ista kategorija, onda stavi useEffect kad god se promijeni items
-        fetchItems(page);
+        if (q.length >= 2) fetchItems(page);
     }, []);
 
     const handleCategoryIdChange = (event: SelectChangeEvent<string>) => {
@@ -170,7 +178,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     return (
         <>
             <ThemeProvider theme={theme}>
-                {items && (
+                {!isLoading ? (
                     <Box
                         sx={{
                             display: "flex",
@@ -296,6 +304,16 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                         </Container>
                         <ExploreRelevantItems randomItems={randomItems} />
                     </Box>
+                ) : (
+                    <CircularProgress
+                        sx={{
+                            width: "100vw",
+                            height: "100vh",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignContent: "center",
+                        }}
+                    ></CircularProgress>
                 )}
             </ThemeProvider>
         </>

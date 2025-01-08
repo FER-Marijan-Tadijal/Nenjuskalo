@@ -108,10 +108,10 @@ const CategoryViewPage = ({ categoryId }: Props) => {
     const fetchItems = async (currentPage: number) => {
         const params = new URLSearchParams();
         params.set("q", "");
-        if (currentPage) params.set("page", currentPage.toString());
+        params.set("page", currentPage.toString());
         params.set("categoryId", categoryId);
         params.set("pageSize", "12");
-        if (orderBy) params.set("orderBy", orderBy);
+        params.set("orderBy", orderBy);
         console.log(params.toString());
         const res = await fetch(`http://localhost:3000/api/search?${params}`);
         const data = await res.json();
@@ -180,7 +180,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                         >
                             <Typography variant="h4">
                                 {" "}
-                                Category: "{selectedCategory.name}"
+                                Kategorija: "{selectedCategory.name}"
                             </Typography>
 
                             <Box

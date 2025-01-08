@@ -32,17 +32,40 @@ const bodyStyle = {
     lineHeight: "1.6",
 };
 
+type Category = {
+    id: number;
+    name: string;
+    supercategoryid: string | null;
+};
+
 export default function HomePage() {
-    
     // Fetch 4 random items
 
     const [randomItems, setRandomItems] = useState([]);
+    const [categories, setCategories] = useState<Category[]>();
+
+    const getCategories = async () => {
+        try {
+            const response = await fetch(
+                "http://localhost:3000/api/categories",
+                { method: "GET" }
+            );
+
+            if (response) {
+                const categories = await response.json();
+                setCategories(categories);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
 
     useEffect(() => {
         async function fetchRandomItems() {
             try {
                 const response = await fetch("/api/random?n=4");
-                if (!response.ok) throw new Error("Failed to fetch random items");
+                if (!response.ok)
+                    throw new Error("Failed to fetch random items");
 
                 const data = await response.json();
                 setRandomItems(data);
@@ -52,11 +75,12 @@ export default function HomePage() {
         }
 
         fetchRandomItems();
+        getCategories();
     }, []);
 
     // Fetch 4 newest items
 
-    const [newestItems, setNewestItems] = useState<any[]>([]); 
+    const [newestItems, setNewestItems] = useState<any[]>([]);
     const [isLoading, setIsLoading] = useState(true); // Loading state
 
     useEffect(() => {
@@ -67,7 +91,7 @@ export default function HomePage() {
                     throw new Error("Failed to fetch newest items");
                 }
                 const data = await response.json();
-                setNewestItems(data); 
+                setNewestItems(data);
             } catch (error) {
                 console.error("Error fetching newest items:", error);
             } finally {
@@ -147,47 +171,44 @@ export default function HomePage() {
                     Istraži Kategorije
                 </Typography>
                 <Grid container spacing={4} justifyContent="center">
-                    {[
-                        { label: "Auto Moto" },
-                        { label: "Nekretnine" },
-                        { label: "Nekretnine" },
-                        { label: "Pijac" },
-                        { label: "Odjevni predmeti" },
-                        { label: "Militarija" },
-                    ].map((category, index) => (
-                        <Grid
-                            item
-                            xs={6}
-                            sm={4}
-                            md={2}
-                            key={index}
-                            sx={{ textAlign: "center" }}
-                        >
-                            <Button
-                                variant="contained"
-                                sx={{
-                                    width: "100%",
-                                    height: "80px",
-                                    borderRadius: "16px",
-                                    fontSize: "1rem",
-                                    fontWeight: "600",
-                                    fontFamily: "'Poppins', sans-serif",
-                                    color: "white",
-                                    backgroundColor: "#003049",
-                                    boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.2)",
-                                    "&:hover": {
-                                        backgroundColor: "#1c4a6e",
-                                        transform: "scale(1.05)",
-                                        boxShadow:
-                                            "0px 6px 15px rgba(0, 0, 0, 0.3)",
-                                    },
-                                    transition: "transform 0.2s ease-in-out",
-                                }}
+                    {categories &&
+                        categories.map((category, index) => (
+                            <Grid
+                                item
+                                xs={6}
+                                sm={4}
+                                md={2}
+                                key={index}
+                                sx={{ textAlign: "center" }}
                             >
-                                {category.label}
-                            </Button>
-                        </Grid>
-                    ))}
+                                <Button
+                                    variant="contained"
+                                    href={`categories/${category.id}`}
+                                    sx={{
+                                        width: "100%",
+                                        height: "80px",
+                                        borderRadius: "16px",
+                                        fontSize: "1rem",
+                                        fontWeight: "600",
+                                        fontFamily: "'Poppins', sans-serif",
+                                        color: "white",
+                                        backgroundColor: "#003049",
+                                        boxShadow:
+                                            "0px 4px 12px rgba(0, 0, 0, 0.2)",
+                                        "&:hover": {
+                                            backgroundColor: "#1c4a6e",
+                                            transform: "scale(1.05)",
+                                            boxShadow:
+                                                "0px 6px 15px rgba(0, 0, 0, 0.3)",
+                                        },
+                                        transition:
+                                            "transform 0.2s ease-in-out",
+                                    }}
+                                >
+                                    {category.name}
+                                </Button>
+                            </Grid>
+                        ))}
                 </Grid>
             </Box>
 
@@ -206,7 +227,7 @@ export default function HomePage() {
                     Najnoviji Proizvodi
                 </Typography>
                 <Grid container spacing={4} justifyContent="center">
-                {newestItems.length > 0 ? (
+                    {newestItems.length > 0 ? (
                         newestItems.map((item: any) => (
                             <Grid item xs={12} sm={6} md={3} key={item.id}>
                                 <Card>
@@ -258,7 +279,7 @@ export default function HomePage() {
                                                     bgcolor: "#E5A800",
                                                 },
                                             }}
-                                            href={`/item?id=${item.id}`}
+                                            href={`/item/${item.id}`}
                                         >
                                             Detalji
                                         </Button>
@@ -329,7 +350,8 @@ export default function HomePage() {
                                                 marginTop: "8px",
                                             }}
                                         >
-                                            Cijena: {item.askingprice}€                                       </Typography>
+                                            Cijena: {item.askingprice}€{" "}
+                                        </Typography>
                                         <Button
                                             variant="contained"
                                             fullWidth
@@ -342,7 +364,7 @@ export default function HomePage() {
                                                     bgcolor: "#E5A800",
                                                 },
                                             }}
-                                            href={`/item?id=${item.id}`}
+                                            href={`/item/${item.id}`}
                                         >
                                             Detalji
                                         </Button>

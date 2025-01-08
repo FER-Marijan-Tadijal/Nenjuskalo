@@ -1,7 +1,9 @@
-import React, { useContext } from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
+import theme from "@/app/styles/theme";
+import type { Session } from "next-auth";
 
 type Props = {
     user: {
@@ -18,10 +20,17 @@ type Props = {
         registerTime: string;
         role: string;
     };
+    session: Session | null;
 };
 
-const ItemThumbnail = ({ user }: Props) => {
-    console.log(user);
+const ItemThumbnail = ({ user, session }: Props) => {
+    const [check, setCheck] = useState(false);
+    useEffect(() => {
+        if (session?.user?.id == user.id) {
+            setCheck(true);
+        }
+    }, []);
+
     return (
         <Box
             sx={{
@@ -96,13 +105,36 @@ const ItemThumbnail = ({ user }: Props) => {
                 <Typography variant="body1">
                     • Adresa: {user.city} {user.street} {user.houseno}
                 </Typography>
-                <Button
-                    variant="contained"
-                    sx={{ mt: 2 }}
-                    href={`/message/${user.id}`}
-                >
-                    Pošalji poruku
-                </Button>
+                {check && (
+                    <Button
+                        variant="contained"
+                        sx={{ mt: 2, backgroundColor: "grey" }}
+                        href={`/message/${user.id}`}
+                    >
+                        Ažuriraj oglas
+                    </Button>
+                )}
+                {!check && (
+                    <Button
+                        variant="contained"
+                        sx={{ mt: 2 }}
+                        href={`/message/${user.id}`}
+                    >
+                        Pošalji poruku
+                    </Button>
+                )}
+                {!check && (
+                    <Button
+                        variant="contained"
+                        sx={{
+                            mt: 2,
+                            backgroundColor: theme.palette.accent.main,
+                        }}
+                        href={`/`}
+                    >
+                        Kupi
+                    </Button>
+                )}
             </Box>
         </Box>
     );
