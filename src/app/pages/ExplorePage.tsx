@@ -102,14 +102,12 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         const params = new URLSearchParams();
         params.set("pageSize", "8");
         params.set("q", q);
-        if (currentPage) params.set("page", currentPage.toString());
-        if (categoryId || categoryId == "0")
-            params.set("categoryId", categoryId);
-        if (conditionId || conditionId == "0")
-            params.set("conditionId", conditionId);
-        if (orderBy) params.set("orderBy", orderBy);
-        if (minPrice) params.set("minPrice", minPrice);
-        if (maxPrice) params.set("maxPrice", maxPrice);
+        params.set("page", currentPage.toString());
+        params.set("categoryId", categoryId);
+        params.set("conditionId", conditionId);
+        params.set("orderBy", orderBy);
+        params.set("minPrice", minPrice);
+        params.set("maxPrice", maxPrice);
         console.log(params.toString());
         try {
             const res = await fetch(

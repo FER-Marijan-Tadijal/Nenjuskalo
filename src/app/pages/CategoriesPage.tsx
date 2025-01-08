@@ -79,7 +79,6 @@ const CategoriesPage = ({ categories }: Props) => {
         params.set("page", "1");
         params.set("pageSize", "1");
         params.set("categoryId", categoryId.toString());
-        //params.set("limit", "1")
         console.log(params.toString());
         try {
             const res = await fetch(
