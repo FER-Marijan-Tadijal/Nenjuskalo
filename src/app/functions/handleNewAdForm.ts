@@ -17,7 +17,7 @@ export async function HandleNewAdForm(formData: FormData) {
                 id: id != null ? id + 1 : -1,
                 title: formData.get("title") as string,
                 description: formData.get("description") as string,
-                askingprice: parseInt(formData.get("askingprice") as string),
+                askingprice: parseFloat(formData.get("askingprice") as string),
                 sellerid: session.user?.id != undefined ? session.user?.id : "greska",
                 conditionid: parseInt(formData.get("condition") as string)
 
@@ -27,6 +27,13 @@ export async function HandleNewAdForm(formData: FormData) {
             data: {
                 categoryid: parseInt(formData.get("category") as string),
                 itemid: id != null ? id + 1 : -1
+            }
+        })
+        await prisma.itemchangestate.create({
+            data: {
+                itemid: id != null ? id + 1 : -1,
+                stateid: 1,
+                changetime: new Date(),
             }
         })
     }
