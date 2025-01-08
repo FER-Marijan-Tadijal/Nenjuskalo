@@ -93,7 +93,11 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                 }}
             >
                 {item && user && (
-                    <ItemThumbnail user={user} session={session} />
+                    <ItemThumbnail
+                        itemId={itemId}
+                        user={user}
+                        session={session}
+                    />
                 )}
                 {item && user && <ItemTitle item={item} />}
                 {item && user && (

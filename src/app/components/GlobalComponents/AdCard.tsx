@@ -92,7 +92,7 @@ const ExploreItem = ({
                         }}
                     >
                         <img
-                            src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fG5hdHVyZXxlbnwwfHx8fDE2MTg4NzU1MjA&ixlib=rb-1.2.1&q=80&w=400"
+                            src={`/api/image?id=${itemId}&index=0`}
                             alt="Nature image from Unsplash"
                             style={{
                                 width: "100%",
