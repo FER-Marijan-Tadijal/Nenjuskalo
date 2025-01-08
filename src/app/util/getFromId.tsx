@@ -39,6 +39,18 @@ export async function getItemsFromUser(Id: string) {
     const itemList = await prisma.item.findMany({
         where: {
             sellerid: Id,
+        },
+        include: {
+            itemchangestate: {
+                orderBy: {
+                    changetime: 'desc',
+                },
+                select: {
+                    stateid: true,
+                    changetime: true,
+                },
+                take: 1
+            }
         }
     })
 

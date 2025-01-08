@@ -7,6 +7,11 @@ import Link from "next/link";
 import type { Session } from "next-auth";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import ProfileEditForm from "@/app/components/forms/ProfileEditForm";
+import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
+import { item } from "@prisma/client";
+import { stateEnum } from "@/app/enums/stateEnum";
+import MarkAsSoldForm from "@/app/components/forms/MarkAsSoldForm";
 
 // Custom font styles
 const titleStyle = {
@@ -177,6 +182,8 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 />
             </Box>
 
+            <ProfileEditForm id={session.user?.id || "testek"}/>
+
             {/* User Ads */}
             <Box sx={{ width: "100%", marginTop: "40px" }}>
                 <Typography
@@ -234,6 +241,17 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                             }}
                                         >
                                             {item.title}
+                                        </Typography>
+                                        <Typography
+                                            variant="h6"
+                                            component="div"
+                                            sx={{
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontWeight: "600",
+                                                color: "#003049",
+                                            }}
+                                        >
+                                            Stanje: {stateEnum[item.itemchangestate[0].stateid]}
                                         </Typography>
                                         <Typography
                                             variant="body2"
