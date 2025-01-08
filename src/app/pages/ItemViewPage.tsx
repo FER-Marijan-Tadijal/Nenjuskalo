@@ -58,7 +58,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
     };
     const fetchUser = async (userId: string) => {
         const res = await fetch(
-            `http://localhost:3000/api/getUser?id=${userId}`
+            `/api/getUser?id=${userId}`
         );
         const userData = await res.json();
         setUser(userData);
