@@ -80,12 +80,9 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
             <Container
                 sx={{
                     width: "950px",
-                    //backgroundColor: "#D9F0FF",
                     color: theme.palette.textBlack.main,
                     height: "100vh",
                     padding: 2,
-                    marginBottom: 20,
-                    //paddingBottom: 90,
                     marginTop: 7,
                     display: "flex",
                     flexDirection: "column",
@@ -93,7 +90,11 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                 }}
             >
                 {item && user && (
-                    <ItemThumbnail user={user} session={session} />
+                    <ItemThumbnail
+                        itemId={itemId}
+                        user={user}
+                        session={session}
+                    />
                 )}
                 {item && user && <ItemTitle item={item} />}
                 {item && user && (

@@ -21,10 +21,12 @@ type Props = {
         role: string;
     };
     session: Session | null;
+    itemId: string;
 };
 
-const ItemThumbnail = ({ user, session }: Props) => {
+const ItemThumbnail = ({ user, session, itemId }: Props) => {
     const [check, setCheck] = useState(false);
+
     useEffect(() => {
         if (session?.user?.id == user.id) {
             setCheck(true);
@@ -42,49 +44,26 @@ const ItemThumbnail = ({ user, session }: Props) => {
             }}
         >
             <Box sx={{ width: "70%" }}>
-                <Carousel
-                    navButtonsAlwaysVisible
-                    navButtonsProps={{
-                        style: {
-                            backgroundColor: "rgba(0, 0, 0, 0.5)",
-                            color: "white",
-                        },
+                <Box
+                    sx={{
+                        position: "relative",
+                        width: "100%",
+                        height: "400px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        borderRadius: 2,
                     }}
-                    indicators={true}
                 >
-                    {[
-                        {
-                            image: "/images/banner1.jpg",
-                            title: "image1",
-                        },
-                        {
-                            image: "/images/banner2.jpg",
-                            title: "image2",
-                        },
-                    ].map((item, index) => (
-                        <Box
-                            key={index}
-                            sx={{
-                                position: "relative",
-                                width: "100%",
-                                height: "400px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                overflow: "hidden",
-                                borderRadius: 2,
-                            }}
-                        >
-                            <Image
-                                src={item.image}
-                                alt={item.title}
-                                layout="fill"
-                                objectFit="cover"
-                                priority
-                            />
-                        </Box>
-                    ))}
-                </Carousel>
+                    <Image
+                        src={`/api/image?id=${itemId}&index=0`}
+                        alt="item thumbnail image"
+                        layout="fill"
+                        objectFit="contain"
+                        priority
+                    />
+                </Box>
             </Box>
             <Box
                 sx={{
@@ -103,7 +82,7 @@ const ItemThumbnail = ({ user, session }: Props) => {
                     • Zemlja: {user.country}
                 </Typography>
                 <Typography variant="body1">
-                    • Adresa: {user.city} {user.street} {user.houseno}
+                    • Adresa: {user.city}, {user.street} {user.houseno}
                 </Typography>
                 {check && (
                     <Button
