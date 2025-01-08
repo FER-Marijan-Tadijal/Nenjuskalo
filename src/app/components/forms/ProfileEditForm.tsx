@@ -5,6 +5,7 @@ import React, { useEffect, useState } from "react";
 import { z } from "zod";
 import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid } from "@mui/material";
 import { HandleNewProfileForm } from "@/app/functions/handleNewProfileForm";
+import { redirect } from "next/navigation";
 
 const newProfileSchema = z.object({
     country: z.string().trim()
@@ -15,7 +16,7 @@ const newProfileSchema = z.object({
     houseno: z.string().trim().max(20, { message: "Ulični broj mora imati 20 znakova ili manje." })
 });
 
-export default function NewProfileForm() {
+export default function NewProfileForm({id} : {id : string}) {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const clientAction = async (formData: FormData) => {
@@ -37,6 +38,7 @@ export default function NewProfileForm() {
 
         setErrorMessage("Uspješno ste promijenili profilne podatke!");
         await HandleNewProfileForm(formData);
+        redirect("/profile")
     };
 
     return (
@@ -66,10 +68,11 @@ export default function NewProfileForm() {
             <form action={clientAction}>
                 <Grid container spacing={2}>
                     {/* Session user id that ought to have a default value inside! */}
-                    <TextField
+                    <input
                             required
                             type="hidden"
                             name="id"
+                            value={id}
                         />
 
                     {/* country */}

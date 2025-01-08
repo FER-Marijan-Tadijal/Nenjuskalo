@@ -2,7 +2,6 @@
 
 import { prisma } from "@/prisma";
 import { auth } from "@/app/auth";
-import { count } from "console";
 
 export async function HandleNewProfileForm(formData: FormData) {
 

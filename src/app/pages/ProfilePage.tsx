@@ -10,6 +10,8 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import ProfileEditForm from "@/app/components/forms/ProfileEditForm";
 import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
 import { item } from "@prisma/client";
+import { stateEnum } from "@/app/enums/stateEnum";
+import MarkAsSoldForm from "@/app/components/forms/MarkAsSoldForm";
 
 interface ProfilePageProps {
     session: Session | null; // Accepts session as a prop
@@ -161,7 +163,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 />
             </Box>
 
-            <ProfileEditForm />
+            <ProfileEditForm id={session.user?.id || "testek"}/>
 
             {/* User Ads */}
             <Box sx={{ mt: 6 }}>
@@ -178,7 +180,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 </Typography>
                 {userAds.length > 0 ? (
                     <Grid container spacing={4} justifyContent="center" sx={{ mt: 0 }}>
-                        {userAds.map((item: item) => (
+                        {userAds.map((item: any) => (
                             <Grid item xs={12} sm={6} md={3} key={item.id}>
                                 <Card>
                                     <CardMedia
@@ -198,6 +200,17 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                             }}
                                         >
                                             {item.title}
+                                        </Typography>
+                                        <Typography
+                                            variant="h6"
+                                            component="div"
+                                            sx={{
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontWeight: "600",
+                                                color: "#003049",
+                                            }}
+                                        >
+                                            Stanje: {stateEnum[item.itemchangestate[0].stateid]}
                                         </Typography>
                                         <Typography
                                             variant="body2"
@@ -235,6 +248,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                             Detalji
                                         </Button>
                                         <DeleteAdForm id={item.id} />
+                                        <MarkAsSoldForm id={item.id} />
                                     </CardContent>
                                 </Card>
                             </Grid>

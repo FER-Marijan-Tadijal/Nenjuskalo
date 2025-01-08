@@ -1,14 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { z } from "zod";
 import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid } from "@mui/material";
-import { HandleNewAdForm } from "@/app/functions/handleNewAdForm";
 import { HandleDeleteAdForm } from "@/app/functions/handleDeleteAdForm";
-
-const deleteAdSchema = z.object({
-    id: z.number().nonnegative({ message: "Id mora biti pozitivan." }),
-});
+import { redirect, RedirectType } from "next/navigation";
 
 export default function NewAdForm({id} : {id : number}) {
     const [errorMessage, setErrorMessage] = useState<string>("");
@@ -18,17 +13,8 @@ export default function NewAdForm({id} : {id : number}) {
             title: formData.get("id"),
         };
 
-        const result = deleteAdSchema.safeParse(deleteAd);
-        if (!result.success) {
-            const errors = result.error.issues
-                .map((issue) => `${issue.path[0]}: ${issue.message}`)
-                .join(". ");
-            setErrorMessage(errors);
-            return;
-        }
-
-        setErrorMessage("Uspješno ste izbrisali oglas!");
         await HandleDeleteAdForm(formData);
+        redirect("/profile");
     };
 
     return (
