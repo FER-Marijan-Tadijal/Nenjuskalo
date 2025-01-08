@@ -60,7 +60,7 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
                         src={`/api/image?id=${itemId}&index=0`}
                         alt="item thumbnail image"
                         layout="fill"
-                        objectFit="cover"
+                        objectFit="contain"
                         priority
                     />
                 </Box>
