@@ -72,7 +72,7 @@ export default function NewAdForm() {
         }
 
         const picturesHolder = document.getElementById("pictures"); // Replace with your HTML element ID
-        const picture = (picturesHolder as HTMLInputElement)?.files[0]);
+        const picture = (picturesHolder as HTMLInputElement)?.files[0];
 
         //const newFormData = new FormData()
         formData.append("picture", picture);

@@ -26,6 +26,10 @@ export async function HandleEditAdForm(formData: FormData) {
             data = await picture.bytes()
         }
 
+        let state = 0;
+        let stateAsStr = formData.get("state") as string;
+        if (stateAsStr == "publish") state = 1;
+
         await prisma.item.update({
             where: {
                 id: id,

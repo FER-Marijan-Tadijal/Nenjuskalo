@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { z } from "zod";
-import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid, RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { HandleEditAdForm } from "@/app/functions/handleEditAdForm";
 
 type Category = {
@@ -219,6 +219,20 @@ export default function EditAdForm({id} : {id : number}) {
                         id="pictures"
                         multiple
                     />
+
+                    {/* State (Draft or publish) */}
+                    <Grid item xs={12}>
+                        <FormControl>
+                            <RadioGroup
+                                aria-labelledby="state"
+                                defaultValue="publish"
+                                name="state"
+                            >
+                                <FormControlLabel value="publish" control={<Radio />} label="Objavi" />
+                                <FormControlLabel value="draft" control={<Radio />} label="Spremi kao Skicu" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Grid>
 
                     {/* Submit Button */}
                     <Grid item xs={12}>
