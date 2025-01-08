@@ -21,11 +21,6 @@ const titleStyle = {
     letterSpacing: "0.05em",
 };
 
-const subtitleStyle = {
-    fontFamily: "'Poppins', sans-serif",
-    fontWeight: "600",
-};
-
 const bodyStyle = {
     fontFamily: "'Roboto', sans-serif",
     fontWeight: "400",

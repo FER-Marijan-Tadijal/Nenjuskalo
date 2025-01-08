@@ -1,23 +1,13 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Container, Typography, Box, Button, Card, Grid, CardContent, CardMedia } from "@mui/material";
+import { Container, Typography, Box, Button, CircularProgress, Grid, Card, CardMedia, CardContent, Link } from "@mui/material";
 import { signIn, signOut } from "next-auth/react";
-import Link from "next/link";
 import type { Session } from "next-auth";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
-import ProfileEditForm from "@/app/components/forms/ProfileEditForm";
-import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
-import { stateEnum } from "@/app/enums/stateEnum";
-
-// Custom font styles
-const titleStyle = {
-    fontFamily: "'Poppins', sans-serif",
-    fontWeight: "700",
-    textTransform: "uppercase",
-    letterSpacing: "0.05em",
-};
+import ProfileEditForm from "../components/forms/ProfileEditForm";
+import { stateEnum } from "../enums/stateEnum";
 
 const subtitleStyle = {
     fontFamily: "'Poppins', sans-serif",
@@ -35,7 +25,18 @@ interface ProfilePageProps {
 }
 
 export default function ProfilePage({ session }: ProfilePageProps) {
+    // State for user ads
     const [userAds, setUserAds] = useState([]);
+
+    // State for profile loading and data
+    const [loadingProfile, setLoadingProfile] = useState(true);
+    const [profileData, setProfileData] = useState<{
+        id: string;
+        country: string | null;
+        city: string | null;
+        street: string | null;
+        houseno: string | null;
+    } | null>(null);
 
     // Fetch all user items
     useEffect(() => {
@@ -54,6 +55,29 @@ export default function ProfilePage({ session }: ProfilePageProps) {
         }
 
         fetchUserItems();
+    }, [session?.user?.id]);
+
+    // Fetch user profile data
+    useEffect(() => {
+        async function fetchProfileData() {
+            if (!session?.user?.id) return;
+
+            try {
+                setLoadingProfile(true);
+                const response = await fetch(`/api/getSiteUserInfo?id=${session.user.id}`);
+                if (!response.ok) throw new Error("Failed to fetch profile data");
+
+                const data = await response.json();
+                setProfileData(data);
+            } catch (error) {
+                console.error("Error fetching profile data:", error);
+                setProfileData(null);
+            } finally {
+                setLoadingProfile(false);
+            }
+        }
+
+        fetchProfileData();
     }, [session?.user?.id]);
 
     if (!session) {
@@ -142,8 +166,8 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 paddingBottom: "64px",
             }}
         >
+            {/* Welcome Section */}
             <Box>
-                {/* Welcome Section */}
                 <Typography
                     variant="h4"
                     sx={{
@@ -181,7 +205,117 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 />
             </Box>
 
-            <ProfileEditForm id={session.user?.id || "testek"} />
+            {/* Profile Data */}
+            <Box
+                sx={{
+                    mt: 4,
+                    p: 3,
+                    backgroundColor: "#003049",
+                    borderRadius: "12px",
+                    boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.15)",
+                    maxWidth: "600px",
+                    margin: "0 auto", // Center the box horizontally
+                    border: "3px solid #003049", // Add border
+                }}
+            >
+                
+                <Typography
+                    variant="h5"
+                    sx={{
+                        color: "white",
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        mb: 3,
+                        borderBottom: "2px solid #E5E5E5",
+                        pb: 1,
+                    }}
+                >
+                    Vaši Podaci
+                </Typography>
+                {loadingProfile ? (
+                    <Box
+                        sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            height: "100px",
+                        }}
+                    >
+                        <CircularProgress
+                            sx={{
+                                color: "#FFC300",
+                            }}
+                        />
+                    </Box>
+                ) : profileData ? (
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 2,
+                            fontFamily: "'Roboto', sans-serif",
+                        }}
+                    >
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                color: "white",
+                                fontSize: "1rem",
+                            }}
+                        >
+                            <strong>Država:</strong> {profileData.country || "Nije postavljeno"}
+                        </Typography>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                color: "white",
+                                fontSize: "1rem",
+                            }}
+                        >
+                            <strong>Grad:</strong> {profileData.city || "Nije postavljeno"}
+                        </Typography>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                color: "white",
+                                fontSize: "1rem",
+                            }}
+                        >
+                            <strong>Ulica:</strong> {profileData.street || "Nije postavljeno"}
+                        </Typography>
+                        <Typography
+                            variant="body1"
+                            sx={{
+                                color: "white",
+                                fontSize: "1rem",
+                            }}
+                        >
+                            <strong>Kućni Broj:</strong> {profileData.houseno || "Nije postavljeno"}
+                        </Typography>
+                    </Box>
+                ) : (
+                    <Typography
+                        variant="body1"
+                        sx={{
+                            color: "gray",
+                            textAlign: "center",
+                            fontSize: "1rem",
+                            mt: 2,
+                        }}
+                    >
+                        Podaci nisu dostupni.
+                    </Typography>
+                )}
+            </Box>
+
+            <Box
+                sx={{
+                    width: "100%",
+                    borderBottom: "2px solid #003049",
+                    my: 4,
+                }}
+            /> 
 
             {/* User Ads */}
             <Box sx={{ width: "100%", marginTop: "40px" }}>
@@ -306,10 +440,11 @@ export default function ProfilePage({ session }: ProfilePageProps) {
 
             {/* New Ad Button */}
             <Box sx={{ mt: 4 }}>
-                <Link href="/newAd" passHref>
+                <Link href="/newAd">
                     <Button
                         variant="contained"
                         sx={{
+                            mb: 3,
                             bgcolor: "#003049",
                             color: "#FFC300",
                             fontFamily: "'Poppins', sans-serif",
@@ -325,6 +460,16 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 </Link>
             </Box>
 
+            <Box
+                sx={{
+                    width: "100%",
+                    borderBottom: "2px solid #003049",
+                    my: 4,
+                }}
+            />  
+
+            <ProfileEditForm id={session.user?.id || "testek"} />
+            
             {/* Sign Out Button */}
             <Box sx={{ mt: 3.5 }}>
                 <Button
