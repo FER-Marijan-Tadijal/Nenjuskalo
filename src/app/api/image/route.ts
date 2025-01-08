@@ -1,14 +1,5 @@
 import { prisma } from "@/prisma";
 
-// All the squigglies are OK because parseInt does not throw error exceptions.
-
-const defaultPic = (await prisma.picture.findFirst({
-    where: {
-        itemid: 0,
-        index: 0,
-    }
-}))?.picdata
-
 export async function GET(request: Request) {
     let reqURL = new URL(request.url)
     const idAsString = (reqURL.searchParams.get('id') || "0");
@@ -17,8 +8,15 @@ export async function GET(request: Request) {
     }
     const indexAsString = (reqURL.searchParams.get('index') || "0");
     if (isNaN(parseInt(indexAsString))) {
-        
+        return Response.json({ message: 'Please provide an id', status: 400 });
     }
+
+    const defaultPic = (await prisma.picture.findFirst({
+        where: {
+            itemid: 0,
+            index: 0,
+        }
+    }))?.picdata
 
     let id = parseInt(idAsString);
     let index = parseInt(indexAsString);

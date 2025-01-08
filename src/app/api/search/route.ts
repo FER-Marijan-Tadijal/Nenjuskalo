@@ -29,12 +29,12 @@ export async function GET(request: Request) {
 
     const orderByClause =
         orderBy === orderByEnum.newest
-            ? { itemchangestate: { changetime: 'desc' } }
+            ? {id: 'desc'}
             : orderBy === orderByEnum.oldest
-                ? { itemchangestate: { changetime: 'asc' } }
+                ? {id: 'asc'}
                 : orderBy === orderByEnum.highestPrice
-                    ? { askingprice: 'desc' }
-                    : { askingprice: 'asc' };
+                    ? {askingprice: 'desc'}
+                    : {askingprice: 'asc'};
 
     const query: Prisma.itemFindManyArgs = {
         include: {
