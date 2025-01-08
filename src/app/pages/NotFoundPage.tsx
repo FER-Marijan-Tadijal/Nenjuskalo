@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { Box, Typography, Button, ThemeProvider } from "@mui/material";
-import Link from "next/link";
 import theme from "../styles/theme";
 
 const NotFoundPage = () => {

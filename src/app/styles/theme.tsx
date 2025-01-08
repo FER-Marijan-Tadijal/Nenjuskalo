@@ -22,6 +22,12 @@ const theme = createTheme({
         textWhite: {
             main: "#F1E9DA", // White for dark background
         },
+        green: {
+            main: "#D4EDDA", // Success color
+        },
+        red: {
+            main: "#d95763", // Failure color
+        },
         cardHover: {
             main: "#FAF3E0",
         },

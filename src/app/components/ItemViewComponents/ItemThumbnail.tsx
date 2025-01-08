@@ -103,7 +103,7 @@ const ItemThumbnail = ({ user, session }: Props) => {
                     • Zemlja: {user.country}
                 </Typography>
                 <Typography variant="body1">
-                    • Adresa: {user.city} {user.street} {user.houseno}
+                    • Adresa: {user.city}, {user.street} {user.houseno}
                 </Typography>
                 {check && (
                     <Button
