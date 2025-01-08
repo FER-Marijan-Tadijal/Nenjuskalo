@@ -6,7 +6,7 @@ import {Prisma} from "@prisma/client";
 
 export async function GET(request: Request) {
     const url = new URL(request.url);
-    const searchTerm = url.searchParams.get('q') || "";
+    const searchTerm = url.searchParams.get('q') || undefined;
     const minPrice = parseFloat(url.searchParams.get('minPrice') || '0');
     const maxPrice = parseFloat(url.searchParams.get('maxPrice') || '2147483646');
     const orderBy = (url.searchParams.get('orderBy') || orderByEnum.newest) as orderByEnum;
@@ -15,16 +15,20 @@ export async function GET(request: Request) {
     const page = parseInt(url.searchParams.get('page') || '1');
     const pageSize = parseInt(url.searchParams.get('pageSize') || '10');
 
-    const whereClause = {
-        OR: [
-            {title: {contains: searchTerm, mode: 'insensitive',}},
-            {description: {contains: searchTerm, mode: 'insensitive',}},
-        ],
+    const whereClause: Prisma.itemWhereInput = {
         AND: [
+            ...(searchTerm
+                ? [{
+                    OR: [
+                        {title: {contains: searchTerm, mode: 'insensitive'}},
+                        {description: {contains: searchTerm, mode: 'insensitive'}}
+                    ]
+                }]
+                : []),
             {askingprice: {gte: minPrice, lte: maxPrice}},
-            conditionId !== -1 ? {conditionid: {equals: conditionId}} : {},
-            categoryId !== -1 ? {belongsto: {some: {categoryid: categoryId}}} : {},
-        ],
+            ...(conditionId !== -1 ? [{conditionid: conditionId}] : []),
+            ...(categoryId !== -1 ? [{belongsto: {some: {categoryid: categoryId}}}] : [])
+        ]
     };
 
     const orderByClause =
@@ -36,6 +40,7 @@ export async function GET(request: Request) {
                     ? {askingprice: 'desc'}
                     : {askingprice: 'asc'};
 
+    // try {
     const query: Prisma.itemFindManyArgs = {
         include: {
             belongsto: {
@@ -51,8 +56,8 @@ export async function GET(request: Request) {
                     stateid: true,
                     changetime: true,
                 },
-                take: 1,
-            }
+                take: 1
+            } || []
         },
         where: whereClause,
         orderBy: orderByClause,
@@ -65,10 +70,26 @@ export async function GET(request: Request) {
         prisma.item.count({where: query.where})
     ]);
 
-    if (items.length === 0) {
+    const filteredItems = items.filter(item => item.itemchangestate[0].stateid === stateEnum.active);
+    if (filteredItems.length === 0) {
         return NextResponse.json({message: 'No items found', status: 404});
     } else {
-        const filteredItems = items.filter(item => item.itemchangestate[0].stateid === stateEnum.active);
         return NextResponse.json({data: filteredItems, totalCount: count});
     }
+    // } catch (err: unknown) {
+    //     return NextResponse.json({
+    //         error: err,
+    //         searchTerm,
+    //         minPrice,
+    //         maxPrice,
+    //         orderBy,
+    //         categoryId,
+    //         conditionId,
+    //         page,
+    //         pageSize,
+    //         whereClause,
+    //         orderByClause,
+    //         status: 500
+    //     });
+    // }
 }
