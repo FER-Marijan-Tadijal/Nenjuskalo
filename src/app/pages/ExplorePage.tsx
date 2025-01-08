@@ -117,6 +117,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                 `http://localhost:3000/api/search?${params}`
             );
             const data = await res.json();
+            console.log(data);
             if (Array.isArray(data.data)) {
                 setItems(data.data);
             } else {
