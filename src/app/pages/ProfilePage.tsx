@@ -9,9 +9,7 @@ import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import ProfileEditForm from "@/app/components/forms/ProfileEditForm";
 import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
-import { item } from "@prisma/client";
 import { stateEnum } from "@/app/enums/stateEnum";
-import MarkAsSoldForm from "@/app/components/forms/MarkAsSoldForm";
 
 // Custom font styles
 const titleStyle = {
@@ -178,11 +176,12 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                         borderRadius: "50%",
                         mt: 4,
                         boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+                        mb: 2,
                     }}
                 />
             </Box>
 
-            <ProfileEditForm id={session.user?.id || "testek"}/>
+            <ProfileEditForm id={session.user?.id || "testek"} />
 
             {/* User Ads */}
             <Box sx={{ width: "100%", marginTop: "40px" }}>
@@ -193,7 +192,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                         fontFamily: "'Poppins', sans-serif",
                         fontWeight: "bold",
                         textAlign: "center",
-                        mb : 1
+                        mb: 1,
                     }}
                 >
                     Vaši Oglasi:
@@ -251,7 +250,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                                 color: "#003049",
                                             }}
                                         >
-                                            Stanje: {stateEnum[item.itemchangestate[0].stateid]}
+                                            Stanje: {item.itemchangestate?.[0]?.stateid ? stateEnum[item.itemchangestate[0].stateid] : "Nije definirano"}
                                         </Typography>
                                         <Typography
                                             variant="body2"
