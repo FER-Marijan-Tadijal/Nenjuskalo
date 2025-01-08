@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { z } from "zod";
-import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid, Input } from "@mui/material";
 import { HandleNewAdForm } from "@/app/functions/handleNewAdForm";
 
 type Category = {
@@ -69,6 +69,12 @@ export default function NewAdForm() {
             setErrorMessage(errors);
             return;
         }
+
+        const picturesHolder = document.getElementById("pictures"); // Replace with your HTML element ID
+        const pictures = (picturesHolder as HTMLInputElement)?.files[0];
+
+        //const newFormData = new FormData()
+        formData.append("pictures", pictures);
 
         setErrorMessage("Uspješno ste poslali oglas!");
         await HandleNewAdForm(formData);
@@ -197,6 +203,15 @@ export default function NewAdForm() {
                             </Typography>
                         </Grid>
                     )}
+
+                    { /* Picture button */}
+                    <label>Izaberi slike: </label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        id="pictures"
+                        multiple
+                    />
 
                     {/* Submit Button */}
                     <Grid item xs={12}>

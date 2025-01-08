@@ -11,7 +11,16 @@ export async function HandleNewAdForm(formData: FormData) {
             _max: { id: true }
         })
         var id = max_id._max.id;
-        //console.log(id);
+
+        let picture = formData.get("pictures") as File;
+        console.log("Picture:")
+        console.log(picture)
+
+        let data = null
+        if (picture != null) {
+            data = await picture.bytes()
+        }
+
         await prisma.item.create({
             data: {
                 id: id != null ? id + 1 : -1,
@@ -20,7 +29,6 @@ export async function HandleNewAdForm(formData: FormData) {
                 askingprice: parseFloat(formData.get("askingprice") as string),
                 sellerid: session.user?.id != undefined ? session.user?.id : "greska",
                 conditionid: parseInt(formData.get("condition") as string)
-
             }
         })
         await prisma.belongsto.create({
@@ -36,5 +44,15 @@ export async function HandleNewAdForm(formData: FormData) {
                 changetime: new Date(),
             }
         })
+        if (data != null) {
+            await prisma.picture.create({
+                data: {
+                    itemid: id != null ? id + 1 : -1,
+                    index: 0,
+                    picdata: data,
+                }
+            })
+        }
+        
     }
 }
