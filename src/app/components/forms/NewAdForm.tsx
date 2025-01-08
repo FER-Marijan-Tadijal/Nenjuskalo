@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { z } from "zod";
-import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid, Input } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid, Input, RadioGroup, FormControlLabel, Radio } from "@mui/material";
 import { HandleNewAdForm } from "@/app/functions/handleNewAdForm";
 
 type Category = {
@@ -28,6 +28,7 @@ export default function NewAdForm() {
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [categories, setCategories] = useState<Category[]>([]);
     const [conditions, setConditions] = useState<Condition[]>([]);
+    const states = ["Skica", "Objavi"]
 
     const getCategories = async () => {
         try {
@@ -71,10 +72,10 @@ export default function NewAdForm() {
         }
 
         const picturesHolder = document.getElementById("pictures"); // Replace with your HTML element ID
-        const pictures = (picturesHolder as HTMLInputElement)?.files[0];
+        const picture = (picturesHolder as HTMLInputElement)?.files[0]);
 
         //const newFormData = new FormData()
-        formData.append("pictures", pictures);
+        formData.append("picture", picture);
 
         setErrorMessage("Uspješno ste poslali oglas!");
         await HandleNewAdForm(formData);
@@ -189,6 +190,29 @@ export default function NewAdForm() {
                         </FormControl>
                     </Grid>
 
+                    { /* Picture button */}
+                    <label>Izaberi slike: </label>
+                    <input
+                        type="file"
+                        accept="image/*"
+                        id="pictures"
+                        multiple
+                    />
+
+                    {/* State (Draft or publish) */}
+                    <Grid item xs={12}>
+                        <FormControl>
+                            <RadioGroup
+                                aria-labelledby="state"
+                                defaultValue="publish"
+                                name="state"
+                            >
+                                <FormControlLabel value="publish" control={<Radio />} label="Objavi" />
+                                <FormControlLabel value="draft" control={<Radio />} label="Spremi kao Skicu" />
+                            </RadioGroup>
+                        </FormControl>
+                    </Grid>
+
                     {/* Error Message */}
                     {errorMessage && (
                         <Grid item xs={12}>
@@ -203,15 +227,6 @@ export default function NewAdForm() {
                             </Typography>
                         </Grid>
                     )}
-
-                    { /* Picture button */}
-                    <label>Izaberi slike: </label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        id="pictures"
-                        multiple
-                    />
 
                     {/* Submit Button */}
                     <Grid item xs={12}>

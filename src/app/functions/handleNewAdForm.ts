@@ -12,14 +12,16 @@ export async function HandleNewAdForm(formData: FormData) {
         })
         var id = max_id._max.id;
 
-        let picture = formData.get("pictures") as File;
-        console.log("Picture:")
-        console.log(picture)
+        let picture = formData.get("picture") as File;
 
         let data = null
         if (picture != null) {
             data = await picture.bytes()
         }
+
+        let state = 0;
+        let stateAsStr = formData.get("state") as string;
+        if (stateAsStr == "publish") state = 1;
 
         await prisma.item.create({
             data: {
@@ -40,7 +42,7 @@ export async function HandleNewAdForm(formData: FormData) {
         await prisma.itemchangestate.create({
             data: {
                 itemid: id != null ? id + 1 : -1,
-                stateid: 1,
+                stateid: state,
                 changetime: new Date(),
             }
         })
