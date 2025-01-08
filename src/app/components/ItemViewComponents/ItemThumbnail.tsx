@@ -1,7 +1,9 @@
-import React, { useContext } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import React from "react";
+import {Box, Button, Typography} from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
+import {Elements} from "@stripe/react-stripe-js";
+import {stripePromise} from "@/app/lib/stripe";
 
 type Props = {
     user: {
@@ -20,8 +22,25 @@ type Props = {
     };
 };
 
-const ItemThumbnail = ({ user }: Props) => {
-    console.log(user);
+const ItemThumbnail = ({user}: Props) => {
+    const handleCheckout = async () => {
+        const response = await fetch(`/api/createCheckoutSession`, {
+            method: "POST",
+            body: JSON.stringify({userId: user.id}), // TODO: Pass user info as needed
+        });
+
+        const session = await response.json();
+
+        const stripe = await stripePromise;
+        const {error} = await stripe!.redirectToCheckout({
+            sessionId: session.id,
+        });
+
+        if (error) {
+            console.error("Stripe Checkout error:", error);
+        }
+    };
+
     return (
         <Box
             sx={{
@@ -32,7 +51,7 @@ const ItemThumbnail = ({ user }: Props) => {
                 pb: 0,
             }}
         >
-            <Box sx={{ width: "70%" }}>
+            <Box sx={{width: "70%"}}>
                 <Carousel
                     navButtonsAlwaysVisible
                     navButtonsProps={{
@@ -98,14 +117,28 @@ const ItemThumbnail = ({ user }: Props) => {
                 </Typography>
                 <Button
                     variant="contained"
-                    sx={{ mt: 2 }}
+                    sx={{mt: 2}}
                     href={`/message/${user.id}`}
                 >
                     Pošalji poruku
+                </Button>
+                <Button
+                    variant="contained"
+                    sx={{mt: 2}}
+                    color="primary"
+                    onClick={handleCheckout}
+                >
+                    Kupi sada
                 </Button>
             </Box>
         </Box>
     );
 };
 
-export default ItemThumbnail;
+export default function ItemThumbnailWrapper(props: Props) {
+    return (
+        <Elements stripe={stripePromise}>
+            <ItemThumbnail {...props} />
+        </Elements>
+    );
+}
