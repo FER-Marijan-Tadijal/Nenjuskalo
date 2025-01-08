@@ -25,6 +25,7 @@ export async function GET(request: Request) {
                     ]
                 }]
                 : []),
+            {itemchangestate: {some: {stateid: stateEnum.active}}}, // check if item is active
             {askingprice: {gte: minPrice, lte: maxPrice}},
             ...(conditionId !== -1 ? [{conditionid: conditionId}] : []),
             ...(categoryId !== -1 ? [{belongsto: {some: {categoryid: categoryId}}}] : [])
@@ -70,10 +71,10 @@ export async function GET(request: Request) {
         prisma.item.count({where: query.where})
     ]);
 
-    const filteredItems = items.filter(item => item.itemchangestate[0].stateid === stateEnum.active);
-    if (filteredItems.length === 0) {
+    if (items.length === 0) {
         return NextResponse.json({message: 'No items found', status: 404});
     } else {
+        const filteredItems = items.filter(item => item.itemchangestate[0]?.stateid === stateEnum.active);
         return NextResponse.json({data: filteredItems, totalCount: count});
     }
     // } catch (err: unknown) {
