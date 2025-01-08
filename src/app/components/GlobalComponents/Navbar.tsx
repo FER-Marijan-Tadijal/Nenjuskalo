@@ -69,8 +69,8 @@ export default function Navbar({ session }: NavbarProps) {
 
     const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (!query.trim() || query.trim().length < 2) {
-            alert("Pojam za pretragu mora sadržavati barem dva znaka!");
+        if (!query.trim() || query.trim().length < 3) {
+            alert("Pojam za pretragu mora sadržavati barem tri znaka!");
             return;
         }
         router.push(`/explore?search=${encodeURIComponent(query)}`);

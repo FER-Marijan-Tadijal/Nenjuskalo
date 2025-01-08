@@ -137,14 +137,14 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     useEffect(() => {
         console.log(q);
         console.log("Something changed");
-        if (q.length >= 2) fetchItems(page);
+        if (q.length > 2) fetchItems(page);
     }, [page, categoryId, priceChanged, conditionId, orderBy]);
     useEffect(() => {
         console.log(q);
         fetchCategories();
         fetchRandomItems(); //ako stavimo da se dohvaćaju oglasi koji su ista kategorija, onda stavi useEffect kad god se promijeni items
-        if (q.length >= 2) fetchItems(page);
-    }, []);
+        if (q.length > 2) fetchItems(page);
+    }, [searchTerm]);
 
     const handleCategoryIdChange = (event: SelectChangeEvent<string>) => {
         setCategoryId(event.target.value);
