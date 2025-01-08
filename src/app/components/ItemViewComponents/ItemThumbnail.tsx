@@ -88,7 +88,7 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
                     <Button
                         variant="contained"
                         sx={{ mt: 2, backgroundColor: "grey" }}
-                        href={`/message/${user.id}`}
+                        href={`/editAd/${itemId}`}
                     >
                         Ažuriraj oglas
                     </Button>
