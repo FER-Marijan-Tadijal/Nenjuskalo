@@ -1,8 +1,12 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Box, Button, Typography} from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
 import {Elements} from "@stripe/react-stripe-js";
+import {handleCheckout} from "@/app/util/handleCheckout";
+import {Icon} from "@iconify/react";
+import theme from "@/app/styles/theme";
+import type {Session} from "next-auth";
 import {stripePromise} from "@/app/lib/stripe";
 
 type Props = {
@@ -20,26 +24,17 @@ type Props = {
         registerTime: string;
         role: string;
     };
+    session: Session | null;
+    itemId: string;
 };
 
-const ItemThumbnail = ({user}: Props) => {
-    const handleCheckout = async () => {
-        const response = await fetch(`/api/createCheckoutSession`, {
-            method: "POST",
-            body: JSON.stringify({userId: user.id}), // TODO: Pass user info as needed
-        });
-
-        const session = await response.json();
-
-        const stripe = await stripePromise;
-        const {error} = await stripe!.redirectToCheckout({
-            sessionId: session.id,
-        });
-
-        if (error) {
-            console.error("Stripe Checkout error:", error);
+const ItemThumbnail = ({user, session, itemId}: Props) => {
+    const [check, setCheck] = useState(false);
+    useEffect(() => {
+        if (session?.user?.id == user.id) {
+            setCheck(true);
         }
-    };
+    }, []);
 
     return (
         <Box
@@ -115,21 +110,37 @@ const ItemThumbnail = ({user}: Props) => {
                 <Typography variant="body1">
                     • Adresa: {user.city} {user.street} {user.houseno}
                 </Typography>
-                <Button
-                    variant="contained"
-                    sx={{mt: 2}}
-                    href={`/message/${user.id}`}
-                >
-                    Pošalji poruku
-                </Button>
-                <Button
-                    variant="contained"
-                    sx={{mt: 2}}
-                    color="primary"
-                    onClick={handleCheckout}
-                >
-                    Kupi sada
-                </Button>
+                {check && (
+                    <Button
+                        variant="contained"
+                        sx={{mt: 2, backgroundColor: "grey"}}
+                        href={`/message/${user.id}`}
+                    >
+                        Ažuriraj oglas
+                    </Button>
+                )}
+                {!check && (
+                    <Button
+                        variant="contained"
+                        sx={{mt: 2}}
+                        href={`/message/${user.id}`}
+                    >
+                        Pošalji poruku
+                    </Button>
+                )}
+                {!check && (
+                    <Button
+                        variant="contained"
+                        sx={{
+                            mt: 2,
+                            backgroundColor: theme.palette.accent.main,
+                        }}
+                        onClick={() => handleCheckout(itemId)}
+                    >
+                        Kupi
+                        <Icon icon="fa-solid:shopping-cart"/>
+                    </Button>
+                )}
             </Box>
         </Box>
     );

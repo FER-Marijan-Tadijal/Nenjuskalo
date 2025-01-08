@@ -6,6 +6,7 @@ import ItemDescription from "../components/ItemViewComponents/ItemDescription";
 import ItemTitle from "../components/ItemViewComponents/ItemTitle";
 import {useState} from "react";
 import theme from "../styles/theme";
+import type {Session} from "next-auth";
 
 type Item = {
     itemid: string;
@@ -33,9 +34,11 @@ type User = {
 
 type ItemViewProps = {
     itemId: string;
+    session: Session | null;
 };
 
-const ItemView = ({itemId}: ItemViewProps) => {
+const ItemView = ({itemId, session}: ItemViewProps) => {
+    console.log(itemId);
     const [item, setItem] = useState<Item | null>(null);
     const [user, setUser] = useState<User | null>(null);
 
@@ -46,6 +49,7 @@ const ItemView = ({itemId}: ItemViewProps) => {
                 throw new Error("Failed to fetch item");
             }*/
             const data = await res.json();
+            console.log(data);
             setItem(data.item);
         } catch (err: unknown) {
             console.log(err);
@@ -63,6 +67,7 @@ const ItemView = ({itemId}: ItemViewProps) => {
         fetchItem(itemId);
     }, []);
     useEffect(() => {
+        console.log(item);
         if (item) {
             const sellerId = item.sellerid;
             fetchUser(sellerId);
@@ -88,7 +93,7 @@ const ItemView = ({itemId}: ItemViewProps) => {
             >
                 {item && user && (
                     <>
-                        <ItemThumbnail user={user}/>
+                        <ItemThumbnail user={user} itemId={item.itemid} session={session}/>
                         <ItemTitle item={item}/>
                         <ItemDescription description={item.description}/>
                     </>
