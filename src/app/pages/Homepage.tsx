@@ -62,7 +62,7 @@ export default function HomePage() {
     useEffect(() => {
         async function fetchNewestItems() {
             try {
-                const response = await fetch("/api/newestAds?n=4"); // Fetch 6 newest items
+                const response = await fetch("/api/newestAds?n=4"); // Fetch 4 newest items
                 if (!response.ok) {
                     throw new Error("Failed to fetch newest items");
                 }
@@ -125,6 +125,7 @@ export default function HomePage() {
                         textTransform: "uppercase",
                         "&:hover": { bgcolor: "#E5A800" },
                     }}
+                    href="/explore"
                 >
                     Istraži!
                 </Button>

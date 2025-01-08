@@ -1,11 +1,12 @@
 import { Container, Typography, Box, Paper, Button } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import GoogleIcon from '@mui/icons-material/Google';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { auth, signIn } from "@/app/auth";
 import { prisma } from "@/prisma";
 import SendMessages from "@/app/message/sendMessage";
 import MessageList from "@/app/message/messageList";
-import SignInProp from "@/app/components/MessageComponents/SignInProp";
+import BackButton from "../BackButton";
 
 export default async function Page({
     params,
@@ -121,8 +122,12 @@ export default async function Page({
                     flexDirection: "column",
                     gap: 4,
                     border: "2px solid #FFC300",
+                    position: "relative", // Add position for relative elements
                 }}
             >
+                {/* Back Button */}
+                <BackButton />
+
                 <Typography
                     variant="h5"
                     sx={{
@@ -149,7 +154,6 @@ export default async function Page({
                 >
                     <MessageList senderID={senderID} receiverID={receiverID} />
                 </Paper>
-
 
                 <Box
                     sx={{
