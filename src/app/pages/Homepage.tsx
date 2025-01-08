@@ -219,7 +219,10 @@ export default function HomePage() {
                     gutterBottom
                     sx={{
                         textAlign: "center",
-                        ...titleStyle,
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: "700",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
                         color: "#FFC300",
                         fontSize: "2rem",
                     }}
@@ -245,8 +248,9 @@ export default function HomePage() {
                                     <CardMedia
                                         component="img"
                                         height="140" // Fixed height for image
-                                        image="/images/banner1.jpg" // Placeholder image
+                                        image={`/api/image?id=${item.id}&index=0`} // Dynamic image from API
                                         alt={item.title}
+                                        sx={{ objectFit: "cover" }} // Ensures the image fits nicely
                                     />
                                     <CardContent
                                         sx={{
@@ -260,7 +264,8 @@ export default function HomePage() {
                                             variant="h6"
                                             component="div"
                                             sx={{
-                                                ...subtitleStyle,
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontWeight: "600",
                                                 color: "#003049",
                                                 textOverflow: "ellipsis",
                                                 whiteSpace: "nowrap",
@@ -272,7 +277,7 @@ export default function HomePage() {
                                         <Typography
                                             variant="body2"
                                             sx={{
-                                                ...bodyStyle,
+                                                fontFamily: "'Roboto', sans-serif",
                                                 color: "text.secondary",
                                                 textOverflow: "ellipsis",
                                                 whiteSpace: "nowrap",
@@ -328,7 +333,10 @@ export default function HomePage() {
                     gutterBottom
                     sx={{
                         textAlign: "center",
-                        ...titleStyle,
+                        fontFamily: "'Poppins', sans-serif",
+                        fontWeight: "700",
+                        textTransform: "uppercase",
+                        letterSpacing: "0.05em",
                         color: "#FFC300",
                         fontSize: "2rem",
                     }}
@@ -354,8 +362,9 @@ export default function HomePage() {
                                     <CardMedia
                                         component="img"
                                         height="140" // Fixed height for image
-                                        image="/images/banner1.jpg" // Placeholder image
+                                        image={`/api/image?id=${item.id}&index=0`} // Dynamic image from API
                                         alt={item.title}
+                                        sx={{ objectFit: "cover" }} // Ensures the image fits nicely
                                     />
                                     <CardContent
                                         sx={{
@@ -369,7 +378,8 @@ export default function HomePage() {
                                             variant="h6"
                                             component="div"
                                             sx={{
-                                                ...subtitleStyle,
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontWeight: "600",
                                                 color: "#003049",
                                                 textOverflow: "ellipsis",
                                                 whiteSpace: "nowrap",
@@ -381,7 +391,7 @@ export default function HomePage() {
                                         <Typography
                                             variant="body2"
                                             sx={{
-                                                ...bodyStyle,
+                                                fontFamily: "'Roboto', sans-serif",
                                                 color: "text.secondary",
                                                 textOverflow: "ellipsis",
                                                 whiteSpace: "nowrap",

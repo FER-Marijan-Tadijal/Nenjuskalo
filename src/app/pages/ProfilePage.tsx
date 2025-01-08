@@ -210,8 +210,9 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                     <CardMedia
                                         component="img"
                                         height="140" // Fixed height for image
-                                        image="/images/banner1.jpg" // Placeholder image
+                                        image={`/api/image?id=${item.id}&index=0`} // Dynamic image from API
                                         alt={item.title}
+                                        sx={{ objectFit: "cover" }} // Ensures the image fits nicely
                                     />
                                     <CardContent
                                         sx={{
