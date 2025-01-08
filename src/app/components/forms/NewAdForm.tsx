@@ -143,14 +143,20 @@ export default function NewAdForm() {
                             name="askingprice"
                             variant="outlined"
                             sx={{ backgroundColor: "white" }}
+                            inputProps={{
+                                step: "0.01", // Allows decimal values
+                                min: "0", // Prevents negative values
+                            }}
                             onInput={(e) => {
                                 const input = e.target as HTMLInputElement;
-                                if (parseInt(input.value) < 0) {
+                                const value = parseFloat(input.value);
+                                if (value < 0) {
                                     input.value = "0";
                                 }
                             }}
                         />
                     </Grid>
+
 
                     {/* Category */}
                     <Grid item xs={12}>

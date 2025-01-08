@@ -21,11 +21,6 @@ const titleStyle = {
     letterSpacing: "0.05em",
 };
 
-const subtitleStyle = {
-    fontFamily: "'Poppins', sans-serif",
-    fontWeight: "600",
-};
-
 const bodyStyle = {
     fontFamily: "'Roboto', sans-serif",
     fontWeight: "400",
@@ -125,7 +120,12 @@ export default function HomePage() {
                 <Typography
                     variant="h2"
                     gutterBottom
-                    sx={{ ...titleStyle, color: "#FFC300", fontSize: "2.5rem" }}
+                    sx={{ 
+                        ...titleStyle, 
+                        color: "#FFC300", 
+                        fontSize: "2.5rem", 
+                        WebkitTextStroke: "2px #003049",
+                    }}
                 >
                     Dobrodošli u Šnjofalicu!
                 </Typography>
@@ -148,6 +148,7 @@ export default function HomePage() {
                         fontWeight: "600",
                         textTransform: "uppercase",
                         "&:hover": { bgcolor: "#E5A800" },
+                        border: "2px solid #003049",
                     }}
                     href="/explore"
                 >
@@ -163,7 +164,7 @@ export default function HomePage() {
                     sx={{
                         textAlign: "center",
                         ...titleStyle,
-                        color: "#FFC300",
+                        color: "#003049",
                         fontSize: "2rem",
                         marginBottom: "30px",
                     }}
@@ -188,10 +189,11 @@ export default function HomePage() {
                                         width: "100%",
                                         height: "80px",
                                         borderRadius: "16px",
+                                        border: "1px solid #FFC300",
                                         fontSize: "1rem",
                                         fontWeight: "600",
                                         fontFamily: "'Poppins', sans-serif",
-                                        color: "white",
+                                        color: "#FFC300",
                                         backgroundColor: "#003049",
                                         boxShadow:
                                             "0px 4px 12px rgba(0, 0, 0, 0.2)",
@@ -223,7 +225,7 @@ export default function HomePage() {
                         fontWeight: "700",
                         textTransform: "uppercase",
                         letterSpacing: "0.05em",
-                        color: "#FFC300",
+                        color: "#003049",
                         fontSize: "2rem",
                     }}
                 >
@@ -337,7 +339,7 @@ export default function HomePage() {
                         fontWeight: "700",
                         textTransform: "uppercase",
                         letterSpacing: "0.05em",
-                        color: "#FFC300",
+                        color: "#003049",
                         fontSize: "2rem",
                     }}
                 >
