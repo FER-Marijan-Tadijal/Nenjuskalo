@@ -82,7 +82,7 @@ const CategoriesPage = ({ categories }: Props) => {
         console.log(params.toString());
         try {
             const res = await fetch(
-                `http://localhost:3000/api/search?${params}`
+                `/api/search?${params}`
             );
             const data = await res.json();
             console.log(data);
