@@ -7,6 +7,9 @@ import Link from "next/link";
 import type { Session } from "next-auth";
 import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
+import ProfileEditForm from "@/app/components/forms/ProfileEditForm";
+import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
+import { item } from "@prisma/client";
 
 interface ProfilePageProps {
     session: Session | null; // Accepts session as a prop
@@ -158,6 +161,8 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 />
             </Box>
 
+            <ProfileEditForm />
+
             {/* User Ads */}
             <Box sx={{ mt: 6 }}>
                 <Typography
@@ -173,7 +178,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                 </Typography>
                 {userAds.length > 0 ? (
                     <Grid container spacing={4} justifyContent="center" sx={{ mt: 0 }}>
-                        {userAds.map((item: any) => (
+                        {userAds.map((item: item) => (
                             <Grid item xs={12} sm={6} md={3} key={item.id}>
                                 <Card>
                                     <CardMedia
@@ -229,6 +234,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                         >
                                             Detalji
                                         </Button>
+                                        <DeleteAdForm id={item.id} />
                                     </CardContent>
                                 </Card>
                             </Grid>
