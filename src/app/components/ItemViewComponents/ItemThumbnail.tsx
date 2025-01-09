@@ -5,6 +5,8 @@ import Image from "next/image";
 import theme from "@/app/styles/theme";
 import type { Session } from "next-auth";
 
+import DeleteAdForm from "../forms/DeleteAdForm";
+
 type Props = {
     user: {
         id: string;
@@ -84,6 +86,7 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
                 <Typography variant="body1">
                     • Adresa: {user.city}, {user.street} {user.houseno}
                 </Typography>
+
                 {check && (
                     <Button
                         variant="contained"
@@ -93,6 +96,7 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
                         Ažuriraj oglas
                     </Button>
                 )}
+                {check && <DeleteAdForm id={Number(itemId)}></DeleteAdForm>}
                 {!check && (
                     <Button
                         variant="contained"
@@ -109,7 +113,7 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
                             mt: 2,
                             backgroundColor: theme.palette.accent.main,
                         }}
-                        href={`/`}
+                        href={`/`} //TU NAMJESTITI RUTU ZA PAYMENT
                     >
                         Kupi
                     </Button>

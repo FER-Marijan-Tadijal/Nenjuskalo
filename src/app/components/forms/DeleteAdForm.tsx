@@ -1,11 +1,21 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid } from "@mui/material";
+import {
+    Box,
+    Button,
+    TextField,
+    MenuItem,
+    Typography,
+    Select,
+    FormControl,
+    InputLabel,
+    Grid,
+} from "@mui/material";
 import { HandleDeleteAdForm } from "@/app/functions/handleDeleteAdForm";
 import { redirect, RedirectType } from "next/navigation";
 
-export default function NewAdForm({id} : {id : number}) {
+export default function DeleteAdForm({ id }: { id: number }) {
     const [errorMessage, setErrorMessage] = useState<string>("");
 
     const clientAction = async (formData: FormData) => {
@@ -28,23 +38,21 @@ export default function NewAdForm({id} : {id : number}) {
                 margin: "auto",
             }}
         >
-
             <form action={clientAction}>
                 <Grid container spacing={2}>
                     {/* id. Treba dodati default value id oglasa nekako */}
-                    <input
-                        type="hidden"
-                        required
-                        name="id"
-                        value={id}
-                    />
+                    <input type="hidden" required name="id" value={id} />
 
                     {/* Error Message */}
                     {errorMessage && (
                         <Grid item xs={12}>
                             <Typography
                                 sx={{
-                                    color: errorMessage === "Uspješno ste izbrisali oglas!" ? "green" : "red",
+                                    color:
+                                        errorMessage ===
+                                        "Uspješno ste izbrisali oglas!"
+                                            ? "green"
+                                            : "red",
                                     textAlign: "center",
                                     fontSize: "0.9rem",
                                 }}

@@ -9,6 +9,7 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import ProfileEditForm from "../components/forms/ProfileEditForm";
 import { stateEnum } from "../enums/stateEnum";
 
+
 const subtitleStyle = {
     fontFamily: "'Poppins', sans-serif",
     fontWeight: "600",
@@ -423,7 +424,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                         <Typography
                             sx={{ textAlign: "center", color: "gray", mt: 4 }}
                         >
-                            Učitavam Vaše Artikle...
+                            Trenutno nemate aktivnih oglasa
                         </Typography>
                     )}
                 </Grid>
