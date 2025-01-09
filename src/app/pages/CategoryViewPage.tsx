@@ -78,7 +78,6 @@ interface Props {
 }
 
 const CategoryViewPage = ({ categoryId }: Props) => {
-    var baseUrl = "http://localhost:3000";
     const [categories, setCategories] = useState<Category[]>([]);
     const [selectedCategory, setSelectedCategory] = useState<Category>();
     const [items, setItems] = useState<Item[]>([]);
@@ -88,7 +87,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
 
     async function getSelectedCategory(id: string) {
         try {
-            var res = await fetch(`${baseUrl}/api/getCategory?id=${id}`);
+            var res = await fetch(`/api/getCategory?id=${id}`);
             if (res) {
                 var categoryjson = await res.json();
                 setSelectedCategory(categoryjson);
@@ -100,7 +99,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
     }
 
     const fetchCategories = async () => {
-        const res = await fetch("http://localhost:3000/api/categories");
+        const res = await fetch("/api/categories");
         const data = await res.json();
         setCategories(data);
     };
@@ -108,12 +107,12 @@ const CategoryViewPage = ({ categoryId }: Props) => {
     const fetchItems = async (currentPage: number) => {
         const params = new URLSearchParams();
         params.set("q", "");
-        if (currentPage) params.set("page", currentPage.toString());
+        params.set("page", currentPage.toString());
         params.set("categoryId", categoryId);
         params.set("pageSize", "12");
-        if (orderBy) params.set("orderBy", orderBy);
+        params.set("orderBy", orderBy);
         console.log(params.toString());
-        const res = await fetch(`http://localhost:3000/api/search?${params}`);
+        const res = await fetch(`/api/search?${params}`);
         const data = await res.json();
 
         if (Array.isArray(data.data)) {
@@ -180,7 +179,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                         >
                             <Typography variant="h4">
                                 {" "}
-                                Category: "{selectedCategory.name}"
+                                Kategorija: "{selectedCategory.name}"
                             </Typography>
 
                             <Box

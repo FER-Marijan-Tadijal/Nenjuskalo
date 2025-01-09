@@ -41,7 +41,7 @@ const ExploreItem = ({
 
     const fetchUser = async (userId: string) => {
         const res = await fetch(
-            `http://localhost:3000/api/getUser?id=${userId}`
+            `/api/getUser?id=${userId}`
         );
         const userData = await res.json();
         //console.log(userData);
@@ -67,7 +67,7 @@ const ExploreItem = ({
                 <Box
                     sx={{
                         width: checkPage ? "55%" : "90%",
-                        height: "150px",
+                        height: "160px",
                         margin: checkPage ? 0.7 : 0,
                         padding: 2,
                         display: "flex",
@@ -92,7 +92,7 @@ const ExploreItem = ({
                         }}
                     >
                         <img
-                            src="https://images.unsplash.com/photo-1506748686214-e9df14d4d9d0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDJ8fG5hdHVyZXxlbnwwfHx8fDE2MTg4NzU1MjA&ixlib=rb-1.2.1&q=80&w=400"
+                            src={`/api/image?id=${itemId}&index=0`}
                             alt="Nature image from Unsplash"
                             style={{
                                 width: "100%",
@@ -130,7 +130,7 @@ const ExploreItem = ({
                         <Button
                             variant="accentBtn"
                             fullWidth
-                            href={`/item?id=${itemId}`}
+                            href={`/item/${itemId}`}
                         >
                             View Details
                         </Button>

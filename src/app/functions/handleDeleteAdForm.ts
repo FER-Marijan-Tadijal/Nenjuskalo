@@ -1,0 +1,29 @@
+"use server";
+
+import { prisma } from "@/prisma";
+import { auth } from "@/app/auth";
+
+export async function HandleDeleteAdForm(formData: FormData) {
+
+    const session = await auth();
+    if (session != null) {
+        let id = parseInt(formData.get("id") as string);
+        console.log(id);
+
+        await prisma.itemchangestate.deleteMany({
+            where: {
+                itemid: id,
+            },
+        })
+        await prisma.belongsto.deleteMany({
+            where: {
+                itemid: id,
+            }
+        })
+        await prisma.item.delete({
+            where: {
+                id: id
+            }
+        })
+    }
+}

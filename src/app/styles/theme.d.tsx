@@ -6,6 +6,8 @@ declare module "@mui/material/styles" {
         accent: SimplePaletteColorOptions;
         textBlack: SimplePaletteColorOptions;
         textWhite: SimplePaletteColorOptions;
+        green: SimplePaletteColorOptions;
+        red: SimplePaletteColorOptions;
         cardHover: SimplePaletteColorOptions;
         buttonHover: SimplePaletteColorOptions;
     }
@@ -14,6 +16,8 @@ declare module "@mui/material/styles" {
         accent?: SimplePaletteColorOptions;
         textBlack?: SimplePaletteColorOptions;
         textWhite?: SimplePaletteColorOptions;
+        green?: SimplePaletteColorOptions;
+        red?: SimplePaletteColorOptions;
         cardHover?: SimplePaletteColorOptions;
         buttonHover?: SimplePaletteColorOptions;
     }

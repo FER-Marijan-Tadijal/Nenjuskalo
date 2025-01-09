@@ -69,10 +69,6 @@ export default function Navbar({ session }: NavbarProps) {
 
     const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if (!query.trim()) {
-            alert("Unesite pojam za pretragu!");
-            return;
-        }
         router.push(`/explore?search=${encodeURIComponent(query)}`);
     };
 

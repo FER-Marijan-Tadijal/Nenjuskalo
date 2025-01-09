@@ -3,7 +3,7 @@ import { prisma } from "@/prisma";
 export async function GET(request: Request) {
     const url = new URL(request.url);
     const nParam = url.searchParams.get("n");
-    const n = nParam ? parseInt(nParam) : 10; // Default: uzmi 10 stavki
+    const n = nParam ? parseInt(nParam) : 4; // Default: uzmi 4 stavke
 
     if (isNaN(n) || n <= 0) {
         return new Response(JSON.stringify({ message: "Invalid 'n' parameter" }), {
@@ -13,28 +13,12 @@ export async function GET(request: Request) {
     }
 
     try {
-        // Prvo pronađi najnovijih `n` promena stanja
-        const latestChanges = await prisma.itemchangestate.findMany({
-            select: {
-                itemid: true,
-                changetime: true,
-            },
+        // Pronađi najnovijih `n` oglasa po ID-u
+        const latestItems = await prisma.item.findMany({
             orderBy: {
-                changetime: "desc",
+                id: "desc",
             },
             take: n,
-        });
-
-        // Izvuci ID-eve stavki
-        const itemIds = latestChanges.map((change) => change.itemid);
-
-        // Pronađi stavke koristeći ID-eve
-        const latestItems = await prisma.item.findMany({
-            where: {
-                id: {
-                    in: itemIds,
-                },
-            },
             include: {
                 condition: true, // Ako želiš dodatne detalje, prilagodi prema potrebi
                 belongsto: true,

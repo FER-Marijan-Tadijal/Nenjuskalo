@@ -60,7 +60,7 @@ type items_and_sellersType = {
     sellerinfo: User;
 };
 type CatObjectType = {
-    items: Item[];
+    item: Item;
     cat: Category;
 };
 type Props = {
@@ -68,50 +68,53 @@ type Props = {
 };
 
 const CategoriesPage = ({ categories }: Props) => {
-    var baseUrl = "http://localhost:3000";
+    //var baseUrl = "http://localhost:3000";
     const [allItems, setAllItems] = useState<CatObjectType[]>([]);
     const [propCategories, setPropCategories] = useState<Category[]>([]);
-
-    const fetchCategories = async () => {
-        const res = await fetch("http://localhost:3000/api/categories");
-        const data = await res.json();
-        setPropCategories(data);
-    };
+    const [loading, setLoading] = useState(false);
 
     const fetchItems = async (categoryId: number) => {
         const params = new URLSearchParams();
         params.set("q", "");
         params.set("page", "1");
+        params.set("pageSize", "1");
         params.set("categoryId", categoryId.toString());
-        //params.set("limit", "1")
         console.log(params.toString());
-        const res = await fetch(`http://localhost:3000/api/search?${params}`);
-        const data = await res.json();
-
-        if (Array.isArray(data.data)) {
-            return data.data;
-        } else {
-            return [];
+        try {
+            const res = await fetch(
+                `/api/search?${params}`
+            );
+            const data = await res.json();
+            console.log(data);
+            if (Array.isArray(data.data)) {
+                return data.data;
+            } else {
+                return [];
+            }
+        } finally {
         }
     };
 
     useEffect(() => {
         async function fetchAllItems() {
+            setLoading(true);
             try {
                 const allItemsCopy: CatObjectType[] = [];
                 for (const category of categories) {
-                    const catItems = await fetchItems(category.id);
-                    console.log(catItems);
-                    if (catItems.length > 1) catItems.length = 1;
+                    const catItem = await fetchItems(category.id);
+                    console.log(catItem);
                     const catObject = {
-                        items: catItems,
+                        item: catItem[0],
                         cat: category,
                     };
                     allItemsCopy.push(catObject); // Append items for the category
                 }
+                console.log(allItemsCopy);
                 setAllItems(allItemsCopy); // Update state once after fetching all items
             } catch (error) {
                 console.error("Failed to fetch items:", error);
+            } finally {
+                setLoading(false);
             }
         }
         fetchAllItems();
@@ -152,13 +155,27 @@ const CategoriesPage = ({ categories }: Props) => {
                                 Kategorije:
                             </Typography>
                         </Box>
+                        {loading && (
+                            <Box
+                                sx={{
+                                    marginTop: 10,
+                                    backgroundColor:
+                                        theme.palette.secondary.main,
+                                    padding: 3,
+                                    borderRadius: 2,
+                                    fontSize: 30,
+                                }}
+                            >
+                                Kategorije se učitavaju...
+                            </Box>
+                        )}
                         <Box
                             sx={{
                                 mt: 2,
                                 display: "grid",
                                 gridTemplateColumns: {
-                                    sm: "500px", // Single column on extra small screens
-                                    md: "repeat(2, 500px)", // Two columns on small screens and up
+                                    sm: "550px", // Single column on extra small screens
+                                    md: "repeat(2, 550px)", // Two columns on small screens and up
                                 },
                                 gap: 2, // Spacing between items
                                 //backgroundColor: theme.palette.secondary.main,
@@ -169,7 +186,7 @@ const CategoriesPage = ({ categories }: Props) => {
                                 <Box
                                     key={index}
                                     sx={{
-                                        height: "180px",
+                                        height: "200px",
                                         display: "flex",
                                         alignContent: "center",
                                         justifyContent: "space-between",
@@ -188,21 +205,26 @@ const CategoriesPage = ({ categories }: Props) => {
                                     >
                                         {catObject.cat.name}
                                     </Button>
-
-                                    {catObject.items.map((item, index) => (
-                                        <Box key={index} sx={{ p: 2, pt: 0 }}>
+                                    {catObject.item && (
+                                        <Box sx={{ p: 2, pt: 0 }}>
                                             <CategoryItem
-                                                itemId={item.id}
-                                                title={item.title}
-                                                price={item.askingprice.toString()}
+                                                itemId={catObject.item.id}
+                                                title={catObject.item.title}
+                                                price={
+                                                    catObject.item.askingprice
+                                                }
                                                 key={index}
-                                                categoryObjects={item.belongsto}
-                                                sellerId={item.sellerid}
+                                                categoryObjects={
+                                                    catObject.item.belongsto
+                                                }
+                                                sellerId={
+                                                    catObject.item.sellerid
+                                                }
                                                 checkPage={false}
-                                                categories={propCategories}
+                                                categories={categories}
                                             />
                                         </Box>
-                                    ))}
+                                    )}
                                 </Box>
                             ))}
                         </Box>

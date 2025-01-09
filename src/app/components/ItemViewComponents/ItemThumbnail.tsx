@@ -1,13 +1,12 @@
-import React, {useEffect, useState} from "react";
-import {Box, Button, Typography} from "@mui/material";
-import Carousel from "react-material-ui-carousel";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
-import {Elements} from "@stripe/react-stripe-js";
-import {handleCheckout} from "@/app/util/handleCheckout";
 import {Icon} from "@iconify/react";
 import theme from "@/app/styles/theme";
 import type {Session} from "next-auth";
+import DeleteAdForm from "../forms/DeleteAdForm";
 import {stripePromise} from "@/app/lib/stripe";
+import {Elements} from "@stripe/react-stripe-js";
 
 type Props = {
     user: {
@@ -47,51 +46,28 @@ const ItemThumbnail = ({user, session, itemId}: Props) => {
                 pb: 0,
             }}
         >
-            <Box sx={{width: "70%"}}>
-                <Carousel
-                    navButtonsAlwaysVisible
-                    navButtonsProps={{
-                        style: {
-                            backgroundColor: "rgba(0, 0, 0, 0.5)",
-                            color: "white",
-                        },
+            <Box sx={{ width: "70%" }}>
+                <Box
+                    sx={{
+                        position: "relative",
+                        width: "100%",
+                        height: "400px",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        borderRadius: 2,
                     }}
-                    indicators={true}
                 >
-                    {[
-                        {
-                            image: "/images/banner1.jpg",
-                            title: "image1",
-                        },
-                        {
-                            image: "/images/banner2.jpg",
-                            title: "image2",
-                        },
-                    ].map((item, index) => (
-                        <Box
-                            key={index}
-                            sx={{
-                                position: "relative",
-                                width: "100%",
-                                height: "400px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                overflow: "hidden",
-                                borderRadius: 2,
-                            }}
-                        >
-                            <Image
-                                src={item.image}
-                                alt={item.title}
-                                layout="fill"
-                                objectFit="cover"
-                                priority
-                            />
-                        </Box>
-                    ))}
-                </Carousel>
-            </Box>
+                    <Image
+                        src={`/api/image?id=${itemId}&index=0`}
+                        alt="item thumbnail image"
+                        layout="fill"
+                        objectFit="contain"
+                        priority
+                    />
+                </Box>
+                </Box>
             <Box
                 sx={{
                     display: "flex",
@@ -109,24 +85,38 @@ const ItemThumbnail = ({user, session, itemId}: Props) => {
                     • Zemlja: {user.country}
                 </Typography>
                 <Typography variant="body1">
-                    • Adresa: {user.city} {user.street} {user.houseno}
+                    • Adresa: {user.city}, {user.street} {user.houseno}
                 </Typography>
+
                 {check && (
                     <Button
                         variant="contained"
-                        sx={{mt: 2, backgroundColor: "grey"}}
-                        href={`/message/${user.id}`}
+                        sx={{ mt: 2, backgroundColor: "grey" }}
+                        href={`/editAd/${itemId}`}
                     >
                         Ažuriraj oglas
+                    </Button>
+                )}
+                {check && <DeleteAdForm id={Number(itemId)}></DeleteAdForm>}
+                {!check && (
+                    <Button
+                        variant="contained"
+                        sx={{ mt: 2 }}
+                        href={`/message/${user.id}`}
+                    >
+                        Pošalji poruku
                     </Button>
                 )}
                 {!check && (
                     <Button
                         variant="contained"
-                        sx={{mt: 2}}
-                        href={`/message/${user.id}`}
+                        sx={{
+                            mt: 2,
+                            backgroundColor: theme.palette.accent.main,
+                        }}
+                        href={`/`} //TU NAMJESTITI RUTU ZA PAYMENT
                     >
-                        Pošalji poruku
+                        Kupi
                     </Button>
                 )}
                 {!check && (
