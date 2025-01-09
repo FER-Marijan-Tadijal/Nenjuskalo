@@ -1,14 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import {NextApiRequest, NextApiResponse} from 'next';
 import {stripe} from "@/app/lib/stripe";
-import {prisma} from "@/prisma";
 
-export default async function handler(
+export default async function POST(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     if (req.method === 'POST') {
         try {
-            const { name, description, priceInEuros } = req.body;
+            const {itemId, name, description, priceInEuros} = req.body;
 
             // Create a Stripe Product
             const product = await stripe.products.create({
@@ -23,8 +22,14 @@ export default async function handler(
                 product: product.id,
             });
 
-            // save productId and priceId into the item in the database
-            const item = await prisma.item.update(); // TODO: Update the item in the database with the productId and priceId
+            // Save productId and priceId into the item in the database
+            await fetch(`/api/updateItem?id=${itemId}`, {
+                method: "PUT",
+                body: JSON.stringify({
+                    productId: product.id,
+                    priceId: price.id,
+                }),
+            });
 
             res.status(200).json({
                 productId: product.id,
@@ -32,7 +37,7 @@ export default async function handler(
             });
         } catch (error) {
             console.error('Error creating Stripe item:', error);
-            res.status(500).json({ error: 'Failed to create Stripe item' });
+            res.status(500).json({error: 'Failed to create Stripe item'});
         }
     } else {
         res.setHeader('Allow', 'POST');

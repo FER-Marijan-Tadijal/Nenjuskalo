@@ -2,25 +2,47 @@ import {stripePromise} from "@/app/lib/stripe";
 
 
 export const handleCheckout = async (itemId: string) => {
-    const priceId = await fetch(`/api/getPriceIdByItemId`, {
-        method: "POST",
-        body: JSON.stringify({itemId}),
-    }).then((res) => res.json());
-    console.log("priceId", priceId);
+    try {
+        let item = await fetch(`/api/getItem?id=${itemId}`).then((res) => res.json());
+        if (!item) {
+            console.error("Item not found");
+            return;
+        }
 
-    const response = await fetch(`/api/createCheckoutSession`, {
-        method: "POST",
-        body: JSON.stringify({priceId}),
-    });
+        item = item.item;
+        let priceId = item.priceId;
+        if (!item.priceId) {
+            console.log("Creating Stripe item for: ", JSON.stringify(item));
+            const {fetchedProductId, fetchedPriceId} = await fetch(`/api/createStripeItem`, {
+                method: "POST",
+                body: JSON.stringify({
+                    itemId: item.id,
+                    name: item.title,
+                    description: item.description,
+                    priceInEuros: item.askingprice,
+                }),
+            });
+            priceId = fetchedPriceId;
+        }
 
-    const session = await response.json();
+        // Create a new Stripe Checkout session
+        const response = await fetch(`/api/createCheckoutSession`, {
+            method: "POST",
+            body: JSON.stringify({priceId, itemId}),
+        });
 
-    const stripe = await stripePromise;
-    const {error} = await stripe!.redirectToCheckout({
-        sessionId: session.id,
-    });
+        const session = await response.json();
 
-    if (error) {
-        console.error("Stripe Checkout error:", error);
+        const stripe = await stripePromise;
+        const {error} = await stripe!.redirectToCheckout({
+            sessionId: session.id,
+        });
+
+        if (error) {
+            console.error("Stripe Checkout error:", error);
+        }
+    } catch (error) {
+        console.error("Error handling checkout:", error);
+        return;
     }
 };

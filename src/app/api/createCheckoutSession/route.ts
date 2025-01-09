@@ -1,12 +1,13 @@
-import { NextApiRequest, NextApiResponse } from 'next';
+import {NextApiRequest, NextApiResponse} from 'next';
 import {stripe} from "@/app/lib/stripe";
-export default async function handler(
+
+export default async function POST(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
     if (req.method === 'POST') {
         try {
-            const { priceId } = req.body;
+            const {priceId, itemId} = req.body;
 
             const session = await stripe.checkout.sessions.create({
                 line_items: [
@@ -16,13 +17,13 @@ export default async function handler(
                     },
                 ],
                 mode: 'payment',
-                success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
-                cancel_url: `${req.headers.origin}/cancel`,
+                success_url: `${req.headers.host}/paymentSuccess/${itemId}`,
+                cancel_url: `${req.headers.host}/paymentFailure/${itemId}`,
             });
 
-            res.status(200).json({ sessionId: session.id });
+            res.status(200).json({sessionId: session.id});
         } catch (err: any) {
-            res.status(500).json({ statusCode: 500, message: err.message });
+            res.status(500).json({statusCode: 500, message: err.message});
         }
     } else {
         res.setHeader('Allow', 'POST');

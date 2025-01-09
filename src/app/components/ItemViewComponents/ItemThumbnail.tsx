@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {Box, Button, Typography} from "@mui/material";
 import Image from "next/image";
 import {Icon} from "@iconify/react";
 import theme from "@/app/styles/theme";
@@ -7,6 +7,7 @@ import type {Session} from "next-auth";
 import DeleteAdForm from "../forms/DeleteAdForm";
 import {stripePromise} from "@/app/lib/stripe";
 import {Elements} from "@stripe/react-stripe-js";
+import {handleCheckout} from "@/app/util/handleCheckout";
 
 type Props = {
     user: {
@@ -46,7 +47,7 @@ const ItemThumbnail = ({user, session, itemId}: Props) => {
                 pb: 0,
             }}
         >
-            <Box sx={{ width: "70%" }}>
+            <Box sx={{width: "70%"}}>
                 <Box
                     sx={{
                         position: "relative",
@@ -67,7 +68,7 @@ const ItemThumbnail = ({user, session, itemId}: Props) => {
                         priority
                     />
                 </Box>
-                </Box>
+            </Box>
             <Box
                 sx={{
                     display: "flex",
@@ -91,7 +92,7 @@ const ItemThumbnail = ({user, session, itemId}: Props) => {
                 {check && (
                     <Button
                         variant="contained"
-                        sx={{ mt: 2, backgroundColor: "grey" }}
+                        sx={{mt: 2, backgroundColor: "grey"}}
                         href={`/editAd/${itemId}`}
                     >
                         Ažuriraj oglas
@@ -101,22 +102,10 @@ const ItemThumbnail = ({user, session, itemId}: Props) => {
                 {!check && (
                     <Button
                         variant="contained"
-                        sx={{ mt: 2 }}
+                        sx={{mt: 2}}
                         href={`/message/${user.id}`}
                     >
                         Pošalji poruku
-                    </Button>
-                )}
-                {!check && (
-                    <Button
-                        variant="contained"
-                        sx={{
-                            mt: 2,
-                            backgroundColor: theme.palette.accent.main,
-                        }}
-                        href={`/`} //TU NAMJESTITI RUTU ZA PAYMENT
-                    >
-                        Kupi
                     </Button>
                 )}
                 {!check && (
