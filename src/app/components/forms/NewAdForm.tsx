@@ -149,10 +149,11 @@ export default function NewAdForm() {
                             }}
                             onInput={(e) => {
                                 const input = e.target as HTMLInputElement;
-                                const value = parseFloat(input.value);
+                                let value = parseFloat(input.value);
                                 if (value < 0) {
-                                    input.value = "0";
+                                    value = 0;
                                 }
+                                input.value = value.toFixed(2);
                             }}
                         />
                     </Grid>
@@ -196,27 +197,122 @@ export default function NewAdForm() {
                         </FormControl>
                     </Grid>
 
-                    { /* Picture button */}
-                    <label>Izaberi slike: </label>
-                    <input
-                        type="file"
-                        accept="image/*"
-                        id="pictures"
-                        multiple
-                    />
-
-                    {/* State (Draft or publish) */}
-                    <Grid item xs={12}>
-                        <FormControl>
-                            <RadioGroup
-                                aria-labelledby="state"
-                                defaultValue="publish"
-                                name="state"
+                    {/* Pictures */}
+                    <Grid item xs={12} md={6}>
+                        <Box
+                            sx={{
+                                p: 2,
+                                backgroundColor: "#003049", // Dark blue background
+                                borderRadius: "8px", // Rounded corners
+                                border: "2px solid #003049", // Matches the app theme
+                                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 1,
+                                height: "70%",
+                            }}
+                        >
+                            {/* Label for Input */}
+                            <label
+                                htmlFor="pictures"
+                                style={{
+                                    display: "inline-block",
+                                    padding: "10px 20px",
+                                    backgroundColor: "#FFC300", // Golden yellow background
+                                    color: "#003049", // Dark blue text
+                                    fontWeight: "bold",
+                                    borderRadius: "8px", // Rounded corners for the button
+                                    cursor: "pointer",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    textAlign: "center",
+                                    marginBottom: "8px",
+                                }}
                             >
-                                <FormControlLabel value="publish" control={<Radio />} label="Objavi" />
-                                <FormControlLabel value="draft" control={<Radio />} label="Spremi kao Skicu" />
-                            </RadioGroup>
-                        </FormControl>
+                                Izaberi Slike
+                            </label>
+
+                            {/* Input */}
+                            <input
+                                type="file"
+                                accept="image/*"
+                                id="pictures"
+                                multiple
+                                onChange={(e) => {
+                                    const files = e.target.files;
+                                    const filenames = Array.from(files || []).map((file) => file.name);
+                                    const displayText = filenames.length
+                                        ? `${filenames.join(", ")}`
+                                        : "Nijedan file nije izabran.";
+                                    const displayElement = document.getElementById("file-display");
+                                    if (displayElement) displayElement.textContent = displayText;
+                                }}
+                                style={{
+                                    display: "none", 
+                                    padding: "10px",
+                                    borderRadius: "8px",
+                                    width: "100%",
+                                    backgroundColor: "white", 
+                                    border: "1px solid #E5E5E5", 
+                                    fontFamily: "'Roboto', sans-serif",
+                                    fontSize: "0.9rem",
+                                    color: "#333",
+                                }}
+                            />
+
+                            {/* Display Selected Files */}
+                            <Typography
+                                id="file-display"
+                                sx={{
+                                    fontFamily: "'Roboto', sans-serif",
+                                    fontSize: "0.9rem",
+                                    color: "white",
+                                    textAlign: "center",
+                                }}
+                            >
+                                Nijedan file nije izabran.
+                            </Typography>
+                        </Box>
+                    </Grid>
+
+                    {/* State */}
+                    <Grid item xs={12} md={6}>
+                        <Box
+                            sx={{
+                                p: 2,
+                                backgroundColor: "#003049", // Dark blue background
+                                borderRadius: "8px", // Rounded corners
+                                border: "2px solid #003049", // Matches the app theme
+                                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+                                display: "flex",
+                                flexDirection: "column",
+                                gap: 1,
+                            }}
+                        >
+                            <FormControl>
+                                <RadioGroup
+                                    aria-labelledby="state"
+                                    defaultValue="publish"
+                                    name="state"
+                                    sx={{ 
+                                        width: "100%", // Ensures full width
+                                        color: "white" 
+                                    }}
+                                >
+                                    <FormControlLabel 
+                                        value="publish" 
+                                        control={<Radio sx={{ color: "#FFC300", '&.Mui-checked': { color: "#FFC300" } }} />} 
+                                        label="Objavi" 
+                                        sx={{ color: "white" }} 
+                                    />
+                                    <FormControlLabel 
+                                        value="draft" 
+                                        control={<Radio sx={{ color: "#FFC300", '&.Mui-checked': { color: "#FFC300" } }} />} 
+                                        label="Spremi kao Skicu" 
+                                        sx={{ color: "white" }} 
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                        </Box>
                     </Grid>
 
                     {/* Error Message */}
