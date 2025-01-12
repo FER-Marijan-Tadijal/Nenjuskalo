@@ -2,22 +2,18 @@ import React from "react";
 import { Box, Typography } from "@mui/material";
 import { useContext } from "react";
 import { conditionEnum } from "@/app/enums/conditionEnum";
+import { category, item, itemchangestate } from "@prisma/client";
 
-type Props = {
-    item: {
-        itemid: string;
-        title: string;
-        description: string;
-        askingprice: string;
-        sellerid: string;
-        buyerid?: string;
-        conditionid: number;
-    };
-};
+type BigItem = {
+    item: item,
+    categories: category[],
+    state: itemchangestate[],
+    noOfPictures: number,
+}
 
-const ItemTitle = ({ item }: Props) => {
+const ItemTitle = ({ bigItem }: { bigItem: BigItem }) => {
     const conditionName =
-        conditionEnum[item.conditionid] ?? "unknown condition";
+        conditionEnum[bigItem.item.conditionid] ?? "unknown condition";
     return (
         <Box
             sx={{
@@ -32,13 +28,16 @@ const ItemTitle = ({ item }: Props) => {
             }}
         >
             <Typography variant="h4" sx={{ fontWeight: 400 }}>
-                • {item.title}
+                • {bigItem.item.title}
             </Typography>
             <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
-                • Cijena: {item.askingprice} €
+                • Cijena: {bigItem.item.askingprice.toString()} €
             </Typography>
             <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
                 • Stanje: {conditionName}
+            </Typography>
+            <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
+                • Kategorije: {bigItem.categories.map((category) => category.name + "  ")}
             </Typography>
         </Box>
     );

@@ -19,27 +19,35 @@ export async function HandleEditAdForm(formData: FormData) {
             return
         }
 
-        let picture = formData.get("picture") as File;
-
-        let data = null
-        if (typeof picture === "object") { // Eh, it's probably a picture file then.
-            data = await picture.bytes()
-        }
-
         let state = 0;
         let stateAsStr = formData.get("state") as string;
-        if (stateAsStr == "publish") state = 1;
+        if (stateAsStr == "active") state = 1;
+
+        let title = formData.get("title") as string;
+        let description = formData.get("description") as string;
+        let askingPrice = parseFloat(formData.get("askingprice") as string);
+        if (Number.isNaN(askingPrice)) askingPrice = 0;
+        let sellerId = session.user?.id != undefined ? session.user?.id : "greska";
+        let conditionId = parseInt(formData.get("condition") as string);
+
+        let categories = JSON.parse(formData.get("category") as string);
+        console.log("categories: ", categories)
+        let categoryIds = []
+        for (let category of categories) {
+            if (!(category.id in categoryIds))
+            categoryIds.push(category.id)
+        }
 
         await prisma.item.update({
             where: {
                 id: id,
             },
             data: {
-                title: formData.get("title") as string,
-                description: formData.get("description") as string,
-                askingprice: parseFloat(formData.get("askingprice") as string),
-                sellerid: session.user?.id != undefined ? session.user?.id : "greska",
-                conditionid: parseInt(formData.get("condition") as string)
+                title: title,
+                description: description,
+                askingprice: askingPrice,
+                sellerid: sellerId,
+                conditionid: conditionId,
             }
         })
         await prisma.belongsto.deleteMany({
@@ -47,12 +55,15 @@ export async function HandleEditAdForm(formData: FormData) {
                 itemid: id
             }
         })
-        await prisma.belongsto.create({
-            data: {
-                categoryid: parseInt(formData.get("category") as string),
-                itemid: id
-            }
-        })
+
+        for (let categoryId of categoryIds) {
+            await prisma.belongsto.create({
+                data: {
+                    categoryid: categoryId,
+                    itemid: id
+                }
+            })
+        }
         await prisma.itemchangestate.create({
             data: {
                 itemid: id,
@@ -60,24 +71,5 @@ export async function HandleEditAdForm(formData: FormData) {
                 changetime: new Date(),
             }
         })
-        if (data != null) {
-            await prisma.picture.upsert({
-                where: {
-                    itemid_index: {
-                        itemid: id, 
-                        index: 0,
-                    },
-                },
-                update: {
-                    picdata: data,
-                },
-                create: {
-                    itemid: id,
-                    index: 0,
-                    picdata: data,
-                },
-            })
-        }
-        
     }
 }

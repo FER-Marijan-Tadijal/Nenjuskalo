@@ -5,7 +5,8 @@ import Image from "next/image";
 import theme from "@/app/styles/theme";
 import type { Session } from "next-auth";
 
-import DeleteAdForm from "../forms/DeleteAdForm";
+import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
+import MarkAsSoldForm from "@/app/components/forms/MarkAsSoldForm";
 
 type Props = {
     user: {
@@ -96,7 +97,7 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
                         Ažuriraj oglas
                     </Button>
                 )}
-                {check && <DeleteAdForm id={Number(itemId)}></DeleteAdForm>}
+                {check && <DeleteAdForm id={Number(itemId)} />}
                 {!check && (
                     <Button
                         variant="contained"
@@ -106,6 +107,7 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
                         Pošalji poruku
                     </Button>
                 )}
+                {check && <MarkAsSoldForm id={Number(itemId)} />}
                 {!check && (
                     <Button
                         variant="contained"

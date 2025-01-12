@@ -2,32 +2,42 @@
 
 import React, { useEffect, useState } from "react";
 import { z } from "zod";
-import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid, RadioGroup, FormControlLabel, Radio, Autocomplete } from "@mui/material";
 import { HandleEditAdForm } from "@/app/functions/handleEditAdForm";
+import { HandleDeletePictureForm } from "@/app/functions/handleDeletePictureForm";
+import { HandleNewPictureForm } from "@/app/functions/handleNewPictureForm";
+import { category, condition, item, itemchangestate } from "@prisma/client";
+import { stateEnum } from "@/app/enums/stateEnum";
+import { useRouter } from "next/navigation";
 
-type Category = {
-    id: number;
-    name: string;
-};
-type Condition = {
-    id: number;
-    name: string;
-};
+type Category = category;
+
+type Condition = condition;
+
+type BigItem = {
+    item: item,
+    categories: category[],
+    state: itemchangestate[],
+    noOfPictures: number,
+}
 
 const newAdSchema = z.object({
     title: z.string().trim()
-        .min(3, { message: "Naziv mora sadržavati barem 3 znaka." })
-        .max(30, { message: "Naziv mora imati 30 znakova ili manje." }),
+        .min(2, { message: "Naziv mora sadržavati barem 2 znaka" })
+        .max(50, { message: "Naziv mora imati 50 znakova ili manje" }),
     description: z.string().trim()
-        .min(10, { message: "Opis mora sadržavati barem 10 znakova." })
-        .max(1000, { message: "Opis mora imati 1000 znakova ili manje." }),
-    askingprice: z.number().nonnegative({ message: "Cijena mora biti pozitivna." }),
+        .max(1000, { message: "Opis mora imati 1000 znakova ili manje" }),
+    askingprice: z.number({ message: "Morate upisati cijenu"}).nonnegative({ message: "Cijena mora biti pozitivna" }),
 });
+
+const picIndexes = [0, 1, 2, 3, 4, 5] // This should be an array of however many max pictures we want because React no like for loops
 
 export default function EditAdForm({id} : {id : number}) {
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [categories, setCategories] = useState<Category[]>([]);
     const [conditions, setConditions] = useState<Condition[]>([]);
+    const [item, setItem] = useState<BigItem>();
+    const router = useRouter()
 
     const getCategories = async () => {
         try {
@@ -49,36 +59,79 @@ export default function EditAdForm({id} : {id : number}) {
         }
     };
 
+    const getItem = async () => {
+        try {
+            const response = await fetch(`/api/getItem?id=${id}`, { cache: "no-store"});
+            const myItem = await response.json();
+            setItem(myItem);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
     useEffect(() => {
         getCategories();
         getConditions();
+        getItem();
     }, []);
 
     const clientAction = async (formData: FormData) => {
         const newAd = {
             title: formData.get("title"),
             description: formData.get("description"),
-            askingprice: parseInt(formData.get("askingprice") as string),
+            askingprice: parseFloat(formData.get("askingprice") as string),
         };
 
+        let state = formData.get("state") as string;
+
         const result = newAdSchema.safeParse(newAd);
-        if (!result.success) {
+        if (!result.success && state=="publish") {
             const errors = result.error.issues
                 .map((issue) => `${issue.path[0]}: ${issue.message}`)
                 .join(". ");
-            setErrorMessage(errors);
+            setErrorMessage(errors + "\n ili spremite oglas kao skicu.");
             return;
         }
-
-        const picturesHolder = document.getElementById("pictures"); // Replace with your HTML element ID
-        const picture = (picturesHolder as HTMLInputElement)?.files[0];
-
-        //const newFormData = new FormData()
-        formData.append("picture", picture);
 
         setErrorMessage("Uspješno ste ažurirali oglas!");
         await HandleEditAdForm(formData);
     };
+
+    const uploadPicture = async (formData: FormData) => {
+        const picturesHolder = document.getElementById("imgupload") as HTMLInputElement;
+        if (picturesHolder.files == null) {
+            setErrorMessage("Niste odabrali sliku!")
+            return
+        }
+        const picture = picturesHolder.files[0];
+
+        await clientAction(formData);
+
+        formData.append("picture", picture);
+        await HandleNewPictureForm(formData);
+
+        const response = await fetch(`/api/getItem?id=${id}`, { cache: "no-store"});
+        const myItem = await response.json();
+        setItem(myItem);
+
+        router.refresh()
+    };
+
+    const deletePicture = async (formData: FormData, index : number) => {
+        await clientAction(formData);
+
+        formData.append("index", index.toString());
+        await HandleDeletePictureForm(formData);
+
+        const response = await fetch(`/api/getItem?id=${id}`, { cache: "no-store"});
+        const myItem = await response.json();
+        setItem(myItem);
+        router.refresh()
+    };
+
+    if (!item) {
+        return <h1>Loading! (or nonexistant item)</h1>
+    }
 
     return (
         <Box
@@ -104,7 +157,7 @@ export default function EditAdForm({id} : {id : number}) {
                 Ažurirajte Oglas
             </Typography>
 
-            <form action={clientAction}>
+            <form>
                 <Grid container spacing={2}>
                     {/* ID */}
                     <input
@@ -117,7 +170,8 @@ export default function EditAdForm({id} : {id : number}) {
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
-                            required
+                            inputProps={{ maxLength: 50 }}
+                            defaultValue={item?.item.title}
                             label="Naziv Artikla"
                             name="title"
                             variant="outlined"
@@ -129,7 +183,8 @@ export default function EditAdForm({id} : {id : number}) {
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
-                            required
+                            inputProps={{ maxLength: 1000 }}
+                            defaultValue={item?.item.description}
                             label="Opis Artikla"
                             name="description"
                             variant="outlined"
@@ -143,49 +198,48 @@ export default function EditAdForm({id} : {id : number}) {
                     <Grid item xs={12}>
                         <TextField
                             fullWidth
-                            required
                             type="number"
                             label="Cijena Artikla"
                             name="askingprice"
                             variant="outlined"
-                            inputProps={{ step: "0.01" }}
+                            inputProps={{ inputMode: "decimal", step: "0.01", min: "0"}}
+                            defaultValue={item?.item.askingprice}
                             sx={{ backgroundColor: "white" }}
-                            onInput={(e) => {
-                                const input = e.target as HTMLInputElement;
-                                if (parseFloat(input.value) < 0) {
-                                    input.value = "0";
-                                }
-                                input.value = parseFloat(input.value).toFixed(2);
-                            }}
                         />
                     </Grid>
 
                     {/* Category */}
                     <Grid item xs={12}>
-                        <FormControl fullWidth required variant="outlined">
-                            <InputLabel>Kategorija</InputLabel>
-                            <Select
-                                name="category"
-                                defaultValue=""
-                                label="Kategorija"
-                                sx={{ backgroundColor: "white" }}
-                            >
-                                {categories.map((category) => (
-                                    <MenuItem key={category.id} value={category.id}>
-                                        {category.name}
-                                    </MenuItem>
-                                ))}
-                            </Select>
+                        <input type="hidden" id="category" name="category" defaultValue={JSON.stringify(item.categories)}/>
+                        <FormControl fullWidth variant="outlined">
+                            <Autocomplete
+                                multiple
+                                limitTags={3}
+                                id="categorySelector"
+                                options={categories}
+                                getOptionLabel={(category) => category.name}
+                                defaultValue= {item.categories}
+                                renderInput={(params) => (
+                                    <TextField {...params} label="Kategorije" placeholder="Kategorije" />
+                                )}
+                                onChange={(event, value) => {
+                                    // This will synchronize the autocomplete value with a hidden input
+                                    const hiddenInput = document.getElementById("category");
+                                    if (hiddenInput) (hiddenInput as HTMLInputElement).value = JSON.stringify(value);
+                                  }}
+                                sx={{ width: '500px' }}
+                            />
                         </FormControl>
                     </Grid>
 
                     {/* Condition */}
                     <Grid item xs={12}>
-                        <FormControl fullWidth required variant="outlined">
+                        <FormControl fullWidth variant="outlined">
                             <InputLabel>Stanje Artikla</InputLabel>
                             <Select
                                 name="condition"
-                                defaultValue=""
+                                displayEmpty
+                                defaultValue={item.item.conditionid}
                                 label="Stanje Artikla"
                                 sx={{ backgroundColor: "white" }}
                             >
@@ -247,7 +301,7 @@ export default function EditAdForm({id} : {id : number}) {
                                 Izaberi Slike
                             </label>
 
-                            {/* Input */}
+                            {/* Input 
                             <input
                                 type="file"
                                 accept="image/*"
@@ -273,7 +327,38 @@ export default function EditAdForm({id} : {id : number}) {
                                     fontSize: "0.9rem",
                                     color: "#333",
                                 }}
-                            />
+                            /> */}
+
+                            {picIndexes.map((name) => {
+                                if (name < item.noOfPictures ) {
+                                    return (
+                                    <span key={"group" + name}>
+                                        <img key={"img" + name} 
+                                             src={"/api/image?id=" + id + "&index=" + name + "&cachebreaker" + (new Date().toString())}
+                                             width="100" />
+                                        <input key={"deletepic" + name}
+                                            type="submit"
+                                            value="Izbriši"
+                                            formAction={(e) => deletePicture(e, name)}
+                                        />
+                                    </span>)
+                                } else  if (name == item.noOfPictures) {
+                                    return(
+                                    <span key={"group" + name}>
+                                        <input key={"imgupload"}
+                                               id="imgupload"
+                                               type="file"
+                                               accept="image/*"
+                                        />
+                                        <input key={"submit" + name}
+                                               type="submit"
+                                               value="postavi sliku"
+                                               formAction={uploadPicture}
+                                        />
+                                    </span>
+                                    )
+                                }
+                            })} 
 
                             {/* Display Selected Files */}
                             <Typography
@@ -307,7 +392,7 @@ export default function EditAdForm({id} : {id : number}) {
                             <FormControl>
                                 <RadioGroup
                                     aria-labelledby="state"
-                                    defaultValue="publish"
+                                    defaultValue={stateEnum[item.state[0].stateid]}
                                     name="state"
                                     sx={{ 
                                         width: "100%", // Ensures full width
@@ -315,7 +400,7 @@ export default function EditAdForm({id} : {id : number}) {
                                     }}
                                 >
                                     <FormControlLabel 
-                                        value="publish" 
+                                        value="active" 
                                         control={<Radio sx={{ color: "#FFC300", '&.Mui-checked': { color: "#FFC300" } }} />} 
                                         label="Objavi" 
                                         sx={{ color: "white" }} 
@@ -336,6 +421,7 @@ export default function EditAdForm({id} : {id : number}) {
                         <Button
                             fullWidth
                             type="submit"
+                            formAction={clientAction}
                             variant="contained"
                             sx={{
                                 backgroundColor: "#FFC300",
