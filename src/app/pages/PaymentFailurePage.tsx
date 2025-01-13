@@ -18,6 +18,7 @@ const PaymentFailurePage = (props: Props) => {
                     justifyContent: "center",
                     alignItems: "center",
                 }}
+                className="slide-in-container-05s"
             >
                 <Box
                     sx={{

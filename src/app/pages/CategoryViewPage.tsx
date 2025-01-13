@@ -156,6 +156,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                             paddingBottom: 1,
                             mt: 8,
                         }}
+                        className="slide-in-container-05s"
                     >
                         <Button
                             variant="accentBtn"

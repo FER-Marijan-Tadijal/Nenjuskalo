@@ -11,11 +11,11 @@ import type { Session } from "next-auth";
 import { category, item, itemchangestate } from "@prisma/client";
 
 type BigItem = {
-    item: item,
-    categories: category[],
-    state: itemchangestate[],
-    noOfPictures: number,
-}
+    item: item;
+    categories: category[];
+    state: itemchangestate[];
+    noOfPictures: number;
+};
 
 type Item = {
     itemid: string;
@@ -65,9 +65,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
         }
     };
     const fetchUser = async (userId: string) => {
-        const res = await fetch(
-            `/api/getUser?id=${userId}`
-        );
+        const res = await fetch(`/api/getUser?id=${userId}`);
         const userData = await res.json();
         setUser(userData);
     };
@@ -84,7 +82,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
     }, [item]);
 
     if (!item) {
-        return( <CircularProgress /> )
+        return <CircularProgress />;
     }
 
     return (
@@ -100,6 +98,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                     flexDirection: "column",
                     alignItems: "center",
                 }}
+                className="slide-in-container-05s"
             >
                 {item && user && (
                     <ItemThumbnail

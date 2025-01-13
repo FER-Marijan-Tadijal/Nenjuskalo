@@ -1,7 +1,18 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Container, Typography, Box, Button, CircularProgress, Grid, Card, CardMedia, CardContent, Link } from "@mui/material";
+import {
+    Container,
+    Typography,
+    Box,
+    Button,
+    CircularProgress,
+    Grid,
+    Card,
+    CardMedia,
+    CardContent,
+    Link,
+} from "@mui/material";
 import { signIn, signOut } from "next-auth/react";
 import type { Session } from "next-auth";
 import GoogleIcon from "@mui/icons-material/Google";
@@ -9,7 +20,6 @@ import GitHubIcon from "@mui/icons-material/GitHub";
 import ProfileEditForm from "../components/forms/ProfileEditForm";
 import { stateEnum } from "../enums/stateEnum";
 import NewAdButton from "../components/forms/NewAdButton";
-
 
 const subtitleStyle = {
     fontFamily: "'Poppins', sans-serif",
@@ -46,7 +56,9 @@ export default function ProfilePage({ session }: ProfilePageProps) {
             if (!session?.user?.id) return;
 
             try {
-                const response = await fetch(`/api/getItemsByUser?id=${session.user.id}`);
+                const response = await fetch(
+                    `/api/getItemsByUser?id=${session.user.id}`
+                );
                 if (!response.ok) throw new Error("Failed to fetch user items");
 
                 const data = await response.json();
@@ -66,8 +78,11 @@ export default function ProfilePage({ session }: ProfilePageProps) {
 
             try {
                 setLoadingProfile(true);
-                const response = await fetch(`/api/getUser?id=${session.user.id}`);
-                if (!response.ok) throw new Error("Failed to fetch profile data");
+                const response = await fetch(
+                    `/api/getUser?id=${session.user.id}`
+                );
+                if (!response.ok)
+                    throw new Error("Failed to fetch profile data");
 
                 const data = await response.json();
                 setProfileData(data);
@@ -95,6 +110,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                     alignItems: "center",
                     gap: 4,
                 }}
+                className="slide-in-container-05s"
             >
                 <Typography
                     variant="h4"
@@ -114,7 +130,8 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                         fontSize: "1rem",
                     }}
                 >
-                    Prijavite se sada kako biste pristupili svom profilu i upravljali oglasima.
+                    Prijavite se sada kako biste pristupili svom profilu i
+                    upravljali oglasima.
                 </Typography>
                 <Box sx={{ display: "flex", gap: 2 }}>
                     <Button
@@ -221,7 +238,6 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                     border: "3px solid #003049", // Add border
                 }}
             >
-                
                 <Typography
                     variant="h5"
                     sx={{
@@ -267,7 +283,8 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                 fontSize: "1rem",
                             }}
                         >
-                            <strong>Država:</strong> {profileData.country || "Nije postavljeno"}
+                            <strong>Država:</strong>{" "}
+                            {profileData.country || "Nije postavljeno"}
                         </Typography>
                         <Typography
                             variant="body1"
@@ -276,7 +293,8 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                 fontSize: "1rem",
                             }}
                         >
-                            <strong>Grad:</strong> {profileData.city || "Nije postavljeno"}
+                            <strong>Grad:</strong>{" "}
+                            {profileData.city || "Nije postavljeno"}
                         </Typography>
                         <Typography
                             variant="body1"
@@ -285,7 +303,8 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                 fontSize: "1rem",
                             }}
                         >
-                            <strong>Ulica:</strong> {profileData.street || "Nije postavljeno"}
+                            <strong>Ulica:</strong>{" "}
+                            {profileData.street || "Nije postavljeno"}
                         </Typography>
                         <Typography
                             variant="body1"
@@ -294,7 +313,8 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                 fontSize: "1rem",
                             }}
                         >
-                            <strong>Kućni Broj:</strong> {profileData.houseno || "Nije postavljeno"}
+                            <strong>Kućni Broj:</strong>{" "}
+                            {profileData.houseno || "Nije postavljeno"}
                         </Typography>
                     </Box>
                 ) : (
@@ -318,7 +338,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                     borderBottom: "2px solid #003049",
                     my: 4,
                 }}
-            /> 
+            />
 
             {/* User Ads */}
             <Box sx={{ width: "100%", marginTop: "40px" }}>
@@ -345,7 +365,8 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                         justifyContent: "space-between",
                                         height: "100%", // Ensure consistent height
                                         maxHeight: "350px", // Optional: Limit height
-                                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                                        boxShadow:
+                                            "0px 4px 12px rgba(0, 0, 0, 0.1)",
                                         border: "3px solid #003049", // Add border
                                         borderRadius: "8px", // Add border radius
                                     }}
@@ -391,7 +412,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                         >
                                             {item.description}
                                         </Typography>
-                                        
+
                                         <Typography
                                             variant="body1"
                                             sx={{
@@ -443,10 +464,10 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                     borderBottom: "2px solid #003049",
                     my: 4,
                 }}
-            />  
+            />
 
             <ProfileEditForm id={session.user?.id || "testek"} />
-            
+
             {/* Sign Out Button */}
             <Box sx={{ mt: 3.5 }}>
                 <Button

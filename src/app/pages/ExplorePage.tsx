@@ -110,9 +110,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         params.set("maxPrice", maxPrice);
         console.log(params.toString());
         try {
-            const res = await fetch(
-                `/api/search?${params}`
-            );
+            const res = await fetch(`/api/search?${params}`);
             const data = await res.json();
             console.log(data);
             if (Array.isArray(data.data)) {
@@ -186,6 +184,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                             alignItems: "start",
                             mt: 8,
                         }}
+                        className="slide-in-container-05s"
                     >
                         <Box>
                             <ExploreFilter

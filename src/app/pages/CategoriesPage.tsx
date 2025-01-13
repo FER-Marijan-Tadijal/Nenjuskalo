@@ -81,9 +81,7 @@ const CategoriesPage = ({ categories }: Props) => {
         params.set("categoryId", categoryId.toString());
         console.log(params.toString());
         try {
-            const res = await fetch(
-                `/api/search?${params}`
-            );
+            const res = await fetch(`/api/search?${params}`);
             const data = await res.json();
             console.log(data);
             if (Array.isArray(data.data)) {
@@ -139,6 +137,7 @@ const CategoriesPage = ({ categories }: Props) => {
                             flexDirection: "column",
                             alignItems: "center",
                         }}
+                        className="slide-in-container-05s"
                     >
                         <Box
                             sx={{
