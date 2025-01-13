@@ -25,9 +25,10 @@ type Props = {
     };
     session: Session | null;
     itemId: string;
+    noOfPictures: number;
 };
 
-const ItemThumbnail = ({ user, session, itemId }: Props) => {
+const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
     const [check, setCheck] = useState(false);
 
     useEffect(() => {
@@ -47,26 +48,40 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
             }}
         >
             <Box sx={{ width: "70%" }}>
-                <Box
-                    sx={{
-                        position: "relative",
-                        width: "100%",
-                        height: "400px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden",
-                        borderRadius: 2,
+                <Carousel
+                    navButtonsAlwaysVisible
+                    navButtonsProps={{
+                        style: {
+                            backgroundColor: "rgba(0, 0, 0, 0.5)",
+                            color: "white",
+                        },
                     }}
                 >
-                    <Image
-                        src={`/api/image?id=${itemId}&index=0`}
-                        alt="item thumbnail image"
-                        layout="fill"
-                        objectFit="contain"
-                        priority
-                    />
-                </Box>
+                    {Array.from({ length: noOfPictures }, (_, pictureNum) => (
+                        <Box
+                            key={pictureNum}
+                            sx={{
+                                position: "relative",
+                                width: "100%",
+                                height: "400px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                overflow: "hidden",
+                                borderRadius: 2,
+                            }}
+                        >
+                            <Image
+                                key={pictureNum}
+                                src={`/api/image?id=${itemId}&index=${pictureNum}`}
+                                alt="item thumbnail image"
+                                layout="fill"
+                                objectFit="contain"
+                                priority
+                            />
+                        </Box>
+                    ))}
+                </Carousel>
             </Box>
             <Box
                 sx={{

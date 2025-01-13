@@ -105,6 +105,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                         itemId={itemId}
                         user={user}
                         session={session}
+                        noOfPictures={item.noOfPictures}
                     />
                 )}
                 {item && user && <ItemTitle bigItem={item} />}
