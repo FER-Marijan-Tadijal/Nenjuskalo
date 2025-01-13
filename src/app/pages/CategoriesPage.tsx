@@ -199,13 +199,13 @@ const CategoriesPage = ({ categories }: Props) => {
                                 >
                                     <Button
                                         variant="categoryBtn"
-                                        sx={{ width: "150px", height: "80px" }}
+                                        sx={{ width: "30%", height: "80px" }}
                                         href={`/categories/${catObject.cat.id}`}
                                     >
                                         {catObject.cat.name}
                                     </Button>
                                     {catObject.item && (
-                                        <Box sx={{ p: 2, pt: 0 }}>
+                                        <Box sx={{ p: 2, pt: 0, width: "70%" }}>
                                             <CategoryItem
                                                 itemId={catObject.item.id}
                                                 title={catObject.item.title}

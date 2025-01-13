@@ -33,14 +33,11 @@ const ExplorePriceRange = ({
                 mt: 2,
                 mb: 2,
                 padding: 2,
-                width: "300px",
+                width: "70%",
                 borderRadius: 2,
             }}
         >
-            <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Filtriraj po cijeni:
-            </Typography>
-            <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+            <FormControl sx={{ m: 1, width: "90%" }} variant="outlined">
                 <OutlinedInput
                     id="outlined-adornment-weight"
                     value={minPrice}
@@ -63,7 +60,7 @@ const ExplorePriceRange = ({
                     Najniža cijena
                 </FormHelperText>
             </FormControl>
-            <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+            <FormControl sx={{ m: 1, width: "90%" }} variant="outlined">
                 <OutlinedInput
                     id="outlined-adornment-weight"
                     value={maxPrice}

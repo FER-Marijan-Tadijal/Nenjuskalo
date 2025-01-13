@@ -34,15 +34,18 @@ const ExploreFilter = ({
                 backgroundColor: theme.palette.secondary.main,
                 mt: 2,
                 padding: 2,
-                width: "300px",
+                width: "70%",
                 borderRadius: 2,
             }}
         >
-            <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Filtriraj po {filterName}:
-            </Typography>
             <FormControl fullWidth variant="outlined">
-                <InputLabel id="select-label">{filterName}</InputLabel>
+                <InputLabel
+                    id="select-label"
+                    shrink={false}
+                    //sx={{ fontWeight: "semibold" }}
+                >
+                    {filterName}
+                </InputLabel>
                 <Select
                     labelId="select-label"
                     value={filter}

@@ -27,18 +27,18 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
                 //right: 0,
                 mt: 2,
                 padding: 2,
-                width: "300px", //PRETVORI U %
+                width: "20%", //PRETVORI U %
                 borderRadius: 2,
             }}
         >
-            <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Predloženi proizvodi:
+            <Typography sx={{ marginBottom: 2 }} variant="h6">
+                Proučite i ove proizvode:
             </Typography>
             <Box>
                 {randomItems.map((item, index) => (
                     <Box
                         sx={{
-                            margin: 0.5,
+                            margin: 1,
                             padding: 1,
                             border: "1px solid grey",
                             borderRadius: 1.5,

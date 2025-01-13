@@ -186,7 +186,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                         }}
                         className="slide-in-container-05s"
                     >
-                        <Box>
+                        <Box sx={{ width: "20%" }}>
                             <ExploreFilter
                                 filterName="stanje"
                                 filter={conditionId}
@@ -210,7 +210,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                         </Box>
                         <Container
                             sx={{
-                                width: "1000px",
+                                width: "60%",
                                 //backgroundColor: "#D9F0FF ",
                                 //color: "#F1E9DA",
                                 display: "flex",
@@ -233,10 +233,6 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                     alignItems: "center",
                                 }}
                             >
-                                <Typography variant="h6">
-                                    {" "}
-                                    Rezultati pretraživanja: "{searchTerm}"
-                                </Typography>
                                 <Box
                                     sx={{
                                         backgroundColor:
@@ -247,7 +243,10 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                     }}
                                 >
                                     <FormControl fullWidth variant="outlined">
-                                        <InputLabel id="select-label">
+                                        <InputLabel
+                                            id="select-label"
+                                            shrink={false}
+                                        >
                                             Sortiraj
                                         </InputLabel>
                                         <Select
