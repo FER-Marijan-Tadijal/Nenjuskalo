@@ -40,9 +40,7 @@ const ExploreItem = ({
     var check = true;
 
     const fetchUser = async (userId: string) => {
-        const res = await fetch(
-            `/api/getUser?id=${userId}`
-        );
+        const res = await fetch(`/api/getUser?id=${userId}`);
         const userData = await res.json();
         //console.log(userData);
         setUser(userData);
@@ -87,7 +85,9 @@ const ExploreItem = ({
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "center",
+                            alignItems: "center",
                             width: "50%",
+                            height: "100%",
                             paddingRight: 1,
                         }}
                     >
@@ -98,7 +98,7 @@ const ExploreItem = ({
                                 width: "100%",
                                 height: "auto",
                                 maxHeight: "100%",
-                                objectFit: "cover",
+                                objectFit: "contain",
                                 borderRadius: 4,
                             }}
                         />
