@@ -231,15 +231,17 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                     display: "flex",
                                     justifyContent: "space-around",
                                     alignItems: "center",
+                                    width: "50%",
+                                    minWidth: "200px",
                                 }}
                             >
                                 <Box
                                     sx={{
                                         backgroundColor:
                                             theme.palette.secondary.main,
-                                        padding: 2,
-                                        width: "300px",
+                                        padding: 1,
                                         borderRadius: 2,
+                                        width: "70%",
                                     }}
                                 >
                                     <FormControl fullWidth variant="outlined">

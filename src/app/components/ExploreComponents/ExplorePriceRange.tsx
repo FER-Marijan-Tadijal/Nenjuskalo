@@ -34,12 +34,12 @@ const ExplorePriceRange = ({
                 mb: 2,
                 padding: 2,
                 width: "70%",
+                minWidth: "120px",
                 borderRadius: 2,
             }}
         >
             <FormControl sx={{ m: 1, width: "90%" }} variant="outlined">
                 <OutlinedInput
-                    id="outlined-adornment-weight"
                     value={minPrice}
                     onChange={handleMinPriceChange}
                     onKeyDown={(event) => {
@@ -62,7 +62,6 @@ const ExplorePriceRange = ({
             </FormControl>
             <FormControl sx={{ m: 1, width: "90%" }} variant="outlined">
                 <OutlinedInput
-                    id="outlined-adornment-weight"
                     value={maxPrice}
                     onChange={handleMaxPriceChange}
                     onKeyDown={(event) => {

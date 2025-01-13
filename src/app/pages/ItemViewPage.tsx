@@ -91,7 +91,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                 sx={{
                     width: "950px",
                     color: theme.palette.textBlack.main,
-                    height: "100vh",
+                    height: "100%",
                     padding: 2,
                     marginTop: 7,
                     display: "flex",
