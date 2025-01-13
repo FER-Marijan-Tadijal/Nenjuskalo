@@ -48,40 +48,64 @@ const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
             }}
         >
             <Box sx={{ width: "70%" }}>
-                <Carousel
-                    navButtonsAlwaysVisible
-                    navButtonsProps={{
-                        style: {
-                            backgroundColor: "rgba(0, 0, 0, 0.5)",
-                            color: "white",
-                        },
-                    }}
-                >
-                    {Array.from({ length: noOfPictures }, (_, pictureNum) => (
-                        <Box
-                            key={pictureNum}
-                            sx={{
-                                position: "relative",
-                                width: "100%",
-                                height: "400px",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                overflow: "hidden",
-                                borderRadius: 2,
-                            }}
-                        >
-                            <Image
-                                key={pictureNum}
-                                src={`/api/image?id=${itemId}&index=${pictureNum}`}
-                                alt="item thumbnail image"
-                                layout="fill"
-                                objectFit="contain"
-                                priority
-                            />
-                        </Box>
-                    ))}
-                </Carousel>
+                {noOfPictures > 0 && (
+                    <Carousel
+                        navButtonsAlwaysVisible
+                        navButtonsProps={{
+                            style: {
+                                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                color: "white",
+                            },
+                        }}
+                    >
+                        {Array.from(
+                            { length: noOfPictures },
+                            (_, pictureNum) => (
+                                <Box
+                                    key={pictureNum}
+                                    sx={{
+                                        position: "relative",
+                                        width: "100%",
+                                        height: "400px",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        overflow: "hidden",
+                                        borderRadius: 2,
+                                    }}
+                                >
+                                    <Image
+                                        key={pictureNum}
+                                        src={`/api/image?id=${itemId}&index=${pictureNum}`}
+                                        alt="item thumbnail image"
+                                        layout="fill"
+                                        objectFit="contain"
+                                        priority
+                                    />
+                                </Box>
+                            )
+                        )}
+                    </Carousel>
+                )}
+                {noOfPictures == 0 && (
+                    <Box
+                        sx={{
+                            position: "relative",
+                            width: "100%",
+                            height: "400px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            overflow: "hidden",
+                            borderRadius: 2,
+                            border: "1px solid black",
+                        }}
+                    >
+                        <Typography variant="h4" fontStyle="oblique">
+                            Nema slike za ovaj oglas
+                        </Typography>
+                    </Box>
+                )}
             </Box>
             <Box
                 sx={{
