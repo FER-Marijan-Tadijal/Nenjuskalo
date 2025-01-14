@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from "react";
-import {Box, Button, Typography} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
 import {Icon} from "@iconify/react";
 import theme from "@/app/styles/theme";
-import type {Session} from "next-auth";
-import DeleteAdForm from "../forms/DeleteAdForm";
+import type { Session } from "next-auth";
 import {stripePromise} from "@/app/lib/stripe";
 import {Elements} from "@stripe/react-stripe-js";
 import {handleCheckout} from "@/app/util/handleCheckout";
+import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
+import MarkAsSoldForm from "@/app/components/forms/MarkAsSoldForm";
 
 type Props = {
     user: {
@@ -28,8 +29,7 @@ type Props = {
     itemId: string;
 };
 
-const ItemThumbnail = ({user, session, itemId}: Props) => {
-    console.log("itemTHumbnail itemId: ", itemId);
+const ItemThumbnail = ({ user, session, itemId }: Props) => {
     const [check, setCheck] = useState(false);
     useEffect(() => {
         if (session?.user?.id == user.id) {
@@ -98,16 +98,17 @@ const ItemThumbnail = ({user, session, itemId}: Props) => {
                         Ažuriraj oglas
                     </Button>
                 )}
-                {check && <DeleteAdForm id={Number(itemId)}></DeleteAdForm>}
+                {check && <DeleteAdForm id={Number(itemId)} />}
                 {!check && (
                     <Button
                         variant="contained"
-                        sx={{mt: 2}}
+                        sx={{ mt: 2 }}
                         href={`/message/${user.id}`}
                     >
                         Pošalji poruku
                     </Button>
                 )}
+                {check && <MarkAsSoldForm id={Number(itemId)} />}
                 {!check && (
                     <Button
                         variant="contained"

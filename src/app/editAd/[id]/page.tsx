@@ -80,7 +80,7 @@ export default async function editAd({
             }}
         >
 
-            {/* New Ad Form */}
+            {/* Edit Ad Form */}
             <Box
                 sx={{
                     bgcolor: "#003049",

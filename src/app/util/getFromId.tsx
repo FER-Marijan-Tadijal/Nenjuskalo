@@ -1,4 +1,5 @@
 import { prisma } from "@/prisma";
+import { category } from "@prisma/client";
 
 export async function getUser(Id: string) {
     const user = await prisma.user.findUnique({where: {id: Id}})
@@ -12,11 +13,17 @@ export async function getItem(Id: number) {
         where: {id: Id},
     })
 
-    const categories = await prisma.belongsto.findMany({
+    const categoryids = await prisma.belongsto.findMany({
         where: {
             itemid: Id,
         },
     })
+
+    let categories: category[] = []
+    for (let categoryid of categoryids) {
+        let category = await getCategory(categoryid.categoryid)
+        if (category != null) categories.push(category)
+    }
 
     const noOfPictures = await prisma.picture.count({
         where: {

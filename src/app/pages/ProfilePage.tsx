@@ -8,6 +8,8 @@ import GoogleIcon from "@mui/icons-material/Google";
 import GitHubIcon from "@mui/icons-material/GitHub";
 import ProfileEditForm from "../components/forms/ProfileEditForm";
 import { stateEnum } from "../enums/stateEnum";
+import NewAdButton from "../components/forms/NewAdButton";
+
 
 const subtitleStyle = {
     fontFamily: "'Poppins', sans-serif",
@@ -192,6 +194,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
 
                 <Box
                     component="img"
+                    referrerPolicy="no-referrer"
                     src={session.user?.image || "/images/default-profile.png"}
                     alt="Profile Picture"
                     sx={{
@@ -423,7 +426,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                         <Typography
                             sx={{ textAlign: "center", color: "gray", mt: 4 }}
                         >
-                            Učitavam Vaše Artikle...
+                            Trenutno nemate aktivnih oglasa
                         </Typography>
                     )}
                 </Grid>
@@ -431,24 +434,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
 
             {/* New Ad Button */}
             <Box sx={{ mt: 4 }}>
-                <Link href="/newAd">
-                    <Button
-                        variant="contained"
-                        sx={{
-                            mb: 3,
-                            bgcolor: "#003049",
-                            color: "#FFC300",
-                            fontFamily: "'Poppins', sans-serif",
-                            fontWeight: "bold",
-                            textTransform: "uppercase",
-                            "&:hover": {
-                                bgcolor: "#1C4A6E",
-                            },
-                        }}
-                    >
-                        Napravi Novi Oglas
-                    </Button>
-                </Link>
+                <NewAdButton />
             </Box>
 
             <Box

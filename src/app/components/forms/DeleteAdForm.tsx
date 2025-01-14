@@ -28,61 +28,50 @@ export default function DeleteAdForm({ id }: { id: number }) {
     };
 
     return (
-        <Box
-            sx={{
-                backgroundColor: "#f5f5f5",
-                padding: "32px",
-                borderRadius: "8px",
-                boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)",
-                maxWidth: "600px",
-                margin: "auto",
-            }}
-        >
-            <form action={clientAction}>
-                <Grid container spacing={2}>
-                    {/* id. Treba dodati default value id oglasa nekako */}
-                    <input type="hidden" required name="id" value={id} />
-
-                    {/* Error Message */}
-                    {errorMessage && (
-                        <Grid item xs={12}>
-                            <Typography
-                                sx={{
-                                    color:
-                                        errorMessage ===
-                                        "Uspješno ste izbrisali oglas!"
-                                            ? "green"
-                                            : "red",
-                                    textAlign: "center",
-                                    fontSize: "0.9rem",
-                                }}
-                            >
-                                {errorMessage}
-                            </Typography>
-                        </Grid>
-                    )}
-
-                    {/* Submit Button */}
-                    <Grid item xs={12}>
-                        <Button
-                            fullWidth
-                            type="submit"
-                            variant="contained"
-                            sx={{
-                                backgroundColor: "#FFC300",
-                                color: "#003049",
-                                fontWeight: "bold",
-                                fontSize: "1rem",
-                                "&:hover": {
-                                    backgroundColor: "#E5A800",
-                                },
-                            }}
-                        >
-                            Izbriši Oglas
-                        </Button>
-                    </Grid>
+    <form action={clientAction}>
+        <Grid container spacing={2}>
+            {/* id. Treba dodati default value id oglasa nekako */}
+            <input type="hidden" required name="id" value={id} />
+                        
+            {/* Error Message */}
+            {errorMessage && (
+                <Grid item xs={12}>
+                    <Typography
+                        sx={{
+                            color:
+                                errorMessage ===
+                                "Uspješno ste izbrisali oglas!"
+                                    ? "green"
+                                    : "red",
+                            textAlign: "center",
+                            fontSize: "0.9rem",
+                        }}
+                    >
+                        {errorMessage}
+                    </Typography>
                 </Grid>
-            </form>
-        </Box>
+            )}
+
+            {/* Submit Button */}
+            <Grid item xs={12}>
+                <Button
+                    fullWidth
+                    type="submit"
+                    variant="contained"
+                    sx={{
+                        backgroundColor: "#EE1300",
+                        color: "#003049",
+                        fontWeight: "bold",
+                        fontSize: "1rem",
+                        "&:hover": {
+                            backgroundColor: "#BB1300",
+                        },
+                    }}
+                >
+                    Izbriši Oglas
+                </Button>
+            </Grid>
+        </Grid>
+    </form>
     );
 }

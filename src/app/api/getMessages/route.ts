@@ -1,10 +1,16 @@
 
+import { auth } from "@/app/auth";
 import { prisma } from "@/prisma"
+import { NextResponse } from "next/server";
 
-export async function POST(request: Request) {
-    const body = await request.json();
+export const POST = auth(async function POST(req) {
+    const body = await req.json();
     const senderID = body.senderid;
     const receiverID = body.receiverid;
+
+    if (req.auth?.user?.id != senderID) {
+        return NextResponse.json({ message: "Not authorized" }, { status: 403 })
+    }
 
     let data = await prisma.message.findMany({
         where: {
@@ -49,4 +55,4 @@ export async function POST(request: Request) {
     }
 
     return Response.json(data)
-}
+})

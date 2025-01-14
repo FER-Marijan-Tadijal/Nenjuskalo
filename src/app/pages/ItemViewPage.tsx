@@ -1,13 +1,21 @@
 "use client";
-import {Container, Box} from "@mui/material";
-import React, {useEffect} from "react";
+import { Container, Box, CircularProgress } from "@mui/material";
+import React, { useEffect } from "react";
 import ItemThumbnail from "../components/ItemViewComponents/ItemThumbnail";
 import ItemDescription from "../components/ItemViewComponents/ItemDescription";
 import ItemTitle from "../components/ItemViewComponents/ItemTitle";
 import {useState} from "react";
 import theme from "../styles/theme";
-import type {Session} from "next-auth";
+import type { Session } from "next-auth";
+import { category, item, itemchangestate } from "@prisma/client";
 import ItemThumbnailWrapper from "../components/ItemViewComponents/ItemThumbnail";
+
+type BigItem = {
+    item: item,
+    categories: category[],
+    state: itemchangestate[],
+    noOfPictures: number,
+}
 
 type Item = {
     itemid: string;
@@ -38,9 +46,9 @@ type ItemViewProps = {
     session: Session | null;
 };
 
-const ItemView = ({itemId, session}: ItemViewProps) => {
+const ItemView = ({ itemId, session }: ItemViewProps) => {
     console.log(itemId);
-    const [item, setItem] = useState<Item | null>(null);
+    const [item, setItem] = useState<BigItem>();
     const [user, setUser] = useState<User | null>(null);
 
     const fetchItem = async (itemId: string) => {
@@ -51,7 +59,7 @@ const ItemView = ({itemId, session}: ItemViewProps) => {
             }*/
             const data = await res.json();
             console.log(data);
-            setItem(data.item);
+            setItem(data);
         } catch (err: unknown) {
             console.log(err);
         }
@@ -70,10 +78,14 @@ const ItemView = ({itemId, session}: ItemViewProps) => {
     useEffect(() => {
         console.log(item);
         if (item) {
-            const sellerId = item.sellerid;
+            const sellerId = item.item.sellerid;
             fetchUser(sellerId);
         }
     }, [item]);
+
+    if (!item) {
+        return( <CircularProgress /> )
+    }
 
     return (
         <>
@@ -90,13 +102,16 @@ const ItemView = ({itemId, session}: ItemViewProps) => {
                 }}
             >
                 {item && user && (
-                    <>
-                        <ItemThumbnailWrapper user={user} itemId={itemId} session={session}/>
-                        <ItemTitle item={item}/>
-                        <ItemDescription description={item.description}/>
-                    </>
+                    <ItemThumbnailWrapper
+                        itemId={itemId}
+                        user={user}
+                        session={session}
+                    />
                 )}
-
+                {item && user && <ItemTitle bigItem={item} />}
+                {item && user && (
+                    <ItemDescription description={item.item.description} />
+                )}
                 {(!user || !item) && (
                     <Box
                         sx={{

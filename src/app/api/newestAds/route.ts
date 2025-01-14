@@ -1,3 +1,4 @@
+import getNewestAds from "@/app/util/getNewestAds";
 import { prisma } from "@/prisma";
 
 export async function GET(request: Request) {
@@ -14,16 +15,7 @@ export async function GET(request: Request) {
 
     try {
         // Pronađi najnovijih `n` oglasa po ID-u
-        const latestItems = await prisma.item.findMany({
-            orderBy: {
-                id: "desc",
-            },
-            take: n,
-            include: {
-                condition: true, // Ako želiš dodatne detalje, prilagodi prema potrebi
-                belongsto: true,
-            },
-        });
+        const latestItems = await getNewestAds(n)
 
         return new Response(JSON.stringify(latestItems), {
             status: 200,

@@ -20,6 +20,11 @@ export async function HandleDeleteAdForm(formData: FormData) {
                 itemid: id,
             }
         })
+        await prisma.picture.deleteMany({
+            where: {
+                itemid: id,
+            }
+        })
         await prisma.item.delete({
             where: {
                 id: id
