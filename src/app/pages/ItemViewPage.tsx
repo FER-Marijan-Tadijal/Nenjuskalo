@@ -109,16 +109,17 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                         {item.state.stateid == 0 && (
                             <Box
                                 sx={{
-                                    marginTop: 2,
-                                    width: "100%",
+                                    mt: 1,
                                     display: "flex",
                                     justifyContent: "center",
                                     alignItems: "center",
-                                    height: "40px",
+                                    textAlign: "center",
+                                    height: "30px",
                                 }}
                             >
                                 <Typography
                                     sx={{
+                                        width: "180px",
                                         padding: "5px",
                                         borderRadius: 2,
                                         backgroundColor:
@@ -126,14 +127,8 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                                     }}
                                     variant="h6"
                                 >
-                                    SKICA
+                                    *SKICA*
                                 </Typography>
-                                <Button
-                                    variant="contained"
-                                    sx={{ width: "150px" }}
-                                >
-                                    Objavi oglas
-                                </Button>
                             </Box>
                         )}
                         <ItemThumbnail
@@ -161,7 +156,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                         }}
                     >
                         Stranica se učitava...
-                    </Box> //NEMJESTI DA SE NIŠTA NE RENDERA DOK SVE NIJE SPREMNO
+                    </Box>
                 )}
             </Container>
         </>

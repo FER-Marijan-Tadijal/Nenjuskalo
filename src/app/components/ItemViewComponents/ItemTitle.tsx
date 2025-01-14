@@ -38,7 +38,7 @@ const ItemTitle = ({ bigItem }: { bigItem: BigItem }) => {
             </Typography>
             <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
                 • Kategorije:{" "}
-                {bigItem.categories.map((category) => category.name + "  ")}
+                {bigItem.categories.map((category) => category.name + " / ")}
             </Typography>
         </Box>
     );

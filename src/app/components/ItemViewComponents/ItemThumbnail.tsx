@@ -113,7 +113,7 @@ const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "left",
-                    p: 4,
+                    p: 3,
                 }}
             >
                 <Typography variant="body1">
@@ -126,46 +126,46 @@ const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
                 <Typography variant="body1">
                     • Adresa: {user.city}, {user.street} {user.houseno}
                 </Typography>
-                <Box
-                    sx={{
-                        display: "flex column",
-                        justifyContent: "space-between",
-                        padding: 1,
-                    }}
-                >
-                    {check && (
-                        <Button
-                            variant="contained"
-                            sx={{ width: "100%", backgroundColor: "grey" }}
-                            href={`/editAd/${itemId}`}
-                        >
-                            Ažuriraj oglas
-                        </Button>
-                    )}
-                    {check && <DeleteAdForm id={Number(itemId)} />}
-                    {check && <MarkAsSoldForm id={Number(itemId)} />}
-                    {!check && (
-                        <Button
-                            variant="contained"
-                            sx={{ mt: 5 }}
-                            href={`/message/${user.id}`}
-                        >
-                            Pošalji poruku
-                        </Button>
-                    )}
-                    {!check && (
-                        <Button
-                            variant="contained"
-                            sx={{
-                                mt: 5,
-                                backgroundColor: theme.palette.accent.main,
-                            }}
-                            href={`/`} //TU NAMJESTITI RUTU ZA PAYMENT
-                        >
-                            Kupi
-                        </Button>
-                    )}
-                </Box>
+
+                {check && (
+                    <Button
+                        variant="contained"
+                        sx={{
+                            width: "100%",
+                            backgroundColor: "grey",
+                            mt: 3,
+                            "&:hover": {
+                                backgroundColor: "#4B4B4B",
+                            },
+                        }}
+                        href={`/editAd/${itemId}`}
+                    >
+                        Ažuriraj oglas
+                    </Button>
+                )}
+                {check && <DeleteAdForm id={Number(itemId)} />}
+                {check && <MarkAsSoldForm id={Number(itemId)} />}
+                {!check && (
+                    <Button
+                        variant="contained"
+                        sx={{ mt: 5 }}
+                        href={`/message/${user.id}`}
+                    >
+                        Pošalji poruku
+                    </Button>
+                )}
+                {!check && (
+                    <Button
+                        variant="contained"
+                        sx={{
+                            mt: 2,
+                            backgroundColor: theme.palette.accent.main,
+                        }}
+                        href={`/`} //TU NAMJESTITI RUTU ZA PAYMENT
+                    >
+                        Kupi
+                    </Button>
+                )}
             </Box>
         </Box>
     );
