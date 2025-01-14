@@ -33,20 +33,14 @@ const ExploreFilter = ({
             sx={{
                 backgroundColor: theme.palette.secondary.main,
                 mt: 2,
-                padding: 2,
+                padding: 1,
                 width: "70%",
                 minWidth: "120px",
                 borderRadius: 2,
             }}
         >
             <FormControl fullWidth variant="outlined">
-                <InputLabel
-                    id="select-label"
-                    shrink={false}
-                    //sx={{ fontWeight: "semibold" }}
-                >
-                    {filterName}
-                </InputLabel>
+                <InputLabel id="select-label">{filterName}</InputLabel>
                 <Select
                     labelId="select-label"
                     value={filter}

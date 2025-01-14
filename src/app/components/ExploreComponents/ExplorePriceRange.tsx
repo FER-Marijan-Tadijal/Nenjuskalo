@@ -31,8 +31,7 @@ const ExplorePriceRange = ({
             sx={{
                 backgroundColor: theme.palette.secondary.main,
                 mt: 2,
-                mb: 2,
-                padding: 2,
+                padding: 1,
                 width: "70%",
                 minWidth: "120px",
                 borderRadius: 2,

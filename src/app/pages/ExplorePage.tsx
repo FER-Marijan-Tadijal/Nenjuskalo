@@ -10,7 +10,7 @@ import {
     MenuItem,
 } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import { useMediaQuery } from "@mui/material";
 import ExploreItem from "../components/GlobalComponents/AdCard";
 import ExploreFilter from "../components/ExploreComponents/ExploreFilter";
 import theme from "../styles/theme";
@@ -80,6 +80,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const [orderBy, setorderBy] = useState("");
     const [priceChanged, setPriceChanged] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
+
+    const isSmallScreen = useMediaQuery("(max-width:600px)");
+    const isLargeScreen = useMediaQuery("(min-width:600px)");
 
     const fetchCategories = async () => {
         const res = await fetch("/api/categories");
@@ -302,7 +305,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                 />
                             ))}
                         </Container>
-                        <ExploreRelevantItems randomItems={randomItems} />
+                        {isLargeScreen && (
+                            <ExploreRelevantItems randomItems={randomItems} />
+                        )}
                     </Box>
                 ) : (
                     <CircularProgress
