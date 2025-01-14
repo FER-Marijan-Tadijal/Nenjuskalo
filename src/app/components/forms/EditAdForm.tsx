@@ -85,7 +85,7 @@ export default function EditAdForm({id} : {id : number}) {
         let state = formData.get("state") as string;
 
         const result = newAdSchema.safeParse(newAd);
-        if (!result.success && state=="publish") {
+        if (!(result.success) && state=="active") {
             const errors = result.error.issues
                 .map((issue) => `${issue.path[0]}: ${issue.message}`)
                 .join(". ");
