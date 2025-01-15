@@ -6,18 +6,33 @@ export async function GET(req: NextRequest) {
     try {
         // 📥 Dohvaćanje ID-a iz query parametara
         const userId = req.nextUrl.searchParams.get("id");
+        const senderId = req.nextUrl.searchParams.get("senderId") || null;
 
         if (!userId) {
             return NextResponse.json({ error: "Nedostaje ID korisnika." }, { status: 400 });
         }
 
+        let unreadCount = 0
+
         // 📊 Brojanje nepročitanih poruka (seentime === null)
-        const unreadCount = await prisma.message.count({
-            where: {
-                receiverid: userId,
-                seentime: null, // Nepročitane poruke
-            },
-        });
+        if (!senderId) {
+            unreadCount = await prisma.message.count({
+                where: {
+                    receiverid: userId,
+                    seentime: null, // Nepročitane poruke
+                },
+            });
+        }
+        else {
+            unreadCount = await prisma.message.count({
+                where: {
+                    receiverid: userId,
+                    senderid: senderId,
+                    seentime: null, // Nepročitane poruke
+                },
+            });
+        }
+        
 
         // ✅ Vraćanje broja nepročitanih poruka
         return NextResponse.json({ unreadCount });
