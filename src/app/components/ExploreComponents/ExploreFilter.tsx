@@ -43,6 +43,7 @@ const ExploreFilter = ({
                 <InputLabel id="select-label">{filterName}</InputLabel>
                 <Select
                     labelId="select-label"
+                    label={filterName}
                     value={filter}
                     onChange={onChange}
                 >

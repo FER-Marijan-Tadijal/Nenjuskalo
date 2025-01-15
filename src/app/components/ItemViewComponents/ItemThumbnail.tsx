@@ -30,11 +30,15 @@ type Props = {
 
 const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
     const [check, setCheck] = useState(false);
+    const [imagesArray, setImagesArray] = useState(
+        Array.from({ length: noOfPictures }, (_, index) => index)
+    );
 
     useEffect(() => {
         if (session?.user?.id == user.id) {
             setCheck(true);
         }
+        console.log(imagesArray);
     }, []);
 
     return (
@@ -58,33 +62,29 @@ const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
                             },
                         }}
                     >
-                        {Array.from(
-                            { length: noOfPictures },
-                            (_, pictureNum) => (
-                                <Box
-                                    key={pictureNum}
-                                    sx={{
-                                        position: "relative",
-                                        width: "100%",
-                                        height: "400px",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                        overflow: "hidden",
-                                        borderRadius: 2,
-                                    }}
-                                >
-                                    <Image
-                                        key={pictureNum}
-                                        src={`/api/image?id=${itemId}&index=${pictureNum}`}
-                                        alt="item thumbnail image"
-                                        layout="fill"
-                                        objectFit="contain"
-                                        priority
-                                    />
-                                </Box>
-                            )
-                        )}
+                        {imagesArray.map((imageNo) => (
+                            <Box
+                                key={imageNo}
+                                sx={{
+                                    position: "relative",
+                                    width: "100%",
+                                    height: "400px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    overflow: "hidden",
+                                    borderRadius: 2,
+                                }}
+                            >
+                                <Image
+                                    src={`/api/image?id=${itemId}&index=${imageNo}`}
+                                    alt={`item thumbnail image ${imageNo}`}
+                                    layout="fill"
+                                    objectFit="contain"
+                                    priority={imageNo === 0}
+                                />
+                            </Box>
+                        ))}
                     </Carousel>
                 )}
                 {noOfPictures == 0 && (
