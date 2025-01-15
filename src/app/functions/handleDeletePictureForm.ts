@@ -20,10 +20,13 @@ export async function HandleDeletePictureForm(formData: FormData) {
             },
         })
 
-        if (item?.sellerid != session?.user?.id) {
-            console.log("Not qualified to edit")
-            return
-        }
+        let siteuser = await prisma.siteuser.findUnique({
+            where: {
+                id: session.user?.id,
+            },
+        })
+
+        if ((session.user?.id != item?.sellerid) && (siteuser?.roleid != 1)) return
 
         let index = parseInt(formData.get("index") as string);
 

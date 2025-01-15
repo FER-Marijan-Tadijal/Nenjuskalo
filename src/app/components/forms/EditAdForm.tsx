@@ -107,7 +107,7 @@ export default function EditAdForm({ id }: { id: number }) {
         let state = formData.get("state") as string;
 
         const result = newAdSchema.safeParse(newAd);
-        if (!result.success && state == "publish") {
+        if (!(result.success) && state=="active") {
             const errors = result.error.issues
                 .map((issue) => `${issue.path[0]}: ${issue.message}`)
                 .join(". ");
@@ -318,124 +318,177 @@ export default function EditAdForm({ id }: { id: number }) {
                     <Grid item xs={12} md={6}>
                         <Box
                             sx={{
-                                p: 2,
-                                backgroundColor: "#003049", // Dark blue background
-                                borderRadius: "8px", // Rounded corners
-                                border: "2px solid #003049", // Matches the app theme
-                                boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
+                                p: 3,
+                                backgroundColor: "#003049",
+                                borderRadius: "12px",
+                                border: "2px solid #FFC300",
+                                boxShadow: "0px 6px 15px rgba(0, 0, 0, 0.2)",
                                 display: "flex",
                                 flexDirection: "column",
-                                gap: 1,
-                                height: "70%",
+                                gap: 2,
+                                height: "85%",
                             }}
                         >
-                            {/* Label for Input */}
-                            <label
-                                htmlFor="pictures"
-                                style={{
-                                    display: "inline-block",
-                                    padding: "10px 20px",
-                                    backgroundColor: "#FFC300", // Golden yellow background
-                                    color: "#003049", // Dark blue text
-                                    fontWeight: "bold",
-                                    borderRadius: "8px", // Rounded corners for the button
-                                    cursor: "pointer",
-                                    fontFamily: "'Poppins', sans-serif",
-                                    textAlign: "center",
-                                    marginBottom: "8px",
-                                }}
-                            >
-                                Izaberi Slike
-                            </label>
+                            {item.noOfPictures > 0 && (
+                                <>
+                                    {/* Picture View Section */}
+                                    <Typography
+                                        variant="h6"
+                                        sx={{
+                                            color: "#FFC300",
+                                            fontFamily: "'Poppins', sans-serif",
+                                            fontWeight: "bold",
+                                            textAlign: "center",
+                                        }}
+                                    >
+                                        Vaše Slike
+                                    </Typography>
+                                </>
+                            )}
 
-                            {/* Input 
-                            <input
-                                type="file"
-                                accept="image/*"
-                                id="pictures"
-                                multiple
-                                onChange={(e) => {
-                                    const files = e.target.files;
-                                    const filenames = Array.from(files || []).map((file) => file.name);
-                                    const displayText = filenames.length
-                                        ? `${filenames.join(", ")}`
-                                        : "Nijedan file nije izabran.";
-                                    const displayElement = document.getElementById("file-display");
-                                    if (displayElement) displayElement.textContent = displayText;
-                                }}
-                                style={{
-                                    display: "none", 
-                                    padding: "10px",
-                                    borderRadius: "8px",
-                                    width: "100%",
-                                    backgroundColor: "white", 
-                                    border: "1px solid #E5E5E5", 
-                                    fontFamily: "'Roboto', sans-serif",
-                                    fontSize: "0.9rem",
-                                    color: "#333",
-                                }}
-                            /> */}
-
-                            {picIndexes.map((name) => {
-                                if (name < item.noOfPictures) {
-                                    return (
-                                        <span key={"group" + name}>
-                                            <img
-                                                key={"img" + name}
-                                                src={
-                                                    "/api/image?id=" +
-                                                    id +
-                                                    "&index=" +
-                                                    name +
-                                                    "&cachebreaker" +
-                                                    new Date().toString()
-                                                }
-                                                width="100"
-                                            />
-                                            <input
-                                                key={"deletepic" + name}
-                                                type="submit"
-                                                value="Izbriši"
-                                                formAction={(e) =>
-                                                    deletePicture(e, name)
-                                                }
-                                            />
-                                        </span>
-                                    );
-                                } else if (name == item.noOfPictures) {
-                                    return (
-                                        <span key={"group" + name}>
-                                            <input
-                                                key={"imgupload"}
-                                                id="imgupload"
-                                                type="file"
-                                                accept="image/*"
-                                            />
-                                            <input
-                                                key={"submit" + name}
-                                                type="submit"
-                                                value="postavi sliku"
-                                                formAction={uploadPicture}
-                                            />
-                                        </span>
-                                    );
-                                }
-                            })}
-
-                            {/* Display Selected Files */}
-                            <Typography
-                                id="file-display"
+                            <Box
                                 sx={{
-                                    fontFamily: "'Roboto', sans-serif",
-                                    fontSize: "0.9rem",
-                                    color: "white",
+                                    maxHeight: "150px",  // Ograničenje visine za scroll
+                                    overflowY: item.noOfPictures > 1 ? "auto" : "visible",   // Vertikalno scrollanje ako ima više od jedne slike
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    gap: 1,
+                                    pr: 1,               // Dodaj prostor za scroll bar
+                                    "&::-webkit-scrollbar-thumb": {
+                                        backgroundColor: "#FFC300",
+                                        borderRadius: "10px",
+                                    },
+                                }}
+                            >
+                                {picIndexes.map((name) => {
+                                    if (name < item.noOfPictures) {
+                                        return (
+                                            <Box
+                                                key={"group" + name}
+                                                sx={{
+                                                    display: "flex",
+                                                    alignItems: "center",
+                                                    justifyContent: "space-between",
+                                                    gap: 1,
+                                                    backgroundColor: "#F5F5F5",
+                                                    p: 1,
+                                                    borderRadius: "8px",
+                                                    boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+                                                }}
+                                            >
+                                                {/* Slika */}
+                                                <img
+                                                    key={"img" + name}
+                                                    src={`/api/image?id=${id}&index=${name}&cachebreaker=${new Date().toString()}`}
+                                                    width="80"
+                                                    height="80"
+                                                    style={{
+                                                        objectFit: "cover",
+                                                        borderRadius: "8px",
+                                                        border: "2px solid #FFC300",
+                                                    }}
+                                                    alt={`Slika ${name + 1}`}
+                                                />
+
+                                                {/* Gumb za Brisanje */}
+                                                <input
+                                                    key={"deletepic" + name}
+                                                    type="submit"
+                                                    value="🗑️ Izbriši"
+                                                    formAction={(e) => deletePicture(e, name)}
+                                                    style={{
+                                                        backgroundColor: "#FF6B6B",
+                                                        color: "white",
+                                                        border: "none",
+                                                        padding: "6px 12px",
+                                                        borderRadius: "8px",
+                                                        cursor: "pointer",
+                                                        fontWeight: "bold",
+                                                        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)",
+                                                        transition: "background-color 0.3s ease",
+                                                    }}
+                                                    onMouseOver={(e) =>
+                                                        (e.currentTarget.style.backgroundColor = "#E63946")
+                                                    }
+                                                    onMouseOut={(e) =>
+                                                        (e.currentTarget.style.backgroundColor = "#FF6B6B")
+                                                    }
+                                                />
+                                            </Box>
+                                        );
+                                    }
+                                })}
+                            </Box>
+
+                            {/* 📤 Sekcija za Upload Slike */}
+                            <Typography
+                                variant="h6"
+                                sx={{
+                                    color: "#FFC300",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontWeight: "bold",
                                     textAlign: "center",
                                 }}
                             >
-                                Nijedan file nije izabran.
+                                Dodaj Novu Sliku
                             </Typography>
+
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    gap: 2,
+                                    backgroundColor: "#F5F5F5",
+                                    p: 2,
+                                    borderRadius: "8px",
+                                    boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.1)",
+                                }}
+                            >
+                                {/* Input za Upload Slike */}
+                                <input
+                                    key={"imgupload"}
+                                    id="imgupload"
+                                    type="file"
+                                    accept="image/*"
+                                    style={{
+                                        width: "100%",
+                                        padding: "8px",
+                                        borderRadius: "8px",
+                                        backgroundColor: "#fff",
+                                        border: "1px solid #ccc",
+                                        boxSizing: "border-box",
+                                    }}
+                                />
+
+                                {/* Gumb za Upload */}
+                                <input
+                                    key={"submit-upload"}
+                                    type="submit"
+                                    value="📤 Postavi sliku"
+                                    formAction={uploadPicture}
+                                    style={{
+                                        backgroundColor: "#003049",
+                                        color: "#FFC300",
+                                        border: "none",
+                                        padding: "10px 20px",
+                                        borderRadius: "8px",
+                                        cursor: "pointer",
+                                        fontWeight: "bold",
+                                        boxShadow: "0px 2px 8px rgba(0, 0, 0, 0.2)",
+                                        transition: "background-color 0.3s ease",
+                                    }}
+                                    onMouseOver={(e) =>
+                                        (e.currentTarget.style.backgroundColor = "#1C4A6E")
+                                    }
+                                    onMouseOut={(e) =>
+                                        (e.currentTarget.style.backgroundColor = "#003049")
+                                    }
+                                />
+                            </Box>
                         </Box>
                     </Grid>
+
 
                     {/* State */}
                     <Grid item xs={12} md={6}>
@@ -443,8 +496,8 @@ export default function EditAdForm({ id }: { id: number }) {
                             sx={{
                                 p: 2,
                                 backgroundColor: "#003049", // Dark blue background
-                                borderRadius: "8px", // Rounded corners
-                                border: "2px solid #003049", // Matches the app theme
+                                borderRadius: "12px", // Rounded corners
+                                border: "2px solid #FFC300", // Matches the app theme
                                 boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)", // Subtle shadow for depth
                                 display: "flex",
                                 flexDirection: "column",
@@ -508,6 +561,7 @@ export default function EditAdForm({ id }: { id: number }) {
                                 color: "#003049",
                                 fontWeight: "bold",
                                 fontSize: "1rem",
+                                mt: 2, // Added margin-top to move the button down
                                 "&:hover": {
                                     backgroundColor: "#E5A800",
                                 },

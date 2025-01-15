@@ -350,16 +350,38 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                         fontWeight: "bold",
                         textAlign: "center",
                         mb: 1,
+                        mt: 4, // Added margin top to move it closer to the top text
                     }}
                 >
                     Vaši Oglasi:
                 </Typography>
+
+                <Box
+                    sx={{
+                        width: "20%",
+                        borderBottom: "2px solid #003049",
+                        my: 2, // Reduced margin bottom to move it closer to the top text
+                        mx: "auto", // Center the box horizontally
+                    }}
+                />
+
+                <Box sx={{ textAlign: "center", mb: 4 }}>
+                    <Typography variant="body2" sx={{ color: "gray" }}>
+                        <Box component="span" sx={{ display: "inline-block", width: 16, height: 16, bgcolor: "green", mr: 1}} />
+                        Objavljeni
+                        <Box component="span" sx={{ display: "inline-block", width: 16, height: 16, bgcolor: "red", ml: 3, mr: 1}} />
+                        Prodani
+                        <Box component="span" sx={{ display: "inline-block", width: 16, height: 16, bgcolor: "#B0B0B0", ml: 3, mr: 1}} />
+                        Draftovi
+                    </Typography>
+                </Box>
                 <Grid container spacing={4} justifyContent="center">
                     {userAds.length > 0 ? (
                         userAds.map((item: any) => (
                             <Grid item xs={12} sm={6} md={3} key={item.id}>
                                 <Card
                                     sx={{
+                                        position: "relative", // Dodano za pozicioniranje status indikatora
                                         display: "flex",
                                         flexDirection: "column",
                                         justifyContent: "space-between",
@@ -371,16 +393,40 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                         borderRadius: "8px", // Add border radius
                                     }}
                                 >
+                                    {/* Status Indicator */}
+                                    <Box
+                                        sx={{
+                                            position: "absolute",
+                                            top: 8,
+                                            right: 8,
+                                            width: 16,
+                                            height: 16,
+                                            borderRadius: "50%",
+                                            backgroundColor:
+                                                item.itemchangestate[0]?.stateid === 0
+                                                    ? "#B0B0B0" // Draft - Siva
+                                                    : item.itemchangestate[0]?.stateid === 1
+                                                    ? "#28A745" // Aktivan - Zelena
+                                                    : item.itemchangestate[0]?.stateid === 2
+                                                    ? "#DC3545" // Prodan - Crvena
+                                                    : "gray",   // Default boja ako nema status
+                                            border: "2px solid white", // Mali bijeli obrub
+                                            boxShadow: "0px 2px 6px rgba(0,0,0,0.3)",
+                                        }}
+                                    />
+
+                                    {/* Slika oglasa */}
                                     <CardMedia
                                         component="img"
-                                        height="140" // Fixed height for image
-                                        image={`/api/image?id=${item.id}&index=0`} // Dynamic image from API
+                                        height="140"
+                                        image={`/api/image?id=${item.id}&index=0`}
                                         alt={item.title}
-                                        sx={{ objectFit: "cover" }} // Ensures the image fits nicely
+                                        sx={{ objectFit: "cover" }}
                                     />
+
                                     <CardContent
                                         sx={{
-                                            flexGrow: 1, // Ensures content stretches
+                                            flexGrow: 1,
                                             display: "flex",
                                             flexDirection: "column",
                                             justifyContent: "space-between",
@@ -424,23 +470,41 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                             Cijena: {item.askingprice}€
                                         </Typography>
                                     </CardContent>
-                                    <Button
-                                        variant="contained"
-                                        fullWidth
-                                        sx={{
-                                            mt: 2,
-                                            bgcolor: "#FFC300",
-                                            color: "#003049",
-                                            fontWeight: "600",
-                                            "&:hover": {
-                                                bgcolor: "#E5A800",
-                                            },
-                                        }}
-                                        href={`/item/${item.id}`}
-                                    >
-                                        Detalji
-                                    </Button>
+
+                                    <Box sx={{ display: "flex", gap: 1, mt: 2 }}>
+                                        <Button
+                                            variant="contained"
+                                            sx={{
+                                                flex: 1,
+                                                bgcolor: "#FFC300",
+                                                color: "#003049",
+                                                fontWeight: "600",
+                                                "&:hover": {
+                                                    bgcolor: "#E5A800",
+                                                },
+                                            }}
+                                            href={`/item/${item.id}`}
+                                        >
+                                            Detalji
+                                        </Button>
+                                        <Button
+                                            variant="contained"
+                                            sx={{
+                                                flex: 1,
+                                                bgcolor: "#FFC300",
+                                                color: "#003049",
+                                                fontWeight: "600",
+                                                "&:hover": {
+                                                    bgcolor: "#E5A800",
+                                                },
+                                            }}
+                                            href={`/editAd/${item.id}`}
+                                        >
+                                            Uredi
+                                        </Button>
+                                    </Box>
                                 </Card>
+
                             </Grid>
                         ))
                     ) : (
