@@ -8,16 +8,20 @@ export async function HandleEditAdForm(formData: FormData) {
     const session = await auth();
     if (session != null) {
         let id = parseInt(formData.get("id") as string)
-        let item = await prisma.item.findFirst({
+        let item = await prisma.item.findUnique({
             where: {
                 id: id,
             },
         })
 
-        if (item?.sellerid != session?.user?.id) {
-            console.log("Not qualified to edit")
-            return
-        }
+        let siteuser = await prisma.siteuser.findUnique({
+            where: {
+                id: session.user?.id,
+            },
+        })
+
+        if ((session.user?.id != item?.sellerid) && (siteuser?.roleid != 1)) return
+
 
         let state = 0;
         let stateAsStr = formData.get("state") as string;

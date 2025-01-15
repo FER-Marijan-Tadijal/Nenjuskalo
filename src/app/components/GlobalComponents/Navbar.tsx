@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     AppBar,
     Toolbar,
@@ -9,6 +9,7 @@ import {
     IconButton,
     InputBase,
     Button,
+    Badge,
 } from "@mui/material";
 import { Search } from "@mui/icons-material";
 import { styled } from "@mui/system";
@@ -65,12 +66,32 @@ interface NavbarProps {
 
 export default function Navbar({ session }: NavbarProps) {
     const [query, setQuery] = useState("");
+    const [unreadMessages, setUnreadMessages] = useState<number>(0);
     const router = useRouter();
 
     const handleSearch = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         router.push(`/explore?search=${encodeURIComponent(query)}`);
     };
+
+    useEffect(() => {
+        async function fetchUnreadMessages() {
+            if (!session?.user?.id) return;
+
+            try {
+                const res = await fetch(`/api/unreadMessages?id=${session.user.id}`);
+                const data = await res.json();
+                setUnreadMessages(data.unreadCount || 0); // Sprema broj nepročitanih poruka
+            } catch (error) {
+                console.error("Greška pri dohvaćanju poruka:", error);
+            }
+        }
+
+        fetchUnreadMessages(); // Prvo dohvaćanje
+        const interval = setInterval(fetchUnreadMessages, 5000); // Ponavljanje svakih 5 sekundi
+
+        return () => clearInterval(interval); // Čisti interval prilikom demontiranja
+    }, [session]);
 
     return (
         <AppBar
@@ -142,8 +163,15 @@ export default function Navbar({ session }: NavbarProps) {
                     </Link>
                     {session && (
                         <Link href="/message" passHref>
+                        <Badge
+                            color="warning"
+                            badgeContent={unreadMessages > 0 ? unreadMessages : null}
+                            overlap="circular"
+                            sx={{ "& .MuiBadge-badge": { right: -8, top: 4 } }}
+                        >
                             <NavbarLink>Poruke</NavbarLink>
-                        </Link>
+                        </Badge>
+                    </Link>
                     )}
                     {session && (
                         <Link href="/profile" passHref>
@@ -188,7 +216,7 @@ export default function Navbar({ session }: NavbarProps) {
                     </SearchBox>
                 </Box>
 
-                {/* Login/Logout Buttons */}
+               {/* Login/Logout Buttons */}
                 <Box
                     sx={{
                         display: "flex",
@@ -239,25 +267,67 @@ export default function Navbar({ session }: NavbarProps) {
                             </Button>
                         </>
                     ) : (
-                        <Button
-                            variant="contained"
-                            sx={{
-                                bgcolor: "#FFC300",
-                                color: "#003049",
-                                fontFamily: "'Poppins', sans-serif",
-                                fontWeight: "bold",
-                                "&:hover": {
-                                    bgcolor: "#E5A800",
-                                },
-                                textTransform: "none",
-                                px: 2,
-                            }}
-                            onClick={() => signOut()}
-                        >
-                            Odjava
-                        </Button>
+                        <>
+                            {/* User Profile Picture */}
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    gap: 1.5,
+                                    bgcolor: "#ffffff",
+                                    px: 2,
+                                    py: 1,
+                                    borderRadius: "8px",
+                                    boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
+                                }}
+                            >
+                                <Box
+                                    component="img"
+                                    src={session.user?.image || "/images/default-profile.png"} // 👈 Default image if none
+                                    alt="Profile Picture"
+                                    sx={{
+                                        width: 35,
+                                        height: 35,
+                                        borderRadius: "50%",
+                                        objectFit: "cover",
+                                        border: "2px solid #FFC300",
+                                    }}
+                                />
+                                <Typography
+                                    sx={{
+                                        fontFamily: "'Poppins', sans-serif",
+                                        fontWeight: "bold",
+                                        color: "#003049",
+                                        textTransform: "capitalize",
+                                    }}
+                                >
+                                    {session.user?.name || "Korisnik"}
+                                </Typography>
+                            </Box>
+
+                            {/* Logout Button */}
+                            <Button
+                                variant="contained"
+                                sx={{
+                                    bgcolor: "#FFC300",
+                                    color: "#003049",
+                                    fontFamily: "'Poppins', sans-serif",
+                                    fontWeight: "bold",
+                                    "&:hover": {
+                                        bgcolor: "#E5A800",
+                                    },
+                                    textTransform: "none",
+                                    px: 2,
+                                }}
+                                onClick={() => signOut()}
+                            >
+                                Odjava
+                            </Button>
+                        </>
                     )}
                 </Box>
+
+                
             </Toolbar>
         </AppBar>
     );

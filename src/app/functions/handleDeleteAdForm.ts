@@ -10,6 +10,20 @@ export async function HandleDeleteAdForm(formData: FormData) {
         let id = parseInt(formData.get("id") as string);
         console.log(id);
 
+        let item = await prisma.item.findUnique({
+            where: {
+                id: id,
+            },
+        })
+
+        let siteuser = await prisma.siteuser.findUnique({
+            where: {
+                id: session.user?.id,
+            },
+        })
+
+        if ((session.user?.id != item?.sellerid) && (siteuser?.roleid != 1)) return
+
         await prisma.itemchangestate.deleteMany({
             where: {
                 itemid: id,
