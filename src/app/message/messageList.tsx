@@ -84,7 +84,7 @@ export default function MessageList({
             >
                 Razgovor:
             </Typography>
-            <List sx={{ display: "flex", flexDirection: "column-reverse", height: "300px", gap: 1 }}>
+            <List sx={{ display: "flex", flexDirection: "column-reverse", overflow:"scroll", height: "300px", gap: 1 }}>
                 {messages
                     .slice() // Create a shallow copy to avoid mutating state
                     .reverse() // Reverse the order of messages
