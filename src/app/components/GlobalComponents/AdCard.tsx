@@ -143,9 +143,16 @@ const ExploreItem = ({
                                 },
                             }}
                         >
-                            <Typography variant="body2">• {title}</Typography>
+                            {!isLargeScreen && (
+                                <Typography variant="body2">
+                                    • {title} - {price} €
+                                </Typography>
+                            )}
                             {isLargeScreen && (
                                 <>
+                                    <Typography variant="body2">
+                                        • {title}
+                                    </Typography>
                                     <Typography variant="body2">
                                         • Cijena: {price} €
                                     </Typography>
