@@ -81,8 +81,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const [priceChanged, setPriceChanged] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const isSmallScreen = useMediaQuery("(max-width:600px)");
-    const isLargeScreen = useMediaQuery("(min-width:600px)");
+    const isLargeScreen = useMediaQuery("(min-width:800px)");
+    const isMoreThan600px = useMediaQuery("(min-width:600px)");
+    const isLess600px = useMediaQuery("(min-width:600px)");
 
     const fetchCategories = async () => {
         const res = await fetch("/api/categories");
@@ -180,133 +181,198 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         <>
             <ThemeProvider theme={theme}>
                 {!isLoading ? (
-                    <Box
-                        sx={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            alignItems: "start",
-                            mt: 8,
-                        }}
-                        className="slide-in-container-05s"
-                    >
-                        <Box sx={{ width: "20%" }}>
-                            <ExploreFilter
-                                filterName="stanje"
-                                filter={conditionId}
-                                onChange={handleConditionIdChange}
-                                filterOptions={conditions}
-                            />
-                            <ExploreFilter
-                                filterName="kategorija"
-                                filter={categoryId}
-                                onChange={handleCategoryIdChange}
-                                filterOptions={categories}
-                            />
-                            <ExplorePriceRange
-                                minPrice={minPrice}
-                                maxPrice={maxPrice}
-                                handleMaxPriceBlur={handleMaxPriceBlur}
-                                handleMaxPriceChange={handleMaxPriceChange}
-                                handleMinPriceBlur={handleMinPriceBlur}
-                                handleMinPriceChange={handleMinPriceChange}
-                            />
-                        </Box>
-                        <Container
+                    <Box>
+                        <Box
                             sx={{
-                                width: "60%",
-                                //backgroundColor: "#D9F0FF ",
-                                //color: "#F1E9DA",
                                 display: "flex",
-                                flexDirection: "column",
-                                alignItems: "center",
-                                paddingBottom: 1,
+                                justifyContent: "space-between",
+                                alignItems: "start",
+                                mt: 8,
                             }}
+                            className="slide-in-container-05s"
                         >
-                            <Box
+                            <Box sx={{ width: "20%" }}>
+                                <ExploreFilter
+                                    filterName="stanje"
+                                    filter={conditionId}
+                                    onChange={handleConditionIdChange}
+                                    filterOptions={conditions}
+                                />
+                                <ExploreFilter
+                                    filterName="kategorija"
+                                    filter={categoryId}
+                                    onChange={handleCategoryIdChange}
+                                    filterOptions={categories}
+                                />
+                                {(isLargeScreen || !isMoreThan600px) && (
+                                    <ExplorePriceRange
+                                        minPrice={minPrice}
+                                        maxPrice={maxPrice}
+                                        handleMaxPriceBlur={handleMaxPriceBlur}
+                                        handleMaxPriceChange={
+                                            handleMaxPriceChange
+                                        }
+                                        handleMinPriceBlur={handleMinPriceBlur}
+                                        handleMinPriceChange={
+                                            handleMinPriceChange
+                                        }
+                                    />
+                                )}
+                            </Box>
+                            <Container
                                 sx={{
-                                    marginTop: 2,
-                                    marginBottom: 1,
-                                    padding: 1,
-                                    backgroundColor:
-                                        theme.palette.secondary.main,
-                                    color: "#1C2B36",
-                                    borderRadius: 2,
+                                    width: "60%",
+                                    //backgroundColor: "#D9F0FF ",
+                                    //color: "#F1E9DA",
                                     display: "flex",
-                                    justifyContent: "space-around",
+                                    flexDirection: "column",
                                     alignItems: "center",
-                                    width: "50%",
-                                    minWidth: "200px",
+                                    paddingBottom: 1,
+                                    margin: { xs: 0 },
+                                    paddingRight: { sm: 7, xs: 7 },
+                                    paddingLeft: { sm: 7 },
                                 }}
                             >
                                 <Box
                                     sx={{
+                                        marginTop: 2,
+                                        marginBottom: 1,
+                                        padding: 1,
                                         backgroundColor:
                                             theme.palette.secondary.main,
-                                        padding: 1,
+                                        color: "#1C2B36",
                                         borderRadius: 2,
-                                        width: "70%",
+                                        display: "flex",
+                                        justifyContent: "space-around",
+                                        alignItems: "center",
+                                        width: "50%",
+                                        minWidth: "140px",
                                     }}
                                 >
-                                    <FormControl fullWidth variant="outlined">
-                                        <InputLabel
-                                            id="select-label"
-                                            shrink={false}
+                                    <Box
+                                        sx={{
+                                            backgroundColor:
+                                                theme.palette.secondary.main,
+                                            padding: 1,
+                                            borderRadius: 2,
+                                            width: "70%",
+                                        }}
+                                    >
+                                        <FormControl
+                                            fullWidth
+                                            variant="outlined"
                                         >
-                                            Sortiraj
-                                        </InputLabel>
-                                        <Select
-                                            labelId="select-label"
-                                            value={orderBy}
-                                            onChange={handleOrderByChange}
-                                        >
-                                            {orders.map((order, index) => (
-                                                <MenuItem
-                                                    key={index}
-                                                    value={order[0]}
-                                                >
-                                                    {order[1]}
-                                                </MenuItem>
-                                            ))}
-                                        </Select>
-                                    </FormControl>
+                                            <InputLabel
+                                                id="select-label"
+                                                shrink={false}
+                                            >
+                                                Sortiraj
+                                            </InputLabel>
+                                            <Select
+                                                labelId="select-label"
+                                                value={orderBy}
+                                                onChange={handleOrderByChange}
+                                            >
+                                                {orders.map((order, index) => (
+                                                    <MenuItem
+                                                        key={index}
+                                                        value={order[0]}
+                                                    >
+                                                        {order[1]}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
+                                    </Box>
                                 </Box>
-                            </Box>
-                            <Box sx={{ border: "1px solid grey" }}>
-                                <Button
-                                    onClick={() =>
-                                        setPage(Math.max(page - 1, 1))
-                                    }
-                                    disabled={page === 1}
+                                <Box
+                                    sx={{
+                                        border: "1px solid grey",
+                                        display: "flex column",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        textAlign: "center",
+                                    }}
                                 >
-                                    Prijašnja
-                                </Button>
-                                <Typography component="span">
-                                    Stranica {page} od {totalPages}
-                                </Typography>
-                                <Button
-                                    onClick={() =>
-                                        setPage(Math.min(page + 1, totalPages))
-                                    }
-                                    disabled={page === totalPages}
-                                >
-                                    Sljedeća
-                                </Button>
-                            </Box>
-                            {items.map((e, index) => (
-                                <ExploreItem
-                                    itemId={e.id}
-                                    title={e.title}
-                                    price={e.askingprice}
-                                    sellerId={e.sellerid}
-                                    categoryObjects={e.belongsto}
-                                    key={index}
-                                    categories={categories}
-                                    checkPage={true}
+                                    <Box>
+                                        <Button
+                                            onClick={() =>
+                                                setPage(Math.max(page - 1, 1))
+                                            }
+                                            disabled={page === 1}
+                                        >
+                                            Prijašnja
+                                        </Button>
+                                        {isLargeScreen && (
+                                            <Typography component="span">
+                                                Stranica {page} od {totalPages}
+                                            </Typography>
+                                        )}
+                                        <Button
+                                            onClick={() =>
+                                                setPage(
+                                                    Math.min(
+                                                        page + 1,
+                                                        totalPages
+                                                    )
+                                                )
+                                            }
+                                            disabled={page === totalPages}
+                                        >
+                                            Sljedeća
+                                        </Button>
+                                    </Box>
+                                    {!isLargeScreen && (
+                                        <Box>
+                                            <Typography component="span">
+                                                Stranica {page} od {totalPages}
+                                            </Typography>
+                                        </Box>
+                                    )}
+                                </Box>
+                                {items.map((e, index) => (
+                                    <ExploreItem
+                                        itemId={e.id}
+                                        title={e.title}
+                                        price={e.askingprice}
+                                        sellerId={e.sellerid}
+                                        categoryObjects={e.belongsto}
+                                        key={index}
+                                        categories={categories}
+                                        checkPage={true}
+                                    />
+                                ))}
+                            </Container>
+                            {isLargeScreen && (
+                                <Box sx={{ width: "20%" }}>
+                                    <ExploreRelevantItems
+                                        randomItems={randomItems}
+                                    />
+                                </Box>
+                            )}
+                            {!isLargeScreen && isMoreThan600px && (
+                                <ExplorePriceRange
+                                    minPrice={minPrice}
+                                    maxPrice={maxPrice}
+                                    handleMaxPriceBlur={handleMaxPriceBlur}
+                                    handleMaxPriceChange={handleMaxPriceChange}
+                                    handleMinPriceBlur={handleMinPriceBlur}
+                                    handleMinPriceChange={handleMinPriceChange}
                                 />
-                            ))}
-                        </Container>
-                        {isLargeScreen && (
-                            <ExploreRelevantItems randomItems={randomItems} />
+                            )}
+                        </Box>
+                        {!isLargeScreen && (
+                            <Box
+                                sx={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    mb: 1,
+                                }}
+                            >
+                                <ExploreRelevantItems
+                                    randomItems={randomItems}
+                                />
+                            </Box>
                         )}
                     </Box>
                 ) : (

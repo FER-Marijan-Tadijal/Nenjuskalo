@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Typography, Button } from "@mui/material";
 import theme from "@/app/styles/theme";
 import { getUser } from "@/app/util/getFromId";
+import { useMediaQuery } from "@mui/material";
 
 type Props = {
     itemId: number;
@@ -39,6 +40,9 @@ const ExploreItem = ({
     const categoryIds = categoryObjects.map((obj) => obj.categoryid);
     var check = true;
 
+    const isLargeScreen = useMediaQuery("(min-width:1200px)");
+    const isAround1100px = useMediaQuery("(min-width:1100px)");
+
     const fetchUser = async (userId: string) => {
         const res = await fetch(`/api/getUser?id=${userId}`);
         const userData = await res.json();
@@ -65,10 +69,17 @@ const ExploreItem = ({
                 <Box
                     sx={{
                         width: checkPage ? "55%" : "90%",
+                        minWidth: { xs: "150px", sm: "300px" },
                         height: "160px",
                         margin: checkPage ? 0.7 : 0,
                         padding: 2,
                         display: "flex",
+                        flexDirection: {
+                            xs: "column",
+                            sm: "column",
+                            md: "column",
+                            lg: "row",
+                        },
                         justifyContent: "space-between",
                         borderRadius: 3,
                         border: "1px solid grey",
@@ -86,7 +97,18 @@ const ExploreItem = ({
                             flexDirection: "column",
                             justifyContent: "center",
                             alignItems: "center",
-                            width: "50%",
+                            width: {
+                                lg: "50%",
+                                md: "100%",
+                                sm: "100%",
+                                xs: "100%",
+                            },
+                            maxHeight: {
+                                lg: "100%",
+                                md: "60%",
+                                sm: "60%",
+                                xs: "60%",
+                            },
                             height: "100%",
                             paddingRight: 1,
                         }}
@@ -112,25 +134,43 @@ const ExploreItem = ({
                     >
                         <Box
                             sx={{
-                                marginTop: 2,
+                                marginTop: 1,
+                                textAlign: {
+                                    xs: "center",
+                                    sm: "center",
+                                    md: "center",
+                                    lg: "left",
+                                },
                             }}
                         >
-                            <Typography variant="body2">• {title}</Typography>
-                            <Typography variant="body2">
-                                • Cijena: {price} €
-                            </Typography>
-                            <Typography variant="body2">
-                                • Lokacija: {user.city || "- "},
-                                {user.street || " -"}
-                            </Typography>
-                            <Typography variant="body2">
-                                • Kategorija: {itemCategories.join(",")}
-                            </Typography>
+                            {!isLargeScreen && (
+                                <Typography variant="body2">
+                                    • {title} - {price} €
+                                </Typography>
+                            )}
+                            {isLargeScreen && (
+                                <>
+                                    <Typography variant="body2">
+                                        • {title}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        • Cijena: {price} €
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        • Lokacija: {user.city || "- "},
+                                        {user.street || " -"}
+                                    </Typography>
+                                    <Typography variant="body2">
+                                        • Kategorija: {itemCategories.join(",")}
+                                    </Typography>
+                                </>
+                            )}
                         </Box>
                         <Button
                             variant="accentBtn"
                             fullWidth
                             href={`/item/${itemId}`}
+                            sx={{ minWidth: { xs: "140px" } }}
                         >
                             View Details
                         </Button>

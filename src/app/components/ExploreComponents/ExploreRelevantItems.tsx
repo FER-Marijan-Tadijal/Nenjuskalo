@@ -22,12 +22,9 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
         <Box
             sx={{
                 backgroundColor: theme.palette.secondary.main,
-                //position: "fixed",
-                //top: 0,
-                //right: 0,
                 mt: 2,
                 padding: 2,
-                width: "20%",
+                width: "80%",
                 minWidth: "145px",
                 borderRadius: 2,
             }}
@@ -56,10 +53,19 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
                             href={`/item/${item.id}`}
                             sx={{
                                 textDecoration: "none",
-                                //color: "#1C2B36",
+                            }}
+                            fontStyle="oblique"
+                        >
+                            {item.title} -
+                        </Typography>
+                        <Typography
+                            component="a"
+                            href={`/item/${item.id}`}
+                            sx={{
+                                textDecoration: "none",
                             }}
                         >
-                            {item.title} - {item.askingprice} €
+                            - {item.askingprice} €
                         </Typography>
                     </Box>
                 ))}

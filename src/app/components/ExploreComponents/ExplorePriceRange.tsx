@@ -31,13 +31,14 @@ const ExplorePriceRange = ({
             sx={{
                 backgroundColor: theme.palette.secondary.main,
                 mt: 2,
-                padding: 1,
+                padding: 0.5,
+                paddingBottom: 0,
                 width: "70%",
                 minWidth: "120px",
                 borderRadius: 2,
             }}
         >
-            <FormControl sx={{ m: 1, width: "90%" }} variant="outlined">
+            <FormControl sx={{ m: 0.5, width: "90%" }} variant="outlined">
                 <OutlinedInput
                     value={minPrice}
                     onChange={handleMinPriceChange}
@@ -59,7 +60,7 @@ const ExplorePriceRange = ({
                     Najniža cijena
                 </FormHelperText>
             </FormControl>
-            <FormControl sx={{ m: 1, width: "90%" }} variant="outlined">
+            <FormControl sx={{ m: 0.5, width: "90%" }} variant="outlined">
                 <OutlinedInput
                     value={maxPrice}
                     onChange={handleMaxPriceChange}
