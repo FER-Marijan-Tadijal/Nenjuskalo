@@ -9,6 +9,15 @@ export async function HandleNewProfileForm(formData: FormData) {
     if (session != null) {
         // Construct update object dynamically
         const updateData: any = {};
+        const userId = formData.get("id") as string;
+
+        let siteuser = await prisma.siteuser.findUnique({
+            where: {
+                id: session.user?.id,
+            },
+        })
+
+        if ((session.user?.id != userId) && (siteuser?.roleid != 1)) return
 
         const country = formData.get("country") as string;
         if (country?.trim()) {
@@ -34,7 +43,7 @@ export async function HandleNewProfileForm(formData: FormData) {
         if (Object.keys(updateData).length > 0) {
             await prisma.siteuser.update({
                 where: {
-                    id: formData.get("id") as string,
+                    id: userId,
                 },
                 data: updateData,
             });
