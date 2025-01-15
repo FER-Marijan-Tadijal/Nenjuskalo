@@ -36,13 +36,14 @@ const CarouselComponent = () => {
                         alignItems: "center",
                         justifyContent: "center",
                         overflow: "hidden",
+                        borderRadius: "16px", // Add border radius here
                     }}
                 >
                     <Image
                         src={item.image}
                         alt={item.title}
                         fill
-                        style={{ objectFit: "cover" }}
+                        style={{ objectFit: "cover", borderRadius: "16px" }} // Add border radius here
                         priority
                     />
                     <Typography
