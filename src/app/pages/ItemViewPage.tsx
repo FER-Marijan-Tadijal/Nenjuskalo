@@ -1,5 +1,11 @@
 "use client";
-import { Container, Box, CircularProgress } from "@mui/material";
+import {
+    Container,
+    Box,
+    Button,
+    CircularProgress,
+    Typography,
+} from "@mui/material";
 import React, { useEffect } from "react";
 import ItemThumbnail from "../components/ItemViewComponents/ItemThumbnail";
 import ItemDescription from "../components/ItemViewComponents/ItemDescription";
@@ -11,21 +17,12 @@ import type { Session } from "next-auth";
 import { category, item, itemchangestate } from "@prisma/client";
 
 type BigItem = {
-    item: item,
-    categories: category[],
-    state: itemchangestate[],
-    noOfPictures: number,
-}
-
-type Item = {
-    itemid: string;
-    title: string;
-    description: string;
-    askingprice: string;
-    sellerid: string;
-    buyerid?: string;
-    conditionid: number;
+    item: item;
+    categories: category[];
+    state: itemchangestate;
+    noOfPictures: number;
 };
+
 type User = {
     id: string;
     name: string;
@@ -50,6 +47,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
     console.log(itemId);
     const [item, setItem] = useState<BigItem>();
     const [user, setUser] = useState<User | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     const fetchItem = async (itemId: string) => {
         try {
@@ -65,26 +63,30 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
         }
     };
     const fetchUser = async (userId: string) => {
-        const res = await fetch(
-            `/api/getUser?id=${userId}`
-        );
-        const userData = await res.json();
-        setUser(userData);
+        try {
+            const res = await fetch(`/api/getUser?id=${userId}`);
+            const userData = await res.json();
+            setUser(userData);
+        } catch (err: unknown) {
+            console.log(err);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
         fetchItem(itemId);
     }, []);
     useEffect(() => {
-        console.log(item);
         if (item) {
             const sellerId = item.item.sellerid;
             fetchUser(sellerId);
         }
+        console.log(item);
     }, [item]);
 
     if (!item) {
-        return( <CircularProgress /> )
+        return <CircularProgress />;
     }
 
     return (
@@ -93,26 +95,53 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                 sx={{
                     width: "950px",
                     color: theme.palette.textBlack.main,
-                    height: "100vh",
+                    height: "100%",
                     padding: 2,
                     marginTop: 7,
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
                 }}
+                className="slide-in-container-05s"
             >
-                {item && user && (
-                    <ItemThumbnail
-                        itemId={itemId}
-                        user={user}
-                        session={session}
-                    />
+                {!isLoading && user && (
+                    <>
+                        {item.state.stateid == 0 && (
+                            <Box
+                                sx={{
+                                    mt: 1,
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    textAlign: "center",
+                                    height: "30px",
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        width: "180px",
+                                        padding: "5px",
+                                        borderRadius: 2,
+                                        backgroundColor:
+                                            theme.palette.accent.main,
+                                    }}
+                                    variant="h6"
+                                >
+                                    *SKICA*
+                                </Typography>
+                            </Box>
+                        )}
+                        <ItemThumbnail
+                            itemId={itemId}
+                            user={user}
+                            session={session}
+                            noOfPictures={item.noOfPictures}
+                        />
+                        <ItemTitle bigItem={item} />
+                        <ItemDescription description={item.item.description} />
+                    </>
                 )}
-                {item && user && <ItemTitle bigItem={item} />}
-                {item && user && (
-                    <ItemDescription description={item.item.description} />
-                )}
-                {(!user || !item) && (
+                {isLoading && (
                     <Box
                         sx={{
                             marginTop: 30,
@@ -127,7 +156,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                         }}
                     >
                         Stranica se učitava...
-                    </Box> //NEMJESTI DA SE NIŠTA NE RENDERA DOK SVE NIJE SPREMNO
+                    </Box>
                 )}
             </Container>
         </>

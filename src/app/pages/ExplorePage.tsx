@@ -10,7 +10,7 @@ import {
     MenuItem,
 } from "@mui/material";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-
+import { useMediaQuery } from "@mui/material";
 import ExploreItem from "../components/GlobalComponents/AdCard";
 import ExploreFilter from "../components/ExploreComponents/ExploreFilter";
 import theme from "../styles/theme";
@@ -81,6 +81,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
     const [priceChanged, setPriceChanged] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
+    const isSmallScreen = useMediaQuery("(max-width:600px)");
+    const isLargeScreen = useMediaQuery("(min-width:600px)");
+
     const fetchCategories = async () => {
         const res = await fetch("/api/categories");
         const data = await res.json();
@@ -110,9 +113,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
         params.set("maxPrice", maxPrice);
         console.log(params.toString());
         try {
-            const res = await fetch(
-                `/api/search?${params}`
-            );
+            const res = await fetch(`/api/search?${params}`);
             const data = await res.json();
             console.log(data);
             if (Array.isArray(data.data)) {
@@ -186,8 +187,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                             alignItems: "start",
                             mt: 8,
                         }}
+                        className="slide-in-container-05s"
                     >
-                        <Box>
+                        <Box sx={{ width: "20%" }}>
                             <ExploreFilter
                                 filterName="stanje"
                                 filter={conditionId}
@@ -211,7 +213,7 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                         </Box>
                         <Container
                             sx={{
-                                width: "1000px",
+                                width: "60%",
                                 //backgroundColor: "#D9F0FF ",
                                 //color: "#F1E9DA",
                                 display: "flex",
@@ -232,23 +234,24 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                     display: "flex",
                                     justifyContent: "space-around",
                                     alignItems: "center",
+                                    width: "50%",
+                                    minWidth: "200px",
                                 }}
                             >
-                                <Typography variant="h6">
-                                    {" "}
-                                    Rezultati pretraživanja: "{searchTerm}"
-                                </Typography>
                                 <Box
                                     sx={{
                                         backgroundColor:
                                             theme.palette.secondary.main,
-                                        padding: 2,
-                                        width: "300px",
+                                        padding: 1,
                                         borderRadius: 2,
+                                        width: "70%",
                                     }}
                                 >
                                     <FormControl fullWidth variant="outlined">
-                                        <InputLabel id="select-label">
+                                        <InputLabel
+                                            id="select-label"
+                                            shrink={false}
+                                        >
                                             Sortiraj
                                         </InputLabel>
                                         <Select
@@ -302,7 +305,9 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                 />
                             ))}
                         </Container>
-                        <ExploreRelevantItems randomItems={randomItems} />
+                        {isLargeScreen && (
+                            <ExploreRelevantItems randomItems={randomItems} />
+                        )}
                     </Box>
                 ) : (
                     <CircularProgress

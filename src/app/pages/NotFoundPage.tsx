@@ -15,6 +15,7 @@ const NotFoundPage = () => {
                     justifyContent: "center",
                     alignItems: "center",
                 }}
+                className="slide-in-container-05s"
             >
                 <Box
                     sx={{

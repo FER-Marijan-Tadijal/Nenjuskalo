@@ -25,15 +25,20 @@ type Props = {
     };
     session: Session | null;
     itemId: string;
+    noOfPictures: number;
 };
 
-const ItemThumbnail = ({ user, session, itemId }: Props) => {
+const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
     const [check, setCheck] = useState(false);
+    const [imagesArray, setImagesArray] = useState(
+        Array.from({ length: noOfPictures }, (_, index) => index)
+    );
 
     useEffect(() => {
         if (session?.user?.id == user.id) {
             setCheck(true);
         }
+        console.log(imagesArray);
     }, []);
 
     return (
@@ -47,26 +52,60 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
             }}
         >
             <Box sx={{ width: "70%" }}>
-                <Box
-                    sx={{
-                        position: "relative",
-                        width: "100%",
-                        height: "400px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        overflow: "hidden",
-                        borderRadius: 2,
-                    }}
-                >
-                    <Image
-                        src={`/api/image?id=${itemId}&index=0`}
-                        alt="item thumbnail image"
-                        layout="fill"
-                        objectFit="contain"
-                        priority
-                    />
-                </Box>
+                {noOfPictures > 0 && (
+                    <Carousel
+                        navButtonsAlwaysVisible
+                        navButtonsProps={{
+                            style: {
+                                backgroundColor: "rgba(0, 0, 0, 0.5)",
+                                color: "white",
+                            },
+                        }}
+                    >
+                        {imagesArray.map((imageNo) => (
+                            <Box
+                                key={imageNo}
+                                sx={{
+                                    position: "relative",
+                                    width: "100%",
+                                    height: "400px",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    overflow: "hidden",
+                                    borderRadius: 2,
+                                }}
+                            >
+                                <Image
+                                    src={`/api/image?id=${itemId}&index=${imageNo}`}
+                                    alt={`item thumbnail image ${imageNo}`}
+                                    layout="fill"
+                                    objectFit="contain"
+                                    priority={imageNo === 0}
+                                />
+                            </Box>
+                        ))}
+                    </Carousel>
+                )}
+                {noOfPictures == 0 && (
+                    <Box
+                        sx={{
+                            position: "relative",
+                            width: "100%",
+                            height: "400px",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            overflow: "hidden",
+                            borderRadius: 2,
+                            border: "1px solid black",
+                        }}
+                    >
+                        <Typography variant="h4" fontStyle="oblique">
+                            Nema slike za ovaj oglas
+                        </Typography>
+                    </Box>
+                )}
             </Box>
             <Box
                 sx={{
@@ -74,7 +113,7 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "left",
-                    p: 4,
+                    p: 3,
                 }}
             >
                 <Typography variant="body1">
@@ -91,23 +130,30 @@ const ItemThumbnail = ({ user, session, itemId }: Props) => {
                 {check && (
                     <Button
                         variant="contained"
-                        sx={{ mt: 2, backgroundColor: "grey" }}
+                        sx={{
+                            width: "100%",
+                            backgroundColor: "grey",
+                            mt: 3,
+                            "&:hover": {
+                                backgroundColor: "#4B4B4B",
+                            },
+                        }}
                         href={`/editAd/${itemId}`}
                     >
                         Ažuriraj oglas
                     </Button>
                 )}
                 {check && <DeleteAdForm id={Number(itemId)} />}
+                {check && <MarkAsSoldForm id={Number(itemId)} />}
                 {!check && (
                     <Button
                         variant="contained"
-                        sx={{ mt: 2 }}
+                        sx={{ mt: 5 }}
                         href={`/message/${user.id}`}
                     >
                         Pošalji poruku
                     </Button>
                 )}
-                {check && <MarkAsSoldForm id={Number(itemId)} />}
                 {!check && (
                     <Button
                         variant="contained"

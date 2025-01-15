@@ -27,18 +27,19 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
                 //right: 0,
                 mt: 2,
                 padding: 2,
-                width: "300px", //PRETVORI U %
+                width: "20%",
+                minWidth: "145px",
                 borderRadius: 2,
             }}
         >
-            <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Predloženi proizvodi:
+            <Typography sx={{ marginBottom: 2 }} variant="h6">
+                Proučite i ove proizvode:
             </Typography>
             <Box>
                 {randomItems.map((item, index) => (
                     <Box
                         sx={{
-                            margin: 0.5,
+                            margin: 1,
                             padding: 1,
                             border: "1px solid grey",
                             borderRadius: 1.5,
@@ -52,7 +53,7 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
                     >
                         <Typography
                             component="a"
-                            href={`/item?id=${item.id}`}
+                            href={`/item/${item.id}`}
                             sx={{
                                 textDecoration: "none",
                                 //color: "#1C2B36",

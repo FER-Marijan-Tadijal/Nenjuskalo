@@ -81,9 +81,7 @@ const CategoriesPage = ({ categories }: Props) => {
         params.set("categoryId", categoryId.toString());
         console.log(params.toString());
         try {
-            const res = await fetch(
-                `/api/search?${params}`
-            );
+            const res = await fetch(`/api/search?${params}`);
             const data = await res.json();
             console.log(data);
             if (Array.isArray(data.data)) {
@@ -139,6 +137,7 @@ const CategoriesPage = ({ categories }: Props) => {
                             flexDirection: "column",
                             alignItems: "center",
                         }}
+                        className="slide-in-container-05s"
                     >
                         <Box
                             sx={{
@@ -200,13 +199,13 @@ const CategoriesPage = ({ categories }: Props) => {
                                 >
                                     <Button
                                         variant="categoryBtn"
-                                        sx={{ width: "150px", height: "80px" }}
+                                        sx={{ width: "30%", height: "80px" }}
                                         href={`/categories/${catObject.cat.id}`}
                                     >
                                         {catObject.cat.name}
                                     </Button>
                                     {catObject.item && (
-                                        <Box sx={{ p: 2, pt: 0 }}>
+                                        <Box sx={{ p: 2, pt: 0, width: "70%" }}>
                                             <CategoryItem
                                                 itemId={catObject.item.id}
                                                 title={catObject.item.title}
