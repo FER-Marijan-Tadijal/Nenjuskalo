@@ -5,7 +5,7 @@ import { useContext } from "react";
 import theme from "@/app/styles/theme";
 
 interface Prop {
-    description: string;
+    description: string | null;
 }
 
 const ItemDescription = ({ description }: Prop) => {

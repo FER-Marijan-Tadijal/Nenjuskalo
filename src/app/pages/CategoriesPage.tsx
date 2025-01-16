@@ -81,9 +81,7 @@ const CategoriesPage = ({ categories }: Props) => {
         params.set("categoryId", categoryId.toString());
         console.log(params.toString());
         try {
-            const res = await fetch(
-                `/api/search?${params}`
-            );
+            const res = await fetch(`/api/search?${params}`);
             const data = await res.json();
             console.log(data);
             if (Array.isArray(data.data)) {
@@ -139,6 +137,7 @@ const CategoriesPage = ({ categories }: Props) => {
                             flexDirection: "column",
                             alignItems: "center",
                         }}
+                        className="slide-in-container-05s"
                     >
                         <Box
                             sx={{
@@ -172,10 +171,13 @@ const CategoriesPage = ({ categories }: Props) => {
                         <Box
                             sx={{
                                 mt: 2,
+
                                 display: "grid",
                                 gridTemplateColumns: {
+                                    xs: "350px",
                                     sm: "550px", // Single column on extra small screens
-                                    md: "repeat(2, 550px)", // Two columns on small screens and up
+                                    md: "550px",
+                                    lg: "repeat(2, 550px)", // Two columns on small screens and up
                                 },
                                 gap: 2, // Spacing between items
                                 //backgroundColor: theme.palette.secondary.main,
@@ -200,13 +202,23 @@ const CategoriesPage = ({ categories }: Props) => {
                                 >
                                     <Button
                                         variant="categoryBtn"
-                                        sx={{ width: "150px", height: "80px" }}
+                                        sx={{
+                                            width: { sm: "30%", xs: "45%" },
+                                            height: "80px",
+                                            padding: 5,
+                                        }}
                                         href={`/categories/${catObject.cat.id}`}
                                     >
                                         {catObject.cat.name}
                                     </Button>
                                     {catObject.item && (
-                                        <Box sx={{ p: 2, pt: 0 }}>
+                                        <Box
+                                            sx={{
+                                                p: 2,
+                                                pt: 0,
+                                                width: { xs: "55%", sm: "70%" },
+                                            }}
+                                        >
                                             <CategoryItem
                                                 itemId={catObject.item.id}
                                                 title={catObject.item.title}

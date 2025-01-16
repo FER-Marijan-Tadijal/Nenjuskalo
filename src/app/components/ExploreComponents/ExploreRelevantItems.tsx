@@ -22,23 +22,21 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
         <Box
             sx={{
                 backgroundColor: theme.palette.secondary.main,
-                //position: "fixed",
-                //top: 0,
-                //right: 0,
                 mt: 2,
                 padding: 2,
-                width: "300px", //PRETVORI U %
+                width: "80%",
+                minWidth: "145px",
                 borderRadius: 2,
             }}
         >
-            <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Predloženi proizvodi:
+            <Typography sx={{ marginBottom: 2 }} variant="h6">
+                Proučite i ove proizvode:
             </Typography>
             <Box>
                 {randomItems.map((item, index) => (
                     <Box
                         sx={{
-                            margin: 0.5,
+                            margin: 1,
                             padding: 1,
                             border: "1px solid grey",
                             borderRadius: 1.5,
@@ -52,13 +50,22 @@ const ExploreRelevantItems = ({ randomItems }: Props) => {
                     >
                         <Typography
                             component="a"
-                            href={`/item?id=${item.id}`}
+                            href={`/item/${item.id}`}
                             sx={{
                                 textDecoration: "none",
-                                //color: "#1C2B36",
+                            }}
+                            fontStyle="oblique"
+                        >
+                            {item.title} -
+                        </Typography>
+                        <Typography
+                            component="a"
+                            href={`/item/${item.id}`}
+                            sx={{
+                                textDecoration: "none",
                             }}
                         >
-                            {item.title} - {item.askingprice} €
+                            - {item.askingprice} €
                         </Typography>
                     </Box>
                 ))}

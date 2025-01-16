@@ -17,6 +17,7 @@ import Select, { SelectChangeEvent } from "@mui/material/Select";
 import theme from "../styles/theme";
 import { ThemeProvider } from "@mui/material";
 import { orderByEnum } from "../enums/orderByEnum";
+import { useMediaQuery } from "@mui/material";
 
 const orders = [
     ["lowestPrice", "najniža cijena"],
@@ -84,6 +85,8 @@ const CategoryViewPage = ({ categoryId }: Props) => {
     const [page, setPage] = useState(1);
     const [orderBy, setOrderBy] = useState("");
     const [totalPages, setTotalPages] = useState(1);
+
+    const isLargeScreen = useMediaQuery("(min-width:800px)");
 
     async function getSelectedCategory(id: string) {
         try {
@@ -156,11 +159,12 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                             paddingBottom: 1,
                             mt: 8,
                         }}
+                        className="slide-in-container-05s"
                     >
                         <Button
                             variant="accentBtn"
                             href={"/categories"}
-                            sx={{ mt: 1 }}
+                            sx={{ mt: 1, textAlign: "center" }}
                         >
                             <b>Povratak na kategorije</b>
                         </Button>
@@ -197,6 +201,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                     </InputLabel>
                                     <Select
                                         labelId="select-label"
+                                        label={"Sortiraj"}
                                         value={orderBy}
                                         onChange={handleOrderByChange}
                                     >
@@ -212,27 +217,46 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                 </FormControl>
                             </Box>
                         </Box>
-
-                        <Box sx={{ border: "1px solid grey" }}>
-                            <Button
-                                onClick={() => setPage(Math.max(page - 1, 1))}
-                                disabled={page === 1}
-                            >
-                                Prijašnja
-                            </Button>
-                            <Typography component="span">
-                                Stranica {page} od {totalPages}
-                            </Typography>
-                            <Button
-                                onClick={() =>
-                                    setPage(Math.min(page + 1, totalPages))
-                                }
-                                disabled={page === totalPages}
-                            >
-                                Sljedeća
-                            </Button>
+                        <Box
+                            sx={{
+                                border: "1px solid grey",
+                                display: "flex column",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                textAlign: "center",
+                            }}
+                        >
+                            <Box>
+                                <Button
+                                    onClick={() =>
+                                        setPage(Math.max(page - 1, 1))
+                                    }
+                                    disabled={page === 1}
+                                >
+                                    Prijašnja
+                                </Button>
+                                {isLargeScreen && (
+                                    <Typography component="span">
+                                        Stranica {page} od {totalPages}
+                                    </Typography>
+                                )}
+                                <Button
+                                    onClick={() =>
+                                        setPage(Math.min(page + 1, totalPages))
+                                    }
+                                    disabled={page === totalPages}
+                                >
+                                    Sljedeća
+                                </Button>
+                            </Box>
+                            {!isLargeScreen && (
+                                <Box>
+                                    <Typography component="span">
+                                        Stranica {page} od {totalPages}
+                                    </Typography>
+                                </Box>
+                            )}
                         </Box>
-
                         <Box
                             sx={{
                                 mt: 1,

@@ -41,10 +41,7 @@ export default function HomePage() {
 
     const getCategories = async () => {
         try {
-            const response = await fetch(
-                "/api/categories",
-                { method: "GET" }
-            );
+            const response = await fetch("/api/categories", { method: "GET" });
 
             if (response) {
                 const categories = await response.json();
@@ -109,6 +106,7 @@ export default function HomePage() {
                 paddingTop: "64px",
                 paddingBottom: "64px",
             }}
+            className="slide-in-container-05s"
         >
             {/* Main Banner/Carousel Section */}
             <Box sx={{ width: "95%", mb: 4 }}>
@@ -120,10 +118,10 @@ export default function HomePage() {
                 <Typography
                     variant="h2"
                     gutterBottom
-                    sx={{ 
-                        ...titleStyle, 
-                        color: "#FFC300", 
-                        fontSize: "2.5rem", 
+                    sx={{
+                        ...titleStyle,
+                        color: "#FFC300",
+                        fontSize: "2.5rem",
                         WebkitTextStroke: "2px #003049",
                     }}
                 >
@@ -242,7 +240,8 @@ export default function HomePage() {
                                         justifyContent: "space-between",
                                         height: "100%", // Ensure consistent height
                                         maxHeight: "350px", // Optional: Limit height
-                                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                                        boxShadow:
+                                            "0px 4px 12px rgba(0, 0, 0, 0.1)",
                                         border: "3px solid #003049", // Add border
                                         borderRadius: "8px", // Add border radius
                                     }}
@@ -266,7 +265,8 @@ export default function HomePage() {
                                             variant="h6"
                                             component="div"
                                             sx={{
-                                                fontFamily: "'Poppins', sans-serif",
+                                                fontFamily:
+                                                    "'Poppins', sans-serif",
                                                 fontWeight: "600",
                                                 color: "#003049",
                                                 textOverflow: "ellipsis",
@@ -279,7 +279,8 @@ export default function HomePage() {
                                         <Typography
                                             variant="body2"
                                             sx={{
-                                                fontFamily: "'Roboto', sans-serif",
+                                                fontFamily:
+                                                    "'Roboto', sans-serif",
                                                 color: "text.secondary",
                                                 textOverflow: "ellipsis",
                                                 whiteSpace: "nowrap",
@@ -356,7 +357,8 @@ export default function HomePage() {
                                         justifyContent: "space-between",
                                         height: "100%", // Ensure consistent height
                                         maxHeight: "350px", // Optional: Limit height
-                                        boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
+                                        boxShadow:
+                                            "0px 4px 12px rgba(0, 0, 0, 0.1)",
                                         border: "3px solid #003049", // Add border
                                         borderRadius: "8px", // Add border radius
                                     }}
@@ -380,7 +382,8 @@ export default function HomePage() {
                                             variant="h6"
                                             component="div"
                                             sx={{
-                                                fontFamily: "'Poppins', sans-serif",
+                                                fontFamily:
+                                                    "'Poppins', sans-serif",
                                                 fontWeight: "600",
                                                 color: "#003049",
                                                 textOverflow: "ellipsis",
@@ -393,7 +396,8 @@ export default function HomePage() {
                                         <Typography
                                             variant="body2"
                                             sx={{
-                                                fontFamily: "'Roboto', sans-serif",
+                                                fontFamily:
+                                                    "'Roboto', sans-serif",
                                                 color: "text.secondary",
                                                 textOverflow: "ellipsis",
                                                 whiteSpace: "nowrap",
@@ -441,7 +445,6 @@ export default function HomePage() {
                     )}
                 </Grid>
             </Box>
-
         </Container>
     );
 }

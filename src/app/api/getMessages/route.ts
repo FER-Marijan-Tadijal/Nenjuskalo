@@ -26,12 +26,12 @@ export const POST = auth(async function POST(req) {
             ],
         },
         orderBy: {
-            senttime: "desc"
+            senttime: "asc"
         }
     });
 
     // Mark newest receiver message as read.
-    let newestMessage = await prisma.message.findMany({
+    let newestMessages = await prisma.message.findMany({
         where: {
             senderid: receiverID,
             receiverid: senderID,
@@ -39,19 +39,20 @@ export const POST = auth(async function POST(req) {
         orderBy: {
             senttime: "desc",
         },
-        take: 1,
     })
 
-    if (newestMessage.length != 0) {
-        let newestMessageID = newestMessage[0].id
-        await prisma.message.update({
-            where: {
-                id: newestMessageID,
-            },
-            data: {
-                seentime: new Date(),
-            },
-        })
+    for (let message of newestMessages) {
+        if (newestMessages.length != 0) {
+            let newestMessageID = message.id
+            await prisma.message.update({
+                where: {
+                    id: newestMessageID,
+                },
+                data: {
+                    seentime: new Date(),
+                },
+            })
+        }
     }
 
     return Response.json(data)
