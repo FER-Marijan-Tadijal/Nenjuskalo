@@ -7,6 +7,7 @@ import theme from "@/app/styles/theme";
 import type {Session} from "next-auth";
 import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
 import MarkAsSoldForm from "@/app/components/forms/MarkAsSoldForm";
+import {handleCheckout} from "@/app/functions/handleCheckout";
 
 type Props = {
     user: {
@@ -161,7 +162,8 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
                             mt: 2,
                             backgroundColor: theme.palette.accent.main,
                         }}
-                        href={`/checkout/${itemId}`}
+                        // href={`/checkout/${itemId}`}
+                        onClick={() => handleCheckout(itemId)}
                     >
                         Kupi
                         <Icon icon="fa-solid:shopping-cart"/>

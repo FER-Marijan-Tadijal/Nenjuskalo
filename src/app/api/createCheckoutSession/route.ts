@@ -1,5 +1,6 @@
 import {stripe} from "@/app/lib/stripe";
 import {NextRequest, NextResponse} from "next/server";
+import {redirect} from "next/navigation";
 
 export async function POST(
     req: NextRequest
@@ -9,6 +10,11 @@ export async function POST(
             const {priceId, itemId} = await req.json();
 
             const session = await stripe.checkout.sessions.create({
+                submit_type: 'pay',
+                billing_address_collection: 'auto',
+                shipping_address_collection: {
+                    allowed_countries: ['HR', 'RS', 'BA', 'SI', 'ME', 'MK'],
+                },
                 line_items: [
                     {
                         price: priceId,
@@ -16,14 +22,18 @@ export async function POST(
                     },
                 ],
                 mode: 'payment',
-                success_url: `${req.headers.host}/paymentSuccess/${itemId}`,
-                cancel_url: `${req.headers.host}/paymentFailure/${itemId}`,
+                success_url: `${req.nextUrl.origin}/paymentSuccess/${itemId}`,
+                cancel_url: `${req.nextUrl.origin}/paymentFailure/${itemId}`,
             });
 
-            return NextResponse.json({
-                statusCode: 200,
-                id: session.id,
-            });
+            if (session.url) {
+                redirect(session.url);
+            } else {
+                return NextResponse.json({
+                    statusCode: 500,
+                    message: 'Error creating Stripe Checkout session',
+                });
+            }
         } catch (err: any) {
             return NextResponse.json({
                 statusCode: 500,

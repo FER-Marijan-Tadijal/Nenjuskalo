@@ -7,7 +7,7 @@ import {Elements} from "@stripe/react-stripe-js";
 
 export default function Page({params}: { params: Promise<{ id: string }> }) {
     const {id} = use(params);
-    console.log("page.tsx id: ", id);
+
     return (
         <Elements stripe={stripePromise}>
             <CheckoutForm itemId={id}/>
