@@ -5,9 +5,6 @@ import Image from "next/image";
 import {Icon} from "@iconify/react";
 import theme from "@/app/styles/theme";
 import type {Session} from "next-auth";
-import {stripePromise} from "@/app/lib/stripe";
-import {Elements} from "@stripe/react-stripe-js";
-import {handleCheckout} from "@/app/functions/handleCheckout";
 import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
 import MarkAsSoldForm from "@/app/components/forms/MarkAsSoldForm";
 
@@ -164,7 +161,7 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
                             mt: 2,
                             backgroundColor: theme.palette.accent.main,
                         }}
-                        onClick={() => handleCheckout(itemId)}
+                        href={`/checkout/${itemId}`}
                     >
                         Kupi
                         <Icon icon="fa-solid:shopping-cart"/>
@@ -175,10 +172,4 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
     );
 };
 
-export default function ItemThumbnailWrapper(props: Props) {
-    return (
-        <Elements stripe={stripePromise}>
-            <ItemThumbnail {...props} />
-        </Elements>
-    );
-}
+export default ItemThumbnail;

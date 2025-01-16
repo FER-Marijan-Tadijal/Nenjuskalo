@@ -1,8 +1,9 @@
 "use client";
-import { Suspense, lazy } from "react";
-import { Box } from "@mui/material";
-import { useSearchParams } from "next/navigation";
-import { CircularProgress } from "@mui/material";
+import {Suspense, lazy} from "react";
+import {Box} from "@mui/material";
+import {useSearchParams} from "next/navigation";
+import {CircularProgress} from "@mui/material";
+
 const ExplorePage = lazy(() => import("@/app/pages/ExplorePage"));
 
 export default function Page() {
@@ -18,11 +19,11 @@ export default function Page() {
                     alignItems="center"
                     height="100vh"
                 >
-                    <CircularProgress />
+                    <CircularProgress/>
                 </Box>
             }
         >
-            <ExplorePage searchTerm={searchTerm} />
+            <ExplorePage searchTerm={searchTerm}/>
         </Suspense>
     );
 }

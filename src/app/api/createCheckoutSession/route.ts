@@ -1,12 +1,12 @@
-import {NextApiRequest} from 'next';
 import {stripe} from "@/app/lib/stripe";
+import {NextRequest, NextResponse} from "next/server";
 
 export async function POST(
-    req: NextApiRequest
+    req: NextRequest
 ) {
     if (req.method === 'POST') {
         try {
-            const {priceId, itemId} = req.body;
+            const {priceId, itemId} = await req.json();
 
             const session = await stripe.checkout.sessions.create({
                 line_items: [
@@ -20,25 +20,22 @@ export async function POST(
                 cancel_url: `${req.headers.host}/paymentFailure/${itemId}`,
             });
 
-            return new Response({
-                status: 200,
-                body: JSON.stringify(session),
+            return NextResponse.json({
+                statusCode: 200,
+                id: session.id,
             });
         } catch (err: any) {
-            return new Response({
-                status: 500,
-                body: JSON.stringify({
-                    statusCode: 500,
-                    message: err.message,
-                }),
+            return NextResponse.json({
+                statusCode: 500,
+                message: err.message,
             });
         }
     } else {
-        return new Response({
-            status: 405,
-            body: 'Method Not Allowed',
+        return NextResponse.json({
+            statusCode: 405,
+            message: 'Method Not Allowed',
             headers: {
-                'Allow': ['POST'],
+                'Allow': 'POST',
             },
         });
     }

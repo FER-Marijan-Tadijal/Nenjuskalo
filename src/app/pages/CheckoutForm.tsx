@@ -1,12 +1,56 @@
-import {useState} from 'react';
-import {useStripe, useElements} from '@stripe/react-stripe-js';
+"use client";
 
-const CheckoutForm = () => {
+import {useEffect, useState} from 'react';
+import {useElements, useStripe} from '@stripe/react-stripe-js';
+import {item} from "@prisma/client";
+
+type CheckoutFormProps = {
+    itemId: string;
+};
+
+const CheckoutForm = ({itemId}: CheckoutFormProps) => {
     const stripe = useStripe();
     const elements = useElements();
     const [loading, setLoading] = useState(false);
+    const [item, setItem] = useState<item>();
+    const [priceId, setPriceId] = useState<string>(null);
 
-    const handleSubmit = async (event) => {
+    console.log("CheckoutForm itemId: ", itemId);
+
+    const fetchItem = (itemId: string) => {
+        try {
+            fetch(`/api/getItem?id=${itemId}`).then((res) => res.json()).then((data) => setItem(data.item));
+        } catch (err: unknown) {
+            console.log(err);
+        }
+    };
+
+    const createPriceId = (item: item) => {
+        console.log("Creating Stripe item for: ", JSON.stringify(item));
+        fetch(`/api/createStripeItem`, {
+            method: "POST",
+            body: JSON.stringify({
+                itemId: item.id,
+                name: item.title,
+                description: item.description,
+                priceInEuros: item.askingprice,
+            }),
+        }).then((res) => res.json()).then((data) => setPriceId(data.fetchedPriceId));
+    }
+
+    useEffect(() => {
+        fetchItem(itemId);
+    }, [itemId, priceId]);
+
+    useEffect(() => {
+        if (item) {
+            if (!item.priceId) {
+                createPriceId(item);
+            }
+        }
+    }, [item]);
+
+    const handleSubmit = (event) => {
         event.preventDefault();
 
         if (!stripe || !elements) {
@@ -15,19 +59,21 @@ const CheckoutForm = () => {
 
         setLoading(true);
 
+        if (!item) {
+            console.error("Item not found");
+            return;
+        }
+
+        if (!item.priceId) {
+            console.error("PriceId not found");
+            void createPriceId(item);
+        }
+
         try {
-            const {data: {sessionId}} = await fetch(`/api/createCheckoutSession`, {
+            fetch(`/api/createCheckoutSession`, {
                 method: "POST",
-                body: JSON.stringify({priceId: 'your_product_price_id'}), // TODO: Replace with your actual price ID
-            });
-
-            const result = await stripe.redirectToCheckout({
-                sessionId,
-            });
-
-            if (result.error) {
-                console.error(result.error.message);
-            }
+                body: JSON.stringify({priceId, itemId}),
+            }).then((res) => res.json()).then((session) => stripe.redirectToCheckout({sessionId: session.id}));
         } catch (error) {
             console.error(error);
         } finally {

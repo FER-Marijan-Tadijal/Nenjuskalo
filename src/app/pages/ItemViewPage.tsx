@@ -1,20 +1,12 @@
 "use client";
-import {
-    Container,
-    Box,
-    Button,
-    CircularProgress,
-    Typography,
-} from "@mui/material";
-import React, { useEffect } from "react";
+import {Box, CircularProgress, Container, Typography,} from "@mui/material";
+import React, {useEffect, useState} from "react";
 import ItemThumbnail from "../components/ItemViewComponents/ItemThumbnail";
 import ItemDescription from "../components/ItemViewComponents/ItemDescription";
 import ItemTitle from "../components/ItemViewComponents/ItemTitle";
-import {useState} from "react";
 import theme from "../styles/theme";
-import type { Session } from "next-auth";
-import { category, item, itemchangestate } from "@prisma/client";
-import ItemThumbnailWrapper from "../components/ItemViewComponents/ItemThumbnail";
+import type {Session} from "next-auth";
+import {category, item, itemchangestate} from "@prisma/client";
 
 type BigItem = {
     item: item;
@@ -43,7 +35,7 @@ type ItemViewProps = {
     session: Session | null;
 };
 
-const ItemView = ({ itemId, session }: ItemViewProps) => {
+const ItemView = ({itemId, session}: ItemViewProps) => {
     console.log(itemId);
     const [item, setItem] = useState<BigItem>();
     const [user, setUser] = useState<User | null>(null);
@@ -86,7 +78,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
     }, [item]);
 
     if (!item) {
-        return <CircularProgress />;
+        return <CircularProgress/>;
     }
 
     return (
@@ -123,7 +115,7 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                                         padding: "5px",
                                         borderRadius: 2,
                                         backgroundColor:
-                                            theme.palette.accent.main,
+                                        theme.palette.accent.main,
                                     }}
                                     variant="h6"
                                 >
@@ -131,14 +123,14 @@ const ItemView = ({ itemId, session }: ItemViewProps) => {
                                 </Typography>
                             </Box>
                         )}
-                        <ItemThumbnailWrapper
+                        <ItemThumbnail
                             itemId={itemId}
                             user={user}
                             session={session}
                             noOfPictures={item.noOfPictures}
                         />
-                        <ItemTitle bigItem={item} />
-                        <ItemDescription description={item.item.description} />
+                        <ItemTitle bigItem={item}/>
+                        <ItemDescription description={item.item.description}/>
                     </>
                 )}
                 {isLoading && (
