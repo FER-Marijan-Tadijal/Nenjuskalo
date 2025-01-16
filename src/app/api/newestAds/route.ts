@@ -1,5 +1,4 @@
 import getNewestAds from "@/app/util/getNewestAds";
-import { prisma } from "@/prisma";
 
 export async function GET(request: Request) {
     const url = new URL(request.url);

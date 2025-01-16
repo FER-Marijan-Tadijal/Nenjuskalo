@@ -1,9 +1,8 @@
-import {NextApiRequest, NextApiResponse} from 'next';
+import {NextApiRequest} from 'next';
 import {stripe} from "@/app/lib/stripe";
 
-export default async function POST(
-    req: NextApiRequest,
-    res: NextApiResponse
+export async function POST(
+    req: NextApiRequest
 ) {
     if (req.method === 'POST') {
         try {
@@ -15,12 +14,34 @@ export default async function POST(
                 description: description,
             });
 
+            // Check if the product was created successfully
+            if (product.lastResponse.statusCode !== 200) {
+                return new Response({
+                    status: 500,
+                    body: JSON.stringify({
+                        statusCode: 500,
+                        message: product.lastResponse.headers,
+                    }),
+                });
+            }
+
             // Create a Stripe Price
             const price = await stripe.prices.create({
                 unit_amount: priceInEuros * 100, // Convert Euros to cents
                 currency: 'eur',
                 product: product.id,
             });
+
+            // Check if the price was created successfully
+            if (price.lastResponse.statusCode !== 200) {
+                return new Response({
+                    status: 500,
+                    body: JSON.stringify({
+                        statusCode: 500,
+                        message: price.lastResponse.headers,
+                    }),
+                });
+            }
 
             // Save productId and priceId into the item in the database
             await fetch(`/api/updateItem?id=${itemId}`, {
@@ -31,16 +52,30 @@ export default async function POST(
                 }),
             });
 
-            res.status(200).json({
-                productId: product.id,
-                priceId: price.id
+            return new Response({
+                status: 200,
+                body: JSON.stringify({
+                    fetchedProductId: product.id,
+                    fetchedPriceId: price.id,
+                }),
             });
         } catch (error) {
             console.error('Error creating Stripe item:', error);
-            res.status(500).json({error: 'Failed to create Stripe item'});
+            return new Response({
+                status: 500,
+                body: JSON.stringify({
+                    statusCode: 500,
+                    message: error.message,
+                }),
+            });
         }
     } else {
-        res.setHeader('Allow', 'POST');
-        res.status(405).end('Method Not Allowed');
+        return new Response({
+            status: 405,
+            body: 'Method Not Allowed',
+            headers: {
+                'Allow': ['POST'],
+            },
+        });
     }
 }

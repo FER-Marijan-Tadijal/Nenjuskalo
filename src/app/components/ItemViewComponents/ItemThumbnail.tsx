@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import React, {useEffect, useState} from "react";
+import {Box, Button, Typography} from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
 import {Icon} from "@iconify/react";
 import theme from "@/app/styles/theme";
-import type { Session } from "next-auth";
+import type {Session} from "next-auth";
 import {stripePromise} from "@/app/lib/stripe";
 import {Elements} from "@stripe/react-stripe-js";
-import {handleCheckout} from "@/app/util/handleCheckout";
+import {handleCheckout} from "@/app/functions/handleCheckout";
 import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
 import MarkAsSoldForm from "@/app/components/forms/MarkAsSoldForm";
 
@@ -31,10 +31,10 @@ type Props = {
     noOfPictures: number;
 };
 
-const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
+const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
     const [check, setCheck] = useState(false);
-    const [imagesArray, setImagesArray] = useState(
-        Array.from({ length: noOfPictures }, (_, index) => index)
+    const [imagesArray] = useState(
+        Array.from({length: noOfPictures}, (_, index) => index)
     );
 
     useEffect(() => {
@@ -54,7 +54,7 @@ const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
                 pb: 0,
             }}
         >
-            <Box sx={{ width: "70%" }}>
+            <Box sx={{width: "70%"}}>
                 {noOfPictures > 0 && (
                     <Carousel
                         navButtonsAlwaysVisible
@@ -146,12 +146,12 @@ const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
                         Ažuriraj oglas
                     </Button>
                 )}
-                {check && <DeleteAdForm id={Number(itemId)} />}
-                {check && <MarkAsSoldForm id={Number(itemId)} />}
+                {check && <DeleteAdForm id={Number(itemId)}/>}
+                {check && <MarkAsSoldForm id={Number(itemId)}/>}
                 {!check && (
                     <Button
                         variant="contained"
-                        sx={{ mt: 5 }}
+                        sx={{mt: 5}}
                         href={`/message/${user.id}`}
                     >
                         Pošalji poruku

@@ -1,9 +1,8 @@
-import {NextApiRequest, NextApiResponse} from 'next';
+import {NextApiRequest} from 'next';
 import {stripe} from "@/app/lib/stripe";
 
-export default async function POST(
-    req: NextApiRequest,
-    res: NextApiResponse
+export async function POST(
+    req: NextApiRequest
 ) {
     if (req.method === 'POST') {
         try {
@@ -21,12 +20,26 @@ export default async function POST(
                 cancel_url: `${req.headers.host}/paymentFailure/${itemId}`,
             });
 
-            res.status(200).json({sessionId: session.id});
+            return new Response({
+                status: 200,
+                body: JSON.stringify(session),
+            });
         } catch (err: any) {
-            res.status(500).json({statusCode: 500, message: err.message});
+            return new Response({
+                status: 500,
+                body: JSON.stringify({
+                    statusCode: 500,
+                    message: err.message,
+                }),
+            });
         }
     } else {
-        res.setHeader('Allow', 'POST');
-        res.status(405).end('Method Not Allowed');
+        return new Response({
+            status: 405,
+            body: 'Method Not Allowed',
+            headers: {
+                'Allow': ['POST'],
+            },
+        });
     }
 }
