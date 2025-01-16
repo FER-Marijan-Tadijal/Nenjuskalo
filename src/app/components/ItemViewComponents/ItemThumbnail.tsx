@@ -34,6 +34,7 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
     const [imagesArray] = useState(
         Array.from({length: noOfPictures}, (_, index) => index)
     );
+    const [loadingPayment, setLoadingPayment] = useState(false);
 
     useEffect(() => {
         if (session?.user?.id == user.id) {
@@ -156,18 +157,24 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
                     </Button>
                 )}
                 {!check && (
-                    <Button
+                    <LoadingButton
                         variant="contained"
+                        loading={loadingPayment}
                         sx={{
                             mt: 2,
                             backgroundColor: theme.palette.accent.main,
                         }}
                         // href={`/checkout/${itemId}`}
-                        onClick={() => handleCheckout(itemId)}
+                        onClick={() => {
+                            setLoadingPayment(true);
+                            handleCheckout(itemId).then(() =>
+                                setLoadingPayment(false)
+                            );
+                        }}
                     >
                         Kupi
                         <Icon icon="fa-solid:shopping-cart"/>
-                    </Button>
+                    </LoadingButton>
                 )}
             </Box>
         </Box>

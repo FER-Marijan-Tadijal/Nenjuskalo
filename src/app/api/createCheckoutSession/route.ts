@@ -1,6 +1,5 @@
 import {stripe} from "@/app/lib/stripe";
 import {NextRequest, NextResponse} from "next/server";
-import {redirect} from "next/navigation";
 
 export async function POST(
     req: NextRequest
@@ -26,12 +25,15 @@ export async function POST(
                 cancel_url: `${req.nextUrl.origin}/paymentFailure/${itemId}`,
             });
 
-            if (session.url) {
-                redirect(session.url);
-            } else {
+            if (!session.url) {
                 return NextResponse.json({
                     statusCode: 500,
                     message: 'Error creating Stripe Checkout session',
+                });
+            } else {
+                return NextResponse.json({
+                    statusCode: 200,
+                    url: session.url,
                 });
             }
         } catch (err: any) {

@@ -4,6 +4,7 @@ import {useEffect, useState} from 'react';
 import {useElements, useStripe} from '@stripe/react-stripe-js';
 import {item} from "@prisma/client";
 import {Box, Button, Paper, Typography} from "@mui/material";
+import {redirect} from "next/navigation";
 
 type CheckoutFormProps = {
     itemId: string;
@@ -25,7 +26,6 @@ const CheckoutForm = ({itemId}: CheckoutFormProps) => {
     };
 
     const createPriceId = (item: item) => {
-        console.log("Creating Stripe item for: ", JSON.stringify(item));
         fetch(`/api/createStripeItem`, {
             method: "POST",
             headers: {
@@ -42,30 +42,21 @@ const CheckoutForm = ({itemId}: CheckoutFormProps) => {
 
     useEffect(() => {
         fetchItem(itemId);
-        console.log("Fetching item: ", itemId);
     }, [itemId, priceId]);
 
     useEffect(() => {
         if (item) {
-            console.log("Item exists: ", item);
             if (!item.priceId) {
-                console.log("Item exists, but PriceId does not exist");
                 createPriceId(item);
             } else {
                 setPriceId(item.priceId);
-                console.log("Item exists, and PriceId exists: ", item.priceId);
             }
-        } else {
-            console.log("Item does not exist");
         }
     }, [item]);
 
     useEffect(() => {
         if (priceId) {
-            console.log("PriceId exists: ", priceId);
             handleSubmit(new Event('go'));
-        } else {
-            console.log("PriceId does not exist");
         }
     }, [priceId]);
 
@@ -94,13 +85,13 @@ const CheckoutForm = ({itemId}: CheckoutFormProps) => {
                 return;
             }
 
-            void fetch(`/api/createCheckoutSession`, {
+            fetch(`/api/createCheckoutSession`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({priceId, itemId}),
-            });
+            }).then((res) => res.json()).then((data) => redirect(data.url));
         } catch (error) {
             console.error(error);
         } finally {
