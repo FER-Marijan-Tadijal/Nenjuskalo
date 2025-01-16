@@ -262,14 +262,12 @@ const Explore = ({ searchTerm }: ExplorePageProps) => {
                                             fullWidth
                                             variant="outlined"
                                         >
-                                            <InputLabel
-                                                id="select-label"
-                                                shrink={false}
-                                            >
+                                            <InputLabel id="select-label">
                                                 Sortiraj
                                             </InputLabel>
                                             <Select
                                                 labelId="select-label"
+                                                label={"Sortiraj"}
                                                 value={orderBy}
                                                 onChange={handleOrderByChange}
                                             >

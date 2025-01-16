@@ -201,6 +201,7 @@ const CategoryViewPage = ({ categoryId }: Props) => {
                                     </InputLabel>
                                     <Select
                                         labelId="select-label"
+                                        label={"Sortiraj"}
                                         value={orderBy}
                                         onChange={handleOrderByChange}
                                     >
