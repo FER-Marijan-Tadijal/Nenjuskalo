@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from "react";
-import {Box, Button, Typography} from "@mui/material";
+import {Box, Button, CircularProgress, Typography} from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
-import {Icon} from "@iconify/react";
 import theme from "@/app/styles/theme";
 import type {Session} from "next-auth";
 import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
@@ -34,7 +33,7 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
     const [imagesArray] = useState(
         Array.from({length: noOfPictures}, (_, index) => index)
     );
-    const [loadingPayment, setLoadingPayment] = useState(false);
+    const [loadingPayment, setLoadingPayment] = useState<boolean | undefined>(undefined);
 
     useEffect(() => {
         if (session?.user?.id == user.id) {
@@ -157,24 +156,23 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
                     </Button>
                 )}
                 {!check && (
-                    <LoadingButton
+                    <Button
                         variant="contained"
-                        loading={loadingPayment}
                         sx={{
                             mt: 2,
                             backgroundColor: theme.palette.accent.main,
                         }}
-                        // href={`/checkout/${itemId}`}
                         onClick={() => {
                             setLoadingPayment(true);
-                            handleCheckout(itemId).then(() =>
-                                setLoadingPayment(false)
-                            );
+                            void handleCheckout(itemId);
                         }}
                     >
-                        Kupi
-                        <Icon icon="fa-solid:shopping-cart"/>
-                    </LoadingButton>
+                        {loadingPayment ? (
+                            <CircularProgress size={24}/>
+                        ) : (
+                            <Typography>Kupi</Typography>
+                        )}
+                    </Button>
                 )}
             </Box>
         </Box>

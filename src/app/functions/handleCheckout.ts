@@ -1,7 +1,9 @@
-import {stripePromise} from "@/app/lib/stripe";
+import {redirect, RedirectType} from "next/navigation";
 
 
 export const handleCheckout = async (itemId: string) => {
+    let sessionUrl = undefined;
+
     try {
         let item = await fetch(`/api/getItem?id=${itemId}`).then((res) => res.json());
         if (!item) {
@@ -23,26 +25,28 @@ export const handleCheckout = async (itemId: string) => {
                 }),
             });
             priceId = fetchedPriceId;
+            console.log("Created Stripe item: ", fetchedProductId, fetchedPriceId);
         }
 
-        // Create a new Stripe Checkout session
-        const response = await fetch(`/api/createCheckoutSession`, {
+        // Create a new Stripe Checkout session and redirect to it
+        const sessionResponse = await fetch(`/api/createCheckoutSession`, {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify({priceId, itemId}),
         });
-
-        const session = await response.json();
-
-        const stripe = await stripePromise;
-        const {error} = await stripe!.redirectToCheckout({
-            sessionId: session.id,
-        });
-
-        if (error) {
-            console.error("Stripe Checkout error:", error);
-        }
+        sessionUrl = (await sessionResponse.json()).url;
+        console.log("Redirecting to Checkout session: ", sessionUrl);
     } catch (error) {
         console.error("Error handling checkout:", error);
         return;
+    }
+
+    if (sessionUrl) {
+        console.log("Redirecting to: ", sessionUrl);
+        redirect(sessionUrl, RedirectType.push);
+    } else {
+        console.error("Session URL not found");
     }
 };
