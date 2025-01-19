@@ -4,6 +4,7 @@ import {Box, Button, ThemeProvider, Typography} from "@mui/material";
 import theme from "../styles/theme";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import {HandleAddBuyerIdToItem} from "@/app/functions/handleAddBuyerIdToItem";
+import {HandleMarkItemAsSold} from "@/app/functions/handleMarkItemAsSold";
 
 const conditions = ["novo", "rabljeno", "osteceno"];
 type Item = {
@@ -75,6 +76,7 @@ const PaymentSuccessPage = ({itemId, buyerId}: SuccessProp) => {
         console.log("itemId: ", itemId);
         console.log("buyerId: ", buyerId);
         void HandleAddBuyerIdToItem({itemId, buyerId: buyerId});
+        void HandleMarkItemAsSold(itemId);
     }, []);
 
     return (
