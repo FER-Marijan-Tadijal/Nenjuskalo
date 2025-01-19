@@ -123,8 +123,12 @@ export default function EditAdForm({ id }: { id: number }) {
         const picturesHolder = document.getElementById(
             "imgupload"
         ) as HTMLInputElement;
-        if (picturesHolder.files == null) {
+        if (picturesHolder.files == null || picturesHolder.files[0] == null) {
             setErrorMessage("Niste odabrali sliku!");
+            return;
+        }
+        if (picturesHolder.files[0].size > 2000 * 1024) {
+            setErrorMessage("Slika Mora Biti Manja od 2MB")
             return;
         }
         const picture = picturesHolder.files[0];

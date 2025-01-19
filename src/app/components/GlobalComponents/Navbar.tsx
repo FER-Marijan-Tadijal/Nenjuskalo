@@ -283,6 +283,7 @@ export default function Navbar({ session }: NavbarProps) {
                             >
                                 <Box
                                     component="img"
+                                    referrerPolicy="no-referrer"
                                     src={session.user?.image || "/images/default-profile.png"} // 👈 Default image if none
                                     alt="Profile Picture"
                                     sx={{
