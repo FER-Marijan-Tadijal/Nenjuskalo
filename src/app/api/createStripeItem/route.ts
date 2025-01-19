@@ -39,7 +39,7 @@ export async function POST(
             }
 
             // Save productId and priceId into the item in the database
-            const item = await prisma.item.update({
+            await prisma.item.update({
                 where: {id: itemId},
                 data: {
                     productId: product.id,

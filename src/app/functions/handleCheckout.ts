@@ -1,8 +1,10 @@
 import {redirect, RedirectType} from "next/navigation";
 
 
-export const handleCheckout = async (itemId: string) => {
+export const handleCheckout = async (itemId: string, buyerId: string) => {
     let sessionUrl = undefined;
+
+    console.log("Handling checkout for item: ", itemId);
 
     try {
         let item = await fetch(`/api/getItem?id=${itemId}`).then((res) => res.json());
@@ -34,10 +36,10 @@ export const handleCheckout = async (itemId: string) => {
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({priceId, itemId}),
+            body: JSON.stringify({priceId, itemId, buyerId}),
         });
         sessionUrl = (await sessionResponse.json()).url;
-        console.log("Redirecting to Checkout session: ", sessionUrl);
+        console.log("Session url fetched: ", sessionUrl);
     } catch (error) {
         console.error("Error handling checkout:", error);
         return;
@@ -48,5 +50,6 @@ export const handleCheckout = async (itemId: string) => {
         redirect(sessionUrl, RedirectType.push);
     } else {
         console.error("Session URL not found");
+        return true;
     }
 };

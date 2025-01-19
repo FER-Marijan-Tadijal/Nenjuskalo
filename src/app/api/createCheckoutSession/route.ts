@@ -6,7 +6,7 @@ export async function POST(
 ) {
     if (req.method === 'POST') {
         try {
-            const {priceId, itemId} = await req.json();
+            const {priceId, itemId, buyerId} = await req.json();
 
             const session = await stripe.checkout.sessions.create({
                 submit_type: 'pay',
@@ -21,7 +21,7 @@ export async function POST(
                     },
                 ],
                 mode: 'payment',
-                success_url: `${req.nextUrl.origin}/paymentSuccess/${itemId}`,
+                success_url: `${req.nextUrl.origin}/paymentSuccess/${itemId}/${buyerId}`,
                 cancel_url: `${req.nextUrl.origin}/paymentFailure/${itemId}`,
             });
 
