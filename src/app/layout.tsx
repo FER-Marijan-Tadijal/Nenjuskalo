@@ -1,16 +1,12 @@
 // src/app/layout.tsx
 import React from "react";
 import Navbar from "./components/GlobalComponents/Navbar";
-import { Container } from "@mui/material";
+import {Container} from "@mui/material";
 import Footer from "./components/GlobalComponents/Footer";
-import type { Metadata } from "next";
-import { AppRouterCacheProvider } from "@mui/material-nextjs/v14-appRouter";
-import localFont from "next/font/local";
+import {AppRouterCacheProvider} from "@mui/material-nextjs/v14-appRouter";
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
 //import { ThemeProvider } from "@mui/material";
-import theme from "./styles/theme";
-import { auth } from "./auth";
+import {auth} from "./auth";
 
 export default async function RootLayout({
     children,
@@ -22,7 +18,7 @@ export default async function RootLayout({
     return (
         <html lang="en">
             <head>
-                <title>Šnjofalica - Your E-Commerce Platform</title>
+                <title>Šnjofalica - oglasnik</title>
                 <meta
                     name="description"
                     content="Welcome to Šnjofalica, the best place to find everything you need."

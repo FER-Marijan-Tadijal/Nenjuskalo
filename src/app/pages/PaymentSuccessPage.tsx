@@ -1,9 +1,9 @@
 "use client";
-import React from "react";
-import { Box, Typography, Button, ThemeProvider } from "@mui/material";
-import { useState, useEffect } from "react";
+import React, {useEffect, useState} from "react";
+import {Box, Button, ThemeProvider, Typography} from "@mui/material";
 import theme from "../styles/theme";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import {HandleAddBuyerIdToItem} from "@/app/functions/handleAddBuyerIdToItem";
 
 const conditions = ["novo", "rabljeno", "osteceno"];
 type Item = {
@@ -31,19 +31,20 @@ type Seller = {
 };
 type SuccessProp = {
     itemId: string;
+    buyerId: string;
 };
 
-const PaymentSuccessPage = ({ itemId }: SuccessProp) => {
-    console.log(itemId);
+const PaymentSuccessPage = ({itemId, buyerId}: SuccessProp) => {
+    console.log("Entered PaymentSuccessPage");
+    console.log("itemId: ", itemId);
+    console.log("buyerId: ", buyerId);
+
     const [item, setItem] = useState<Item | null>(null);
     const [seller, setSeller] = useState<Seller | null>(null);
 
     const fetchItem = async (itemId: string) => {
         try {
             const res = await fetch(`/api/getItem?id=${itemId}`);
-            /*if (!response.ok) {
-                    throw new Error("Failed to fetch item");
-                }*/
             const data = await res.json();
             console.log(data);
             setItem(data.item);
@@ -68,6 +69,14 @@ const PaymentSuccessPage = ({ itemId }: SuccessProp) => {
             fetchSeller(sellerId);
         }
     }, [item]);
+
+    useEffect(() => {
+        console.log("Handling add buyer id to item");
+        console.log("itemId: ", itemId);
+        console.log("buyerId: ", buyerId);
+        void HandleAddBuyerIdToItem({itemId, buyerId: buyerId});
+    }, []);
+
     return (
         <ThemeProvider theme={theme}>
             <Box
@@ -94,12 +103,12 @@ const PaymentSuccessPage = ({ itemId }: SuccessProp) => {
                     }}
                 >
                     <CheckCircleOutlineIcon
-                        sx={{ fontSize: "50px" }}
+                        sx={{fontSize: "50px"}}
                     ></CheckCircleOutlineIcon>
                     <Typography component="span" variant="h4">
                         Kupnja uspješna!
                     </Typography>
-                    <Box sx={{ mb: 2 }}>
+                    <Box sx={{mb: 2}}>
                         <Typography
                             component="span"
                             variant="h5"
@@ -112,7 +121,7 @@ const PaymentSuccessPage = ({ itemId }: SuccessProp) => {
                             variant="h5"
                             textAlign="center"
                             fontStyle="oblique"
-                            sx={{ ml: 1 }}
+                            sx={{ml: 1}}
                         >
                             {item?.askingprice} €
                         </Typography>
@@ -146,7 +155,7 @@ const PaymentSuccessPage = ({ itemId }: SuccessProp) => {
                         variant="accentBtn"
                         href="/"
                         fullWidth
-                        sx={{ mt: 2 }}
+                        sx={{mt: 2}}
                     >
                         Povratak na početnu stranicu
                     </Button>
