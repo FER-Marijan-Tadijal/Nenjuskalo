@@ -1,8 +1,6 @@
+// File: page.tsx (Server Component)
 import { Container, Typography, Box, Paper, Button } from "@mui/material";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import GoogleIcon from '@mui/icons-material/Google';
-import GitHubIcon from '@mui/icons-material/GitHub';
-import { auth, signIn } from "@/app/auth";
+import { auth } from "@/app/auth";
 import { prisma } from "@/prisma";
 import SendMessages from "@/app/message/sendMessage";
 import MessageList from "@/app/message/messageList";
@@ -11,9 +9,9 @@ import BackButton from "../BackButton";
 export default async function Page({
     params,
 }: {
-    params: Promise<{ receiverID: string }>;
+    params: { receiverID: string };
 }) {
-    const { receiverID } = await params; 
+    const { receiverID } = params;
     const session = await auth();
     const senderID = session?.user?.id;
 
@@ -51,45 +49,6 @@ export default async function Page({
                 >
                     Prijavite se sada kako biste pristupili svom profilu i upravljali oglasima.
                 </Typography>
-                <Box sx={{ display: "flex", gap: 2 }}>
-                    <Button
-                        variant="contained"
-                        startIcon={<GoogleIcon />}
-                        sx={{
-                            bgcolor: "#FFC300",
-                            color: "#003049",
-                            fontFamily: "'Poppins', sans-serif",
-                            fontWeight: "bold",
-                            "&:hover": {
-                                bgcolor: "#E5A800",
-                            },
-                            textTransform: "none",
-                            px: 2,
-                        }}
-                        onClick={() => signIn("google")}
-                    >
-                        Prijava
-                    </Button>
-
-                    <Button
-                        variant="contained"
-                        startIcon={<GitHubIcon />}
-                        sx={{
-                            bgcolor: "#FFC300",
-                            color: "#003049",
-                            fontFamily: "'Poppins', sans-serif",
-                            fontWeight: "bold",
-                            "&:hover": {
-                                bgcolor: "#E5A800",
-                            },
-                            textTransform: "none",
-                            px: 2,
-                        }}
-                        onClick={() => signIn("github")}
-                    >
-                        Prijava
-                    </Button>
-                </Box>
             </Container>
         );
     }
@@ -101,7 +60,7 @@ export default async function Page({
     return (
         <Container
             sx={{
-                height: "95vh", 
+                height: "95vh",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -113,7 +72,7 @@ export default async function Page({
                 maxWidth="md"
                 sx={{
                     bgcolor: "#003049",
-                    color: "#003049",
+                    color: "#ffffff",
                     p: 4,
                     borderRadius: "12px",
                     boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.15)",
@@ -122,10 +81,8 @@ export default async function Page({
                     flexDirection: "column",
                     gap: 4,
                     border: "2px solid #FFC300",
-                    position: "relative", // Add position for relative elements
                 }}
             >
-                {/* Back Button */}
                 <BackButton />
 
                 <Typography
@@ -135,10 +92,12 @@ export default async function Page({
                         fontWeight: "bold",
                         textAlign: "center",
                         mb: 4,
-                        color: "#ffffff",
                     }}
                 >
-                    Trenutni sugovornik: <span style={{ color: "#FFC300" }}>{receiver?.name || "Nepoznati Korisnik"}</span>
+                    Trenutni sugovornik:{" "}
+                    <span style={{ color: "#FFC300" }}>
+                        {receiver?.name || "Nepoznati Korisnik"}
+                    </span>
                 </Typography>
 
                 <Paper

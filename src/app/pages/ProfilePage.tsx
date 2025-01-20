@@ -407,7 +407,7 @@ export default function ProfilePage({ session }: ProfilePageProps) {
                                                     ? "#B0B0B0" // Draft - Siva
                                                     : item.itemchangestate[0]?.stateid === 1
                                                     ? "#28A745" // Aktivan - Zelena
-                                                    : item.itemchangestate[0]?.stateid === 2
+                                                    : item.itemchangestate[0]?.stateid === 3
                                                     ? "#DC3545" // Prodan - Crvena
                                                     : "gray",   // Default boja ako nema status
                                             border: "2px solid white", // Mali bijeli obrub

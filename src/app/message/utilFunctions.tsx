@@ -1,8 +1,9 @@
 import { prisma } from "@/prisma";
 import { getUser } from "@/app/util/getFromId";
 
-// Returns list of  other users. But only of the users that you have exchanged messages with.
+// Dohvaća popis razgovora i vraća listu korisnika s brojem nepročitanih poruka
 export async function getListOfConversations(userID: string) {
+    // 1. Dohvati sve razgovore (jedinstvene po korisnicima)
     const distinctConvos = await prisma.message.findMany({
         select: {
             senderid: true,
@@ -11,68 +12,60 @@ export async function getListOfConversations(userID: string) {
         distinct: ["senderid", "receiverid"],
         where: {
             OR: [
-                {senderid: userID},
-                {receiverid: userID},
-            ]
+                { senderid: userID },
+                { receiverid: userID },
+            ],
         },
     });
 
+    // 2. Pronađi sve druge korisnike povezane s razgovorima
     let otherIDs: string[] = [];
-
     for (let convo of distinctConvos) {
-        if ((convo.receiverid != userID) && (!(otherIDs.includes(convo.receiverid)))) {
+        if (convo.receiverid !== userID && !otherIDs.includes(convo.receiverid)) {
             otherIDs.push(convo.receiverid);
         }
-        if ((convo.senderid != userID) && (!(otherIDs.includes(convo.senderid)))) {
-            otherIDs.push(convo.senderid);
-        }
-        if (convo.senderid == convo.receiverid) {
+        if (convo.senderid !== userID && !otherIDs.includes(convo.senderid)) {
             otherIDs.push(convo.senderid);
         }
     }
 
-    let userList = [];
+    // 3. Dohvati korisnike i njihov broj nepročitanih poruka
+    const userList = await Promise.all(
+        otherIDs.map(async (id) => {
+            const user = await getUser(id); // Dohvaća informacije o korisniku
 
-    for (let id of otherIDs) {
-        userList.push(await getUser(id));
-    }
+            // Broji nepročitane poruke za ovog korisnika
+            const unreadCount = await prisma.message.count({
+                where: {
+                    senderid: id, // Poruke od drugog korisnika
+                    receiverid: userID, // Primatelj je trenutni korisnik
+                    seentime: null, // Poruke nisu pročitane
+                },
+            });
+
+            return {
+                ...user,
+                unreadCount, // Dodaj broj nepročitanih poruka
+            };
+        })
+    );
 
     return userList;
 }
 
+// Dohvati posljednju poruku između dva korisnika
 export async function getLastMessage(senderID: string, receiverID: string) {
-    let data = await prisma.message.findMany({
+    const data = await prisma.message.findFirst({
         where: {
             OR: [
-                {
-                    senderid: senderID,
-                    receiverid: receiverID,
-                },
-                {
-                    senderid: receiverID,
-                    receiverid: senderID,
-                }
+                { senderid: senderID, receiverid: receiverID },
+                { senderid: receiverID, receiverid: senderID },
             ],
         },
         orderBy: {
-            senttime: "desc"
+            senttime: "desc", // Sortiranje prema vremenu slanja
         },
-        take: 1,
     });
 
-    return data
-}
-
-export async function getNumOfUnreads(userID: string) {
-    const convos = await getListOfConversations(userID);
-
-    let unreadCount = 0;
-    for (let otherID in convos) {
-        let lastMessage = await getLastMessage(userID, otherID);
-        if (lastMessage[0].seentime == null) {
-            unreadCount += 1
-        }
-    }
-
-    return unreadCount;
+    return data;
 }
