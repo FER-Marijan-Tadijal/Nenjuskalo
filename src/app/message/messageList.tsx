@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Box, Typography, Paper, List, ListItem, ListItemText, useMediaQuery, useTheme } from "@mui/material";
+import { usePathname } from "next/navigation";
+
 
 export default function MessageList({
     senderID,
@@ -10,6 +12,8 @@ export default function MessageList({
     senderID: string;
     receiverID: string;
 }) {
+    let pathname = usePathname();
+
     const [messages, setMessages] = useState<{
         id: number;
         content: string;
@@ -23,8 +27,9 @@ export default function MessageList({
     const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // Check if the screen is small
 
     useEffect(() => {
+        let intervalid : any;
         async function fetchPosts() {
-            const intervalid = setInterval(async () => {
+            intervalid = setInterval(async () => {
                 const res = await fetch("/api/getMessages", {
                     method: "POST",
                     body: JSON.stringify({ senderid: senderID, receiverid: receiverID }),
@@ -38,7 +43,9 @@ export default function MessageList({
         }
 
         fetchPosts();
-    }, [senderID, receiverID]);
+
+        return () => clearInterval(intervalid)
+    }, [senderID, receiverID, pathname]);
 
     if (!messages) {
         return (
@@ -84,7 +91,7 @@ export default function MessageList({
             >
                 Razgovor:
             </Typography>
-            <List sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+            <List sx={{ display: "flex", flexDirection: "column-reverse", overflow:"scroll", height: "300px", gap: 1 }}>
                 {messages
                     .slice() // Create a shallow copy to avoid mutating state
                     .reverse() // Reverse the order of messages

@@ -5,11 +5,11 @@ import { conditionEnum } from "@/app/enums/conditionEnum";
 import { category, item, itemchangestate } from "@prisma/client";
 
 type BigItem = {
-    item: item,
-    categories: category[],
-    state: itemchangestate[],
-    noOfPictures: number,
-}
+    item: item;
+    categories: category[];
+    state: itemchangestate;
+    noOfPictures: number;
+};
 
 const ItemTitle = ({ bigItem }: { bigItem: BigItem }) => {
     const conditionName =
@@ -37,7 +37,8 @@ const ItemTitle = ({ bigItem }: { bigItem: BigItem }) => {
                 • Stanje: {conditionName}
             </Typography>
             <Typography variant="h6" sx={{ fontStyle: "oblique" }}>
-                • Kategorije: {bigItem.categories.map((category) => category.name + "  ")}
+                • Kategorije:{" "}
+                {bigItem.categories.map((category) => category.name + " / ")}
             </Typography>
         </Box>
     );

@@ -1,0 +1,15 @@
+@keyframes slideIn {
+    to {
+        transform: translateY(0); /* Slide to its normal position */
+        opacity: 1; /* Fade in */
+    }
+}
+
+.slide-in-container-05s {
+    transform: translateY(
+        -50px
+    ); /* Start the container offscreen from the top */
+    opacity: 0;
+    animation: slideIn 0.5s ease-out forwards;
+}
+

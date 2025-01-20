@@ -33,18 +33,17 @@ const ExploreFilter = ({
             sx={{
                 backgroundColor: theme.palette.secondary.main,
                 mt: 2,
-                padding: 2,
-                width: "300px",
+                padding: 1,
+                width: "70%",
+                minWidth: "120px",
                 borderRadius: 2,
             }}
         >
-            <Typography sx={{ marginBottom: 2 }} variant="h5">
-                Filtriraj po {filterName}:
-            </Typography>
             <FormControl fullWidth variant="outlined">
                 <InputLabel id="select-label">{filterName}</InputLabel>
                 <Select
                     labelId="select-label"
+                    label={filterName}
                     value={filter}
                     onChange={onChange}
                 >

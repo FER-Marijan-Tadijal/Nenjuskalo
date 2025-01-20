@@ -1,8 +1,8 @@
-import React from "react";
+import React, {use} from "react";
 import PaymentFailurePage from "../../pages/PaymentFailurePage";
 
-type Props = {};
+export default function PaymentFailure({params}: { params: Promise<{ id: string }> }) {
+    const {id} = use(params);
 
-export default function PaymentFailure() {
-    return <PaymentFailurePage></PaymentFailurePage>;
+    return <PaymentFailurePage itemId={id}/>;
 }

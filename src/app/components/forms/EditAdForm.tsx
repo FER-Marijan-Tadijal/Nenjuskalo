@@ -2,7 +2,21 @@
 
 import React, { useEffect, useState } from "react";
 import { z } from "zod";
-import { Box, Button, TextField, MenuItem, Typography, Select, FormControl, InputLabel, Grid, RadioGroup, FormControlLabel, Radio, Autocomplete } from "@mui/material";
+import {
+    Box,
+    Button,
+    TextField,
+    MenuItem,
+    Typography,
+    Select,
+    FormControl,
+    InputLabel,
+    Grid,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
+    Autocomplete,
+} from "@mui/material";
 import { HandleEditAdForm } from "@/app/functions/handleEditAdForm";
 import { HandleDeletePictureForm } from "@/app/functions/handleDeletePictureForm";
 import { HandleNewPictureForm } from "@/app/functions/handleNewPictureForm";
@@ -15,29 +29,35 @@ type Category = category;
 type Condition = condition;
 
 type BigItem = {
-    item: item,
-    categories: category[],
-    state: itemchangestate[],
-    noOfPictures: number,
-}
+    item: item;
+    categories: category[];
+    state: itemchangestate;
+    noOfPictures: number;
+};
 
 const newAdSchema = z.object({
-    title: z.string().trim()
+    title: z
+        .string()
+        .trim()
         .min(2, { message: "Naziv mora sadržavati barem 2 znaka" })
         .max(50, { message: "Naziv mora imati 50 znakova ili manje" }),
-    description: z.string().trim()
+    description: z
+        .string()
+        .trim()
         .max(1000, { message: "Opis mora imati 1000 znakova ili manje" }),
-    askingprice: z.number({ message: "Morate upisati cijenu"}).nonnegative({ message: "Cijena mora biti pozitivna" }),
+    askingprice: z
+        .number({ message: "Morate upisati cijenu" })
+        .nonnegative({ message: "Cijena mora biti pozitivna" }),
 });
 
-const picIndexes = [0, 1, 2, 3, 4, 5] // This should be an array of however many max pictures we want because React no like for loops
+const picIndexes = [0, 1, 2, 3, 4, 5]; // This should be an array of however many max pictures we want because React no like for loops
 
-export default function EditAdForm({id} : {id : number}) {
+export default function EditAdForm({ id }: { id: number }) {
     const [errorMessage, setErrorMessage] = useState<string>("");
     const [categories, setCategories] = useState<Category[]>([]);
     const [conditions, setConditions] = useState<Condition[]>([]);
     const [item, setItem] = useState<BigItem>();
-    const router = useRouter()
+    const router = useRouter();
 
     const getCategories = async () => {
         try {
@@ -61,7 +81,9 @@ export default function EditAdForm({id} : {id : number}) {
 
     const getItem = async () => {
         try {
-            const response = await fetch(`/api/getItem?id=${id}`, { cache: "no-store"});
+            const response = await fetch(`/api/getItem?id=${id}`, {
+                cache: "no-store",
+            });
             const myItem = await response.json();
             setItem(myItem);
         } catch (error) {
@@ -85,7 +107,7 @@ export default function EditAdForm({id} : {id : number}) {
         let state = formData.get("state") as string;
 
         const result = newAdSchema.safeParse(newAd);
-        if (!result.success && state=="publish") {
+        if (!(result.success) && state=="active") {
             const errors = result.error.issues
                 .map((issue) => `${issue.path[0]}: ${issue.message}`)
                 .join(". ");
@@ -98,10 +120,16 @@ export default function EditAdForm({id} : {id : number}) {
     };
 
     const uploadPicture = async (formData: FormData) => {
-        const picturesHolder = document.getElementById("imgupload") as HTMLInputElement;
-        if (picturesHolder.files == null) {
-            setErrorMessage("Niste odabrali sliku!")
-            return
+        const picturesHolder = document.getElementById(
+            "imgupload"
+        ) as HTMLInputElement;
+        if (picturesHolder.files == null || picturesHolder.files[0] == null) {
+            setErrorMessage("Niste odabrali sliku!");
+            return;
+        }
+        if (picturesHolder.files[0].size > 2000 * 1024) {
+            setErrorMessage("Slika Mora Biti Manja od 2MB")
+            return;
         }
         const picture = picturesHolder.files[0];
 
@@ -110,27 +138,31 @@ export default function EditAdForm({id} : {id : number}) {
         formData.append("picture", picture);
         await HandleNewPictureForm(formData);
 
-        const response = await fetch(`/api/getItem?id=${id}`, { cache: "no-store"});
+        const response = await fetch(`/api/getItem?id=${id}`, {
+            cache: "no-store",
+        });
         const myItem = await response.json();
         setItem(myItem);
 
-        router.refresh()
+        router.refresh();
     };
 
-    const deletePicture = async (formData: FormData, index : number) => {
+    const deletePicture = async (formData: FormData, index: number) => {
         await clientAction(formData);
 
         formData.append("index", index.toString());
         await HandleDeletePictureForm(formData);
 
-        const response = await fetch(`/api/getItem?id=${id}`, { cache: "no-store"});
+        const response = await fetch(`/api/getItem?id=${id}`, {
+            cache: "no-store",
+        });
         const myItem = await response.json();
         setItem(myItem);
-        router.refresh()
+        router.refresh();
     };
 
     if (!item) {
-        return <h1>Loading! (or nonexistant item)</h1>
+        return <h1>Loading! (or nonexistant item)</h1>;
     }
 
     return (
@@ -160,12 +192,7 @@ export default function EditAdForm({id} : {id : number}) {
             <form>
                 <Grid container spacing={2}>
                     {/* ID */}
-                    <input
-                        type="hidden"
-                        required
-                        name="id"
-                        defaultValue={id}
-                    />
+                    <input type="hidden" required name="id" defaultValue={id} />
                     {/* Title */}
                     <Grid item xs={12}>
                         <TextField
@@ -202,7 +229,11 @@ export default function EditAdForm({id} : {id : number}) {
                             label="Cijena Artikla"
                             name="askingprice"
                             variant="outlined"
-                            inputProps={{ inputMode: "decimal", step: "0.01", min: "0"}}
+                            inputProps={{
+                                inputMode: "decimal",
+                                step: "0.01",
+                                min: "0",
+                            }}
                             defaultValue={item?.item.askingprice}
                             sx={{ backgroundColor: "white" }}
                         />
@@ -210,7 +241,12 @@ export default function EditAdForm({id} : {id : number}) {
 
                     {/* Category */}
                     <Grid item xs={12}>
-                        <input type="hidden" id="category" name="category" defaultValue={JSON.stringify(item.categories)}/>
+                        <input
+                            type="hidden"
+                            id="category"
+                            name="category"
+                            defaultValue={JSON.stringify(item.categories)}
+                        />
                         <FormControl fullWidth variant="outlined">
                             <Autocomplete
                                 multiple
@@ -218,16 +254,24 @@ export default function EditAdForm({id} : {id : number}) {
                                 id="categorySelector"
                                 options={categories}
                                 getOptionLabel={(category) => category.name}
-                                defaultValue= {item.categories}
+                                defaultValue={item.categories}
                                 renderInput={(params) => (
-                                    <TextField {...params} label="Kategorije" placeholder="Kategorije" />
+                                    <TextField
+                                        {...params}
+                                        label="Kategorije"
+                                        placeholder="Kategorije"
+                                    />
                                 )}
                                 onChange={(event, value) => {
                                     // This will synchronize the autocomplete value with a hidden input
-                                    const hiddenInput = document.getElementById("category");
-                                    if (hiddenInput) (hiddenInput as HTMLInputElement).value = JSON.stringify(value);
-                                  }}
-                                sx={{ width: '500px' }}
+                                    const hiddenInput =
+                                        document.getElementById("category");
+                                    if (hiddenInput)
+                                        (
+                                            hiddenInput as HTMLInputElement
+                                        ).value = JSON.stringify(value);
+                                }}
+                                sx={{ width: "500px" }}
                             />
                         </FormControl>
                     </Grid>
@@ -244,7 +288,10 @@ export default function EditAdForm({id} : {id : number}) {
                                 sx={{ backgroundColor: "white" }}
                             >
                                 {conditions.map((condition) => (
-                                    <MenuItem key={condition.id} value={condition.id}>
+                                    <MenuItem
+                                        key={condition.id}
+                                        value={condition.id}
+                                    >
                                         {condition.name}
                                     </MenuItem>
                                 ))}
@@ -257,7 +304,11 @@ export default function EditAdForm({id} : {id : number}) {
                         <Grid item xs={12}>
                             <Typography
                                 sx={{
-                                    color: errorMessage === "Uspješno ste ažurirali oglas!" ? "green" : "red",
+                                    color:
+                                        errorMessage ===
+                                        "Uspješno ste ažurirali oglas!"
+                                            ? "green"
+                                            : "red",
                                     textAlign: "center",
                                     fontSize: "0.9rem",
                                 }}
@@ -460,24 +511,42 @@ export default function EditAdForm({id} : {id : number}) {
                             <FormControl>
                                 <RadioGroup
                                     aria-labelledby="state"
-                                    defaultValue={stateEnum[item.state[0].stateid]}
+                                    defaultValue={stateEnum[item.state.stateid]}
                                     name="state"
-                                    sx={{ 
+                                    sx={{
                                         width: "100%", // Ensures full width
-                                        color: "white" 
+                                        color: "white",
                                     }}
                                 >
-                                    <FormControlLabel 
-                                        value="active" 
-                                        control={<Radio sx={{ color: "#FFC300", '&.Mui-checked': { color: "#FFC300" } }} />} 
-                                        label="Objavi" 
-                                        sx={{ color: "white" }} 
+                                    <FormControlLabel
+                                        value="active"
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    color: "#FFC300",
+                                                    "&.Mui-checked": {
+                                                        color: "#FFC300",
+                                                    },
+                                                }}
+                                            />
+                                        }
+                                        label="Objavi"
+                                        sx={{ color: "white" }}
                                     />
-                                    <FormControlLabel 
-                                        value="draft" 
-                                        control={<Radio sx={{ color: "#FFC300", '&.Mui-checked': { color: "#FFC300" } }} />} 
-                                        label="Spremi kao Skicu" 
-                                        sx={{ color: "white" }} 
+                                    <FormControlLabel
+                                        value="draft"
+                                        control={
+                                            <Radio
+                                                sx={{
+                                                    color: "#FFC300",
+                                                    "&.Mui-checked": {
+                                                        color: "#FFC300",
+                                                    },
+                                                }}
+                                            />
+                                        }
+                                        label="Spremi kao Skicu"
+                                        sx={{ color: "white" }}
                                     />
                                 </RadioGroup>
                             </FormControl>

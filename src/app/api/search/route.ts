@@ -21,7 +21,11 @@ export async function GET(request: Request) {
                 ? [{
                     OR: [
                         {title: {contains: searchTerm, mode: 'insensitive'}},
-                        {description: {contains: searchTerm, mode: 'insensitive'}}
+                        {description: {contains: searchTerm, mode: 'insensitive'}},
+                        {siteuser_item_selleridTositeuser: {country: {contains: searchTerm, mode: 'insensitive'}}},
+                        {siteuser_item_selleridTositeuser: {city: {contains: searchTerm, mode: 'insensitive'}}},
+                        {siteuser_item_selleridTositeuser: {street: {contains: searchTerm, mode: 'insensitive'}}},
+                        {siteuser_item_selleridTositeuser: {houseno: {contains: searchTerm, mode: 'insensitive'}}},
                     ]
                 }]
                 : []),

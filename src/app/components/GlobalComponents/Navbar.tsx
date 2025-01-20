@@ -262,7 +262,7 @@ export default function Navbar({ session }: NavbarProps) {
                     </Box>
                 )}
 
-                {/* Login/Logout Buttons */}
+               {/* Login/Logout Buttons */}
                 {!isSmallScreen && (
                     <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
                         {!session ? (

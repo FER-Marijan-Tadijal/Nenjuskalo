@@ -1,12 +1,14 @@
 "use client";
 import React from "react";
-import { Box, Typography, Button, ThemeProvider } from "@mui/material";
+import {Box, Typography, Button, ThemeProvider} from "@mui/material";
 import theme from "../styles/theme";
 import ReportIcon from "@mui/icons-material/Report";
 
-type Props = {};
+type Props = {
+    itemId: string;
+}
 
-const PaymentFailurePage = (props: Props) => {
+const PaymentFailurePage = ({itemId}: Props) => {
     return (
         <ThemeProvider theme={theme}>
             <Box
@@ -18,6 +20,7 @@ const PaymentFailurePage = (props: Props) => {
                     justifyContent: "center",
                     alignItems: "center",
                 }}
+                className="slide-in-container-05s"
             >
                 <Box
                     sx={{
@@ -31,7 +34,7 @@ const PaymentFailurePage = (props: Props) => {
                         borderRadius: 2,
                     }}
                 >
-                    <ReportIcon sx={{ fontSize: "50px" }}></ReportIcon>
+                    <ReportIcon sx={{fontSize: "50px"}}></ReportIcon>
                     <Typography component="span" variant="h4">
                         Neuspjelo plaćanje!
                     </Typography>
@@ -40,16 +43,15 @@ const PaymentFailurePage = (props: Props) => {
                         variant="h5"
                         textAlign="center"
                     >
-                        Vaša kartica je odbijena. Molimo Vas pokušajte
-                        transakciju ponovno.
+                        Vaša transakcija nije uspjela. Molimo pokušajte ponovno.
                     </Typography>
                     <Button
                         variant="accentBtn"
-                        href="/"
+                        href={`/item/${itemId}`}
                         fullWidth
-                        sx={{ mt: 2 }}
+                        sx={{mt: 2}}
                     >
-                        Povratan na oglas
+                        Natrag na oglas
                     </Button>
                 </Box>
             </Box>
