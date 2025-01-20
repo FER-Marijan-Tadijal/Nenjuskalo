@@ -16,6 +16,9 @@ export async function getListOfConversations(userID: string) {
                 { receiverid: userID },
             ],
         },
+        orderBy: {
+            senttime: "desc", // Sortiranje prema vremenu slanja
+        },
     });
 
     // 2. Pronađi sve druge korisnike povezane s razgovorima
