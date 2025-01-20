@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Box, Typography, Paper, List, ListItem, ListItemText } from "@mui/material";
+import { Box, Typography, Paper, List, ListItem, ListItemText, useMediaQuery, useTheme } from "@mui/material";
 
 export default function MessageList({
     senderID,
@@ -18,6 +18,9 @@ export default function MessageList({
         senderid: string;
         receiverid: string;
     }[]>([]);
+
+    const theme = useTheme(); // Access the theme for breakpoints
+    const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm")); // Check if the screen is small
 
     useEffect(() => {
         async function fetchPosts() {
@@ -65,6 +68,8 @@ export default function MessageList({
                     background: "#FFC300",
                     borderRadius: "8px",
                 },
+                maxHeight: isSmallScreen ? "300px" : "400px", // Adjust height for small screens
+                width: "100%", // Ensure it takes full width of the container
             }}
         >
             <Typography
@@ -74,6 +79,7 @@ export default function MessageList({
                     fontWeight: "bold",
                     color: "#003049",
                     mb: 2,
+                    textAlign: isSmallScreen ? "center" : "left", // Center-align title on small screens
                 }}
             >
                 Razgovor:
@@ -94,17 +100,21 @@ export default function MessageList({
                                         : "#E5E5E5", // Gray for received messages
                                 color: message.senderid === senderID ? "#003049" : "black",
                                 borderRadius: "8px",
-                                maxWidth: "70%",
+                                maxWidth: isSmallScreen ? "85%" : "70%", // Wider on small screens
                                 p: 1,
                                 mb: 1,
                                 boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.1)",
+                                fontSize: isSmallScreen ? "0.9rem" : "1rem", // Smaller font size on small screens
                             }}
                         >
                             <ListItemText
                                 primary={
                                     <Typography
                                         variant="body1"
-                                        sx={{ wordBreak: "break-word" }}
+                                        sx={{
+                                            wordBreak: "break-word",
+                                            fontSize: isSmallScreen ? "0.85rem" : "1rem", // Adjust text size
+                                        }}
                                     >
                                         {message.content}
                                     </Typography>
@@ -112,7 +122,10 @@ export default function MessageList({
                                 secondary={
                                     <Typography
                                         variant="caption"
-                                        sx={{ color: "gray", fontSize: "0.6rem" }}
+                                        sx={{
+                                            color: "gray",
+                                            fontSize: isSmallScreen ? "0.6rem" : "0.75rem", // Smaller timestamp font
+                                        }}
                                     >
                                         {new Date(message.senttime).toLocaleTimeString("hr-HR", {
                                             hour: "2-digit",
