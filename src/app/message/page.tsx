@@ -1,4 +1,4 @@
-import { Container, Typography, Box, List, ListItem, ListItemText, Paper, Button } from "@mui/material";
+import { Container, Typography, Box, List, ListItem, ListItemText, Paper, Button, Badge } from "@mui/material";
 import Link from "next/link";
 import { auth } from "@/app/auth";
 import { getListOfConversations } from "@/app/message/utilFunctions";
@@ -37,7 +37,7 @@ export default async function Page() {
     return (
         <Container
             sx={{
-                height: "70vh", 
+                height: "70vh",
                 display: "flex",
                 flexDirection: "column",
                 justifyContent: "center",
@@ -56,7 +56,7 @@ export default async function Page() {
                     p: 4,
                     borderRadius: "12px",
                     boxShadow: "0px 8px 16px rgba(0, 0, 0, 0.15)",
-                    border: "2px solid #FFC300", 
+                    border: "2px solid #FFC300",
                     width: "100%",
                     maxWidth: "600px",
                 }}
@@ -114,13 +114,39 @@ export default async function Page() {
                                         }}
                                     >
                                         <ListItemText
-                                            primary={user?.name || "Nepoznati Korisnik"}
-                                            sx={{
-                                                fontFamily: "'Roboto', sans-serif",
-                                                fontSize: "1rem",
-                                                color: "#003049",
-                                                fontWeight: "500",
-                                            }}
+                                            primary={
+                                                <Box
+                                                    sx={{
+                                                        display: "flex",
+                                                        justifyContent: "space-between",
+                                                        alignItems: "center",
+                                                    }}
+                                                >
+                                                    <Typography
+                                                        sx={{
+                                                            fontFamily: "'Roboto', sans-serif",
+                                                            fontSize: "1rem",
+                                                            color: "#003049",
+                                                            fontWeight: "500",
+                                                        }}
+                                                    >
+                                                        {user?.name || "Nepoznati Korisnik"}
+                                                    </Typography>
+                                                    {user.unreadCount > 0 && (
+                                                        <Badge
+                                                            badgeContent={user.unreadCount}
+                                                            color="secondary"
+                                                            sx={{
+                                                                "& .MuiBadge-badge": {
+                                                                    backgroundColor: "#FFC300",
+                                                                    color: "#003049",
+                                                                    fontSize: "0.8rem",
+                                                                },
+                                                            }}
+                                                        />
+                                                    )}
+                                                </Box>
+                                            }
                                         />
                                     </Link>
                                 </ListItem>
@@ -145,8 +171,8 @@ export default async function Page() {
                 <Button
                     variant="contained"
                     sx={{
-                        bgcolor: "#FFC300", // Yellow for button background
-                        color: "#003049", // Dark blue for button text
+                        bgcolor: "#FFC300",
+                        color: "#003049",
                         fontFamily: "'Poppins', sans-serif",
                         fontWeight: "bold",
                         textTransform: "uppercase",
@@ -155,7 +181,7 @@ export default async function Page() {
                         py: 1.5,
                         borderRadius: "8px",
                         "&:hover": {
-                            bgcolor: "#E5A800", // Slightly darker yellow on hover
+                            bgcolor: "#E5A800",
                         },
                     }}
                     href="/"

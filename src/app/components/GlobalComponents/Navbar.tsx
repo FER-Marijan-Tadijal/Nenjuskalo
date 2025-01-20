@@ -167,7 +167,7 @@ export default function Navbar({ session }: NavbarProps) {
                             color="warning"
                             badgeContent={unreadMessages > 0 ? unreadMessages : null}
                             overlap="circular"
-                            sx={{ "& .MuiBadge-badge": { right: -8, top: 4 } }}
+                            sx={{ "& .MuiBadge-badge": { right: -4, top: 4, backgroundColor: "#FFC300", color: "#003049"} }}
                         >
                             <NavbarLink>Poruke</NavbarLink>
                         </Badge>
