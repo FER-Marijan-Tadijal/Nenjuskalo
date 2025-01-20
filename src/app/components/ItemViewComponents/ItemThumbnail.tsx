@@ -1,12 +1,12 @@
-import React, {useEffect, useState} from "react";
-import {Box, Button, CircularProgress, Typography} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, Button, CircularProgress, Typography } from "@mui/material";
 import Carousel from "react-material-ui-carousel";
 import Image from "next/image";
 import theme from "@/app/styles/theme";
-import type {Session} from "next-auth";
+import type { Session } from "next-auth";
 import DeleteAdForm from "@/app/components/forms/DeleteAdForm";
 import MarkAsSoldForm from "@/app/components/forms/MarkAsSoldForm";
-import {handleCheckout} from "@/app/functions/handleCheckout";
+import { handleCheckout } from "@/app/functions/handleCheckout";
 
 type Props = {
     user: {
@@ -28,17 +28,23 @@ type Props = {
     noOfPictures: number;
 };
 
-const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
-    const [check, setCheck] = useState(false);
+const ItemThumbnail = ({ user, session, itemId, noOfPictures }: Props) => {
+    const [ownProfile, setOwnProfile] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [imagesArray] = useState(
-        Array.from({length: noOfPictures}, (_, index) => index)
+        Array.from({ length: noOfPictures }, (_, index) => index)
     );
-    const [loadingPayment, setLoadingPayment] = useState<boolean | undefined>(undefined);
+    const [loadingPayment, setLoadingPayment] = useState<boolean | undefined>(
+        undefined
+    );
     const buyerId = session?.user?.id || "errWithSession";
 
     useEffect(() => {
         if (session?.user?.id == user.id) {
-            setCheck(true);
+            setOwnProfile(true);
+        }
+        if (session?.user) {
+            setIsLoggedIn(true);
         }
         console.log(imagesArray);
     }, []);
@@ -53,7 +59,7 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
                 pb: 0,
             }}
         >
-            <Box sx={{width: "70%"}}>
+            <Box sx={{ width: "70%" }}>
                 {noOfPictures > 0 && (
                     <Carousel
                         navButtonsAlwaysVisible
@@ -129,7 +135,7 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
                     • Adresa: {user.city}, {user.street} {user.houseno}
                 </Typography>
 
-                {check && (
+                {ownProfile && (
                     <Button
                         variant="contained"
                         sx={{
@@ -145,18 +151,18 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
                         Ažuriraj oglas
                     </Button>
                 )}
-                {check && <DeleteAdForm id={Number(itemId)}/>}
-                {check && <MarkAsSoldForm id={Number(itemId)}/>}
-                {!check && (
+                {ownProfile && <DeleteAdForm id={Number(itemId)} />}
+                {ownProfile && <MarkAsSoldForm id={Number(itemId)} />}
+                {!ownProfile && isLoggedIn && (
                     <Button
                         variant="contained"
-                        sx={{mt: 5}}
+                        sx={{ mt: 5 }}
                         href={`/message/${user.id}`}
                     >
                         Pošalji poruku
                     </Button>
                 )}
-                {!check && (
+                {!ownProfile && isLoggedIn && (
                     <Button
                         variant="contained"
                         sx={{
@@ -166,7 +172,8 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
                         onClick={async () => {
                             setLoadingPayment(true);
                             let err = await handleCheckout(itemId, buyerId);
-                            if (err) { // if err === true, then the payment was unsuccessful
+                            if (err) {
+                                // if err === true, then the payment was unsuccessful
                                 err = await handleCheckout(itemId, buyerId); // This needs to be here as a workaround because function sometimes only works on the second try
                             }
                             if (err) {
@@ -175,7 +182,7 @@ const ItemThumbnail = ({user, session, itemId, noOfPictures}: Props) => {
                         }}
                     >
                         {loadingPayment ? (
-                            <CircularProgress size={24}/>
+                            <CircularProgress size={24} />
                         ) : (
                             <Typography>Kupi</Typography>
                         )}
