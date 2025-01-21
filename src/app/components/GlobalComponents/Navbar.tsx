@@ -346,6 +346,48 @@ export default function Navbar({ session }: NavbarProps) {
                     </Box>
                 )}
 
+                {/* Search Bar for Small Screens */}
+                {isSmallScreen && (
+                    <Box
+                        sx={{
+                            display: "flex",
+                            flexDirection: "column",
+                            gap: 2,
+                            px: 2,
+                            py: 1,
+                        }}
+                    >
+                        <SearchBox
+                            onSubmit={handleSearch}
+                            sx={{
+                                maxWidth: "100%",
+                                width: "100%",
+                                bgcolor: "#ffffff",
+                                borderRadius: "8px",
+                                boxShadow: "0px 2px 4px rgba(0, 0, 0, 0.1)",
+                            }}
+                        >
+                            <StyledInput
+                                placeholder="Search…"
+                                inputProps={{ "aria-label": "search" }}
+                                value={query}
+                                onChange={(e) => setQuery(e.target.value)}
+                            />
+                            <IconButton
+                                type="submit"
+                                sx={{
+                                    position: "absolute",
+                                    right: 0,
+                                    top: 4,
+                                    color: "#003049",
+                                }}
+                            >
+                                <Search />
+                            </IconButton>
+                        </SearchBox>
+                    </Box>
+                )}
+
                 {/* Search Bar */}
                 {!isSmallScreen && (
                     <Box
