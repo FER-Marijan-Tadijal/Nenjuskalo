@@ -183,6 +183,7 @@ export default function Navbar({ session }: NavbarProps) {
                 {/* Navigation Links */}
                 {isSmallScreen ? (
                     <>
+                        {/* Hamburger Icon */}
                         <IconButton
                             edge="end"
                             color="inherit"
@@ -191,6 +192,8 @@ export default function Navbar({ session }: NavbarProps) {
                         >
                             <MenuIcon />
                         </IconButton>
+                    
+                        {/* Drawer */}
                         <Drawer
                             anchor="right"
                             open={drawerOpen}
@@ -204,10 +207,129 @@ export default function Navbar({ session }: NavbarProps) {
                                     height: "100%",
                                     display: "flex",
                                     flexDirection: "column",
-                                    gap: 2,
+                                    gap: 3,
                                 }}
                             >
+                                {/* Navigation Links */}
                                 {renderLinks()}
+                    
+                                {/* Login/Logout Section */}
+                                {!session ? (
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            gap: 2,
+                                            mt: "auto", // Push content to the bottom
+                                        }}
+                                    >
+                                        {/* Google Login Button */}
+                                        <Button
+                                            variant="contained"
+                                            startIcon={<GoogleIcon />}
+                                            sx={{
+                                                bgcolor: "#FFC300",
+                                                color: "#003049",
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontWeight: "bold",
+                                                "&:hover": {
+                                                    bgcolor: "#E5A800",
+                                                },
+                                                textTransform: "none",
+                                                width: "100%",
+                                            }}
+                                            onClick={() => signIn("google")}
+                                        >
+                                            Prijava
+                                        </Button>
+                    
+                                        {/* GitHub Login Button */}
+                                        <Button
+                                            variant="contained"
+                                            startIcon={<GitHubIcon />}
+                                            sx={{
+                                                bgcolor: "#FFC300",
+                                                color: "#003049",
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontWeight: "bold",
+                                                "&:hover": {
+                                                    bgcolor: "#E5A800",
+                                                },
+                                                textTransform: "none",
+                                                width: "100%",
+                                            }}
+                                            onClick={() => signIn("github")}
+                                        >
+                                            Prijava
+                                        </Button>
+                                    </Box>
+                                ) : (
+                                    <Box
+                                        sx={{
+                                            display: "flex",
+                                            flexDirection: "column",
+                                            alignItems: "center",
+                                            gap: 2,
+                                            mt: "auto", // Push content to the bottom
+                                            bgcolor: "#ffffff",
+                                            p: 2,
+                                            borderRadius: "8px",
+                                            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.2)",
+                                        }}
+                                    >
+                                        {/* User Info */}
+                                        <Box
+                                            sx={{
+                                                display: "flex",
+                                                alignItems: "center",
+                                                gap: 2,
+                                            }}
+                                        >
+                                            <Box
+                                                component="img"
+                                                src={session.user?.image || "/images/default-profile.png"}
+                                                alt="Profile Picture"
+                                                sx={{
+                                                    width: 50,
+                                                    height: 50,
+                                                    borderRadius: "50%",
+                                                    objectFit: "cover",
+                                                    border: "2px solid #FFC300",
+                                                }}
+                                            />
+                                            <Typography
+                                                sx={{
+                                                    fontFamily: "'Poppins', sans-serif",
+                                                    fontWeight: "bold",
+                                                    color: "#003049",
+                                                    textTransform: "capitalize",
+                                                }}
+                                            >
+                                                {session.user?.name || "Korisnik"}
+                                            </Typography>
+                                        </Box>
+                    
+                                        {/* Logout Button */}
+                                        <Button
+                                            variant="contained"
+                                            sx={{
+                                                bgcolor: "#FFC300",
+                                                color: "#003049",
+                                                fontFamily: "'Poppins', sans-serif",
+                                                fontWeight: "bold",
+                                                "&:hover": {
+                                                    bgcolor: "#E5A800",
+                                                },
+                                                textTransform: "none",
+                                                width: "100%",
+                                            }}
+                                            onClick={() => signOut()}
+                                        >
+                                            Odjava
+                                        </Button>
+                                    </Box>
+                                )}
                             </Box>
                         </Drawer>
                     </>
