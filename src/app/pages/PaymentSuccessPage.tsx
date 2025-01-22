@@ -55,7 +55,7 @@ const PaymentSuccessPage = ({itemId, buyerId}: SuccessProp) => {
     };
     const fetchSeller = async (sellerId: string) => {
         const res = await fetch(
-            `http://localhost:3000/api/getUser?id=${sellerId}`
+            `/api/getUser?id=${sellerId}`
         );
         const sellerData = await res.json();
         setSeller(sellerData);
